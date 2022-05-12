@@ -44,6 +44,8 @@ import TempDealDashboard from './components/dashboard/TempDealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
+import RemoteAddOrgAdmin from './components/RemoteAddOrgAdmin';
+
 import RemoteTaxBanner from './components/RemoteTaxBanner';
 import RemoteInvest from './components/RemoteInvest';
 import RemoteNextSteps from './components/RemoteNextSteps';
@@ -74,7 +76,11 @@ const MainApp = ({ isAuthenticated }) => {
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
-        <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+        <AdminRoute
+          path="/admin/:organization/manager"
+          component={remoteFundManagerDashboard ? RemoteAddOrgAdmin : SuperAdminManager}
+          exact
+        />
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />

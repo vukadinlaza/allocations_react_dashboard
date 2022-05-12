@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Chip, Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
+import { colors } from '@allocations/design-system';
 
 const ADD_SECTORS = gql`
   mutation AddSectors($email: String!, $sector: String!) {
@@ -93,15 +94,15 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: theme.spacing(0.5),
-    color: 'white',
+    color: theme.colors.white[100],
     fontWeight: 'bold',
   },
   paperMain: {
-    background: '#f1f4fb',
+    background: theme.colors.gray[100],
     padding: '.5rem',
     paddingBottom: '1.5rem',
     paddingRight: '1rem',
-    borderTop: '1px solid #8493A640 !important',
+    borderTop: `1px solid ${theme.colors.gray[400]}40 !important`,
   },
   sectorChoices: {
     height: '50px',
@@ -166,7 +167,7 @@ const Sectors = ({ investor }) => {
           </Typography>
         </Grid>
         <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
-          <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+          <FormControl variant="outlined" style={{ background: colors.white[100], width: '100%' }}>
             <InputLabel>Sectors</InputLabel>
             <Select
               native
@@ -226,7 +227,7 @@ const Sectors = ({ investor }) => {
           </Typography>
         </Grid>
         <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
-          <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+          <FormControl variant="outlined" style={{ background: colors.white[100], width: '100%' }}>
             <InputLabel>Stages</InputLabel>
             <Select
               native

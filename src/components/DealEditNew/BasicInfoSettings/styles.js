@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   currencyTextInput: {
     margin: '5px 0',
     '& .MuiTypography-root': {
-      color: '#2b2b2b',
+      color: theme.colors.gray[800],
       fontWeight: '600',
       fontSize: '1rem',
       backgroundColor: 'transparent',
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   selected: {
-    border: '2px solid #0461ff',
+    border: `2px solid ${theme.colors.primary[600]}`,
   },
 
   textInput: {

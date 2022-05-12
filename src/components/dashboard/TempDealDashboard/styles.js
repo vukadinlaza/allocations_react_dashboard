@@ -335,7 +335,7 @@ const useStyles = makeStyles((theme) => ({
   selectedTab: {
     fontWeight: 'bold !important',
     '& $tabWrapper': {
-      backgroundColor: `${theme.colors.primary[600] + 25}`,
+      backgroundColor: `${theme.colors.primary[600]}25`,
       borderRadius: '10px',
     },
   },

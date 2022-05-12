@@ -1,4 +1,5 @@
 import React from 'react';
+import { colors } from '@allocations/design-system';
 
 export default function FormError({ error }) {
   if (!error) return null;
@@ -8,8 +9,8 @@ export default function FormError({ error }) {
   return (
     <div
       style={{
-        backgroundColor: 'tomato',
-        color: '#fff',
+        backgroundColor: colors.error[400],
+        color: colors.white[100],
         borderRadius: '4px',
         padding: '10px 20px',
         margin: '10px 0px',

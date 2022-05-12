@@ -1,17 +1,17 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab } from '@material-ui/core';
 import { phone } from '../../utils/helpers';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
   selectedTab: {
     fontWeight: '500 !important',
-    color: '#186EFF',
+    color: theme.colors.primary[500],
     '& $tabWrapper': {
-      backgroundColor: '#ECF3FF',
+      backgroundColor: theme.colors.primary[50],
       borderRadius: '10px',
     },
   },
@@ -21,7 +21,7 @@ const styles = (theme) => ({
     fontWeight: '500',
     padding: '6px 0',
     fontSize: '16px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     '&:focus': {
       outline: 'none',
     },
@@ -49,9 +49,11 @@ const styles = (theme) => ({
   tabWrapper: {
     padding: '4px 16px',
   },
-});
+}));
 
-const HighlightedTabs = ({ classes, tabs, tabIndex, handleTabChange, rootStyle }) => {
+const HighlightedTabs = ({ tabs, tabIndex, handleTabChange, rootStyle }) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <Tabs
@@ -84,4 +86,4 @@ const HighlightedTabs = ({ classes, tabs, tabIndex, handleTabChange, rootStyle }
   );
 };
 
-export default withStyles(styles)(HighlightedTabs);
+export default HighlightedTabs;

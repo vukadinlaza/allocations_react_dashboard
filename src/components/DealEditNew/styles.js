@@ -12,14 +12,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '0%',
     right: '0%',
-    background: '#215ef5',
+    background: theme.colors.primary[500],
     color: 'white',
     textTransform: 'none',
     transition: 'all 0.2s ease-in',
 
     '&:hover': {
       transition: 'all 0.2s ease-out',
-      background: '#1253f8',
+      background: theme.colors.primary[700],
     },
   },
   sectionHeader: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     marginRight: '1.5rem',
     padding: '5px',
-    color: '#0561ff',
+    color: theme.colors.primary[500],
     background: 'transparent',
     borderRadius: '0%',
     fontWeight: '700',
@@ -64,10 +64,10 @@ const useStyles = makeStyles((theme) => ({
   },
 
   active: {
-    borderBottom: '3px solid #0561ff',
+    borderBottom: `3px solid ${theme.colors.primary[500]}`,
     transition: 'all 0.25s ease-in',
     [theme.breakpoints.down('md')]: {
-      backgroundColor: '#f1f1f1',
+      backgroundColor: theme.colors.gray[100],
       transition: 'all 0.25s ease-in',
     },
   },
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
   continue: {
     textTransform: 'none',
-    backgroundColor: '#2a2b54',
+    backgroundColor: theme.colors.black[50],
     color: 'white',
     width: '12rem',
     height: '3rem',
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
   saveAndExit: {
     textTransform: 'none',
-    backgroundColor: '#0561ff',
+    backgroundColor: theme.colors.primary[500],
     color: 'white',
     width: '12rem',
     height: '3rem',
@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
 
   deleteDeal: {
     textTransform: 'none',
-    backgroundColor: 'red',
+    backgroundColor: theme.colors.error[500],
     color: 'white',
     width: '12rem',
     height: '3rem',

@@ -173,7 +173,7 @@ const UserHome = ({ classes }) => {
   if (
     !Object.keys(userProfile).length ||
     loading ||
-    (userHasFunds && atFundDataStatus !== 'fetched') ||
+    (Object.keys(dealsData)?.length && atFundDataStatus !== 'fetched') ||
     (userHasFunds && atDealStatus !== 'fetched')
   ) {
     return <AllocationsLoader fullHeight />;
