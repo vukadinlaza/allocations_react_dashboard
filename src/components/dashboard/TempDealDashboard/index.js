@@ -7,7 +7,7 @@ import { Typography as AllocationsTypography } from '@allocations/design-system'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
-import Banking from './sections/Banking';
+// import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
@@ -128,7 +128,7 @@ const TempDealDashboard = () => {
   }
 
   const {
-    fundManagerBankingTab,
+    // fundManagerBankingTab,
     capitalCallsDealSpecific,
     cryptoPaymentInBuild,
     remoteFundManagerDashboard,
@@ -149,14 +149,14 @@ const TempDealDashboard = () => {
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
 
-  if (userProfile.admin) {
-    const bankingTabName = 'Banking';
-    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
-    if (fundManagerBankingTab) {
-      if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
-      if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
-    }
-  }
+  // if (userProfile.admin) {
+  //   const bankingTabName = 'Banking';
+  //   // Only add banking tab if user is admin and FF fundManagerBankingTab is true
+  //   if (fundManagerBankingTab) {
+  //     if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+  //     if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+  //   }
+  // }
 
   if (userProfile.admin && cryptoPaymentInBuild) {
     // const cryptoTabName = 'Crypto';
@@ -355,15 +355,15 @@ const TempDealDashboard = () => {
             handleLinkCopy={handleLinkCopy}
           />
         );
-      case 'Banking':
-        return (
-          <Banking
-            dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
-            deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
-            virtual_account_number={dealData.deal.virtual_account_number || null}
-            classes={classes}
-          />
-        );
+      // case 'Banking':
+      //   return (
+      //     <Banking
+      //       dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
+      //       deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
+      //       virtual_account_number={dealData.deal.virtual_account_number || null}
+      //       classes={classes}
+      //     />
+      //   );
       case 'Crypto':
         return (
           <Crypto
