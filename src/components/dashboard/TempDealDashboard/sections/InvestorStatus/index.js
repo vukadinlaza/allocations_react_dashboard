@@ -110,14 +110,25 @@ const InvestorBox = ({
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        {dealType === '506c' && investor.accredidation_status && (
-          <div className={classes.accredited}>
-            <Tooltip title="This investor is accredited for 506c deals">
+        {dealType === '506c' ? (
+          <div
+            className={classes.accredited}
+            style={investor.accredidation_status ? {} : { background: colors.gray[400] }}
+          >
+            <Tooltip
+              title={
+                investor.accredidation_status
+                  ? 'This investor is accredited for 506c deals'
+                  : 'This investor is not accredited for 506c deals'
+              }
+            >
               <Typography style={{ color: colors.white[100], fontSize: '12px' }}>
                 <VerifiedUserIcon /> 506c
               </Typography>
             </Tooltip>
           </div>
+        ) : (
+          ''
         )}
       </div>
       {investor.amount && investor.status !== 'invited' ? (
