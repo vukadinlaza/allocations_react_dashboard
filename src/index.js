@@ -17,6 +17,7 @@ window.DD_RUM.init({
     : 'development',
   service: 'allocations-dashboard',
   sampleRate: 100,
+  replaySampleRate: 0,
   trackInteractions: true,
   defaultPrivacyLevel: 'allow',
 });
