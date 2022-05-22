@@ -125,6 +125,11 @@ const MainApp = ({ isAuthenticated }) => {
           component={DealOneClick}
           exact
         />
+        <PrivateRoute
+          path={`/deals/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
+          component={DealOneClick}
+          exact
+        />
 
         {/* Invest */}
         <PrivateRoute
