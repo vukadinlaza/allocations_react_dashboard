@@ -13,11 +13,10 @@ import InvestmentsList from './components/InvestmentsList';
 import InvestorCharts from './components/InvestorCharts';
 import InvestorHighlights from './components/InvestorHighlights';
 import FundsInvestments from './components/FundsInvestments';
-import ResignModal from './components/ResignModal';
 import CapitalAccountsModal from './components/CapitalAccountsModal';
 
 const GET_NEW_INVESTOR = gql`
-  query NewUserInvestments($_id: String!) {
+  query NewUserInvestments($_id: String) {
     newUserInvestments(_id: $_id)
   }
 `;
@@ -28,9 +27,8 @@ const DEALS_TABLE = 'Deals';
 
 const UserHome = ({ classes }) => {
   const params = useParams();
-  const [getNewInvestor, { data: { newUserInvestments = [] } = {}, refetch, loading }] =
+  const [getNewInvestor, { data: { newUserInvestments = [] } = {}, loading }] =
     useLazyQuery(GET_NEW_INVESTOR);
-  const [resignInvestment, showResignInvestment] = useState(false);
   const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
   const [dealsData, setDealsData] = useState({});
   const [funds, setFunds] = useState([]);
@@ -201,7 +199,6 @@ const UserHome = ({ classes }) => {
           userInvestments={userInvestments}
           showInvestments={showInvestments}
           fundInvestments={fundInvestments}
-          showResignInvestment={showResignInvestment}
           investor_email={userInvestments?.[0]?.investor_email}
           setShowCapitalAccounts={setShowCapitalAccounts}
         />
@@ -218,11 +215,6 @@ const UserHome = ({ classes }) => {
           showCapitalAccounts={showCapitalAccounts}
         />
       )}
-      <ResignModal
-        showResignModal={resignInvestment}
-        setShowResignModal={showResignInvestment}
-        refetch={refetch}
-      />
     </Grid>
   );
 };
