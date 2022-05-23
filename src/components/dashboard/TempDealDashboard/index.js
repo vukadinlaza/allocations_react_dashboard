@@ -14,12 +14,12 @@ import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import useStyles from './styles';
-import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
 import { phone } from '../../../utils/helpers';
+import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
@@ -327,7 +327,7 @@ const TempDealDashboard = () => {
         );
 
       case 'Documents':
-        return <DocumentsTab classes={classes} data={dealData} refetch={refetch} />;
+        return <RemoteInvestorsDocuments />;
 
       case 'Deal Page':
         return (
