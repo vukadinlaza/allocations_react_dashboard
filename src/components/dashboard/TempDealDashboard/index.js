@@ -159,7 +159,7 @@ const TempDealDashboard = () => {
   const { data: atFundData } = useFetch(
     BASE,
     INVESTMENTS_TABLE,
-    `(FIND("${checkedAtDealDataName}", {Deals}))`,
+    `{Deals}="${checkedAtDealDataName}"`,
   );
 
   useEffect(() => {
