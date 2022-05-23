@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node secrets.js",
     "start": "node server.js",
     "dev": "craco start --verbose",
     "start:watch": "nodemon server.js",
