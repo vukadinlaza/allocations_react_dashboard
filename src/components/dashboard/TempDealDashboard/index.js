@@ -25,73 +25,15 @@ const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
 const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
-const GET_DEAL = gql`
-  query GetDeal($_id: String!) {
-    deal(_id: $_id) {
-      _id
-      company_name
-      company_description
-      target
-      raised
-      slug
-      date_closed
-      investmentType
-      status
-      AUM
-      organization {
-        _id
-        name
-        high_volume_partner
-      }
-      dealParams {
-        signDeadline
-        wireDeadline
-        dealType
-        dealMultiple
-        totalCarry
-        fundTotalCarry
-        managementFees
-        managementFeesDollar
-        fundManagementFeesDollar
-        fundManagementFees
-        managementFeeType
-        fundManagementFeeType
-      }
-      virtual_account_number
-      viewedUsers {
-        _id
-        first_name
-        last_name
-        email
-      }
-      investments {
-        _id
-        amount
-        capitalWiredAmount
-        status
-        submissionData {
-          legalName
-        }
-        investor {
-          _id
-          first_name
-          last_name
-          name
-          email
-          accredidation_status
-        }
-        documents {
-          path
-          link
-        }
-      }
-    }
+const GET_DEAL_WITH_INVESTMENTS = gql`
+  query NewDealInvestments($deal_id: String) {
     investor {
       _id
       admin
       documents
       created_at
     }
+    newDealInvestments(deal_id: $deal_id)
   }
 `;
 
@@ -137,9 +79,12 @@ const TempDealDashboard = () => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
 
-  const { data: dealData, refetch } = useQuery(GET_DEAL, {
-    variables: { _id: deal_id },
-  });
+  const { data: { newDealInvestments: dealData, investor } = {}, refetch } = useQuery(
+    GET_DEAL_WITH_INVESTMENTS,
+    {
+      variables: { deal_id },
+    },
+  );
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
 
@@ -168,7 +113,7 @@ const TempDealDashboard = () => {
       try {
         if (remoteFundManagerDashboard) {
           const res = await fetch(
-            `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
+            `${process.env.REACT_APP_BUILD_FRONTEND_URL}api/deals/${deal_id}`,
           );
           const deal = await res.json();
           if (deal?.phases?.length === 6) {
@@ -190,14 +135,14 @@ const TempDealDashboard = () => {
   }, [deal_id]);
 
   useEffect(() => {
-    if (dealData?.deal?.company_name) {
-      setDealName(dealData?.deal?.company_name);
+    if (dealData?.name) {
+      setDealName(dealData?.name);
     }
   }, [dealData]);
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
-      const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
+      const newTabs = dealData.type === 'fund' ? fundTabs : spvTabs;
 
       if (newTabs.includes('Deal Progress')) {
         setTabIndex(newTabs.indexOf('Deal Progress'));
@@ -236,23 +181,21 @@ const TempDealDashboard = () => {
   }, [atDeal]);
 
   const handleLinkCopy = () => {
-    if (orgSlug && dealData?.deal?.slug) {
-      navigator.clipboard.writeText(
-        window.origin + (`/deals/${orgSlug}/${dealData.deal.slug}` || ''),
-      );
+    if (orgSlug && dealData?.slug) {
+      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.slug}` || ''));
       toast.info('Copied deal link to clipboard');
     }
   };
 
   const goToDeal = () => {
-    if (orgSlug && dealData?.deal?.slug) {
-      window.open(`/deals/${orgSlug}/${dealData.deal.slug}`);
+    if (orgSlug && dealData?.slug) {
+      window.open(`/deals/${orgSlug}/${dealData.slug}`);
     }
   };
 
   const goToEditDeal = () => {
-    if (orgSlug && dealData?.deal?._id) {
-      window.open(`/admin/${orgSlug}/deals/${dealData.deal._id}/edit`);
+    if (orgSlug && dealData?._id) {
+      window.open(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
     }
   };
 
@@ -307,15 +250,15 @@ const TempDealDashboard = () => {
             classes={classes}
             width={width}
             data={dealData}
-            dealType={dealData?.deal?.dealParams?.dealType}
-            superAdmin={dealData?.investor?.admin}
+            dealType={dealData?.offering_type}
+            investor={investor}
             refetch={refetch}
           />
         );
       case 'Investors':
-        return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
+        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?.deal?._id} />
+            <RemoteInvestors deal_id={dealData?._id} />
           </Suspense>
         ) : (
           <Investors
@@ -345,8 +288,8 @@ const TempDealDashboard = () => {
           <Crypto
             orgSlug={orgSlug}
             classes={classes}
-            deal_id={dealData.deal._id}
-            virtual_account_number={dealData.deal.virtual_account_number || null}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.nd_virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
@@ -371,6 +314,7 @@ const TempDealDashboard = () => {
   };
 
   const [openModal, setOpenModal] = useState(false);
+
   if (!dealData || !atFundData || loading)
     return (
       <div className={classes.loaderContainer}>
@@ -383,11 +327,8 @@ const TempDealDashboard = () => {
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
-            progress={getTotalRaiseAmount(
-              serviceDeal?.target_raise_goal || 0,
-              dealData?.deal?.raised,
-            )}
-            currentAmount={dealData?.deal?.raised}
+            progress={getTotalRaiseAmount(serviceDeal?.target_raise_goal || 0, dealData?.raised)}
+            currentAmount={dealData?.raised}
             goalAmount={serviceDeal?.target_raise_goal || 0}
           />
         </Suspense>

@@ -17,19 +17,17 @@ import styles from '../styles';
 import { UserSearch } from '..';
 
 const CREATE_INVESTMENT = gql`
-  mutation CreateInvestment($investment: InvestmentInput!) {
-    createInvestment(investment: $investment) {
-      _id
-    }
+  mutation NewCreateInvestment($investment: Object!) {
+    newCreateInvestment(investment: $investment)
   }
 `;
 
 function validate({ investment, user, deal }) {
   const errors = [];
-  if (!investment.amount) errors.push('amount');
+  if (!investment.total_committed_amount) errors.push('total_committed_amount');
   if (!user) errors.push('user');
   if (!deal) errors.push('deal');
-  if (!investment.status) errors.push('status');
+  if (!investment.phase) errors.push('phase');
   return errors;
 }
 
@@ -62,11 +60,11 @@ export default function CreateInvestment({ deal, handleUpdate }) {
     createInvestment({
       variables: {
         investment: {
-          amount: Math.floor(investment.amount),
-          capitalWiredAmount: investment.capitalWiredAmount,
+          total_committed_amount: Math.floor(investment.total_committed_amount),
+          wired_amount: investment.wired_amount,
           user_id: user._id,
           deal_id: deal._id,
-          status: investment.status,
+          phase: investment.phase,
         },
       },
     });
@@ -91,7 +89,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(deal, 'company_name', '')} ${get(deal, 'company_description', '')}`}
+                value={`${get(deal, 'name', '')} ${get(deal, 'description', '')}`}
                 disabled
                 label="Deal"
                 variant="outlined"
@@ -107,13 +105,13 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                error={errors.includes('amount')}
-                value={get(investment, 'amount', '') || undefined}
+                error={errors.includes('total_committed_amount')}
+                value={get(investment, 'total_committed_amount', '') || undefined}
                 placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'amount',
+                    prop: 'total_committed_amount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -132,11 +130,11 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
                 placeholder="0"
-                value={get(investment, 'capitalWiredAmount', '') || undefined}
+                value={get(investment, 'wired_amount', '') || undefined}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'capitalWiredAmount',
+                    prop: 'wired_amount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -149,10 +147,10 @@ export default function CreateInvestment({ deal, handleUpdate }) {
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
               <Select
-                error={errors.includes('status')}
-                value={investment?.status || ''}
-                onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
-                inputProps={{ name: 'status' }}
+                error={errors.includes('phase')}
+                value={investment?.phase || ''}
+                onChange={(e) => updateInvestmentProp({ prop: 'phase', newVal: e.target.value })}
+                inputProps={{ name: 'phase' }}
               >
                 <MenuItem value="invited">Invited</MenuItem>
                 <MenuItem value="signed">Signed</MenuItem>
