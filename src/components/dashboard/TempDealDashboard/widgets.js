@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   boxTitleContainer: {
     width: '100%',
-    height: '71px',
+    height: '90px',
     background: `${theme.colors.white[100]} 0% 0% no-repeat padding-box`,
     borderBottom: `1px solid ${theme.colors.gray[200]}`,
     borderRadius: '10px 10px 0px 0px',
