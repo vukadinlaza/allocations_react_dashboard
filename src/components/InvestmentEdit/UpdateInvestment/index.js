@@ -30,46 +30,6 @@ import styles from '../styles';
  * Slight refactor of index.js in InvestmemtEdit with the goal of making this reusable
  * and migrating to this component once New Fund Dashboard is completed.
  * */
-// const GET_INVESTMENT = gql`
-//   query GetInvestment($_id: String!) {
-//     investment(_id: $_id) {
-//       _id
-//       amount
-//       capitalWiredAmount
-//       status
-//       wired_date
-//       documents {
-//         link
-//         path
-//       }
-//       submissionData {
-//         legalName
-//       }
-//       deal {
-//         _id
-//         company_name
-//         company_description
-//       }
-//       investor {
-//         _id
-//         first_name
-//         last_name
-//         entity_name
-//         investor_type
-//         investingAs
-//         accredidation_status
-//         email
-//       }
-//     }
-//   }
-// `;
-// const UPDATE_INVESTMENT = gql`
-//   mutation UpdateInvestment($investment: InvestmentInput!) {
-//     updateInvestment(investment: $investment) {
-//       _id
-//     }
-//   }
-// `;
 
 const GET_INVESTOR = gql`
   {

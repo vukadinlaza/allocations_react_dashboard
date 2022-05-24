@@ -9,7 +9,6 @@ import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
-import Investors from './sections/Investors';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
@@ -22,6 +21,7 @@ import { phone } from '../../../utils/helpers';
 import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
+const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
 const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
@@ -258,15 +258,12 @@ const TempDealDashboard = () => {
       case 'Investors':
         return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?._id} />
+            <RemoteOnboarding deal_id={dealData?._id} />
           </Suspense>
         ) : (
-          <Investors
-            classes={classes}
-            data={dealData}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-          />
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteInvestors deal_id={dealData?._id} />
+          </Suspense>
         );
 
       case 'Documents':
