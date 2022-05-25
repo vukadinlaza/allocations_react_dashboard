@@ -63,21 +63,21 @@ const UPDATE_USER = gql`
   }
 `;
 const ADD_INVESTMENT_DOC = gql`
-  mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!, $isK1: Boolean) {
-    addInvestmentDoc(doc: $doc, investment_id: $investment_id, isK1: $isK1)
+  mutation newAddInvestmentDoc($doc: Upload!, $investment_id: String!) {
+    newAddInvestmentDoc(doc: $doc, investment_id: $investment_id)
   }
 `;
 const RM_INVESTMENT_DOC = gql`
-  mutation RmInvestmentDoc($file: String!, $investment_id: String!) {
-    rmInvestmentDoc(file: $file, investment_id: $investment_id)
+  mutation NewDeleteDocument($document_id: String!) {
+    newDeleteDocument(document_id: $document_id)
   }
 `;
 
-function Doc({ doc, investment, getInvestment, matches }) {
+function Doc({ doc, getInvestment, matches }) {
   const file = doc.title;
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
-    variables: { file, investment_id: investment._id },
+    variables: { document_id: doc._id },
     onCompleted: () => {
       getInvestment();
       toast.success('Success! Document deleted');
@@ -121,7 +121,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
   );
 }
 
-function Docs({ investment, getInvestment, isK1 }) {
+function Docs({ investment, getInvestment }) {
   const matches = useMediaQuery('(min-width:600px)');
   const [uploadedDoc, setUploadedDoc] = useState(null);
 
@@ -140,10 +140,10 @@ function Docs({ investment, getInvestment, isK1 }) {
   useEffect(() => {
     if (uploadedDoc) {
       addInvestmentDoc({
-        variables: { doc: uploadedDoc, investment_id: id, isK1 },
+        variables: { doc: uploadedDoc, investment_id: id },
       });
     }
-  }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
+  }, [addInvestmentDoc, id, getInvestment, uploadedDoc]);
 
   const docs = get(investment, 'documents', []);
 
@@ -153,13 +153,7 @@ function Docs({ investment, getInvestment, isK1 }) {
     <Grid container wrap="nowrap" direction={matches ? 'row' : 'column'}>
       <Grid container>
         {docs.map((doc) => (
-          <Doc
-            key={doc.path}
-            doc={doc}
-            investment={investment}
-            getInvestment={getInvestment}
-            matches={matches}
-          />
+          <Doc key={doc.path} doc={doc} getInvestment={getInvestment} matches={matches} />
         ))}
       </Grid>
 
@@ -207,11 +201,7 @@ function Docs({ investment, getInvestment, isK1 }) {
   );
 }
 
-export default function InvestmentEdit({
-  investmentId = false,
-  isK1 = false,
-  handleUpdate = false,
-}) {
+export default function InvestmentEdit({ investmentId = false, handleUpdate = false }) {
   const classes = styles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
@@ -575,7 +565,7 @@ export default function InvestmentEdit({
             Documents
           </div>
         </Grid>
-        <Docs investment={investment} getInvestment={getInvestment} isK1={isK1} />
+        <Docs investment={investment} getInvestment={getInvestment} />
       </form>
     </div>
   );
