@@ -259,10 +259,6 @@ function InvestmentPage() {
 
     if (validation.length > 0) return toast.warning('Incomplete form');
     if (!amount) return toast.warning('Please enter a valid investment amount');
-    if (parseInt(amount, 10) < (minimumInvestment || 1000))
-      return toast.warning(
-        `Please enter an investment amount of at least $${nWithCommas(minimumInvestment || 1000)}`,
-      );
 
     const payload = {
       ...investorFormData,
