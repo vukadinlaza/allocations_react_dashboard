@@ -85,7 +85,6 @@ const InvestmentsList = ({
   classes,
   userInvestments,
   showInvestments,
-  showResignInvestment,
   investor_email,
   setShowCapitalAccounts,
 }) => {
@@ -135,19 +134,15 @@ const InvestmentsList = ({
     setMenuOpen(index);
   };
 
-  const selectItem = (item) => {
-    setSelectedItem(item);
-  };
-
-  const handleMenuClose = (item) => {
-    selectItem(item);
-    setSelectedItem(item.id);
+  const handleMenuClose = () => {
+    setSelectedItem('');
     setMenuOpen(false);
     setAnchorEl(null);
   };
 
   const handleItemClick = ({ id, capitalAccounts }, { metadata, ...investment }) => {
     const { dealId } = metadata;
+    console.log({ investment, dealId, metadata });
     switch (id) {
       case 'dealPage':
         openInNewTab(`/deals/${dealId}`);
@@ -162,7 +157,7 @@ const InvestmentsList = ({
         showInvestments(dealId);
         break;
       case 'resign':
-        showResignInvestment(investment);
+        openInNewTab(`/invest/${dealId}/${investment._id}`);
         break;
       case 'capitalAccounts':
         setShowCapitalAccounts(capitalAccounts);
@@ -170,6 +165,7 @@ const InvestmentsList = ({
       default:
         console.log('no item with that id');
     }
+    handleMenuClose();
   };
 
   const getRowItems = ({ metadata, dealName, ...investment }) => {
@@ -203,7 +199,7 @@ const InvestmentsList = ({
     if (metadata.investmentSigned) {
       rowItems.push({
         id: 'resign',
-        label: 'Resign Documents',
+        label: 'Edit Investment',
         startIcon: {
           iconName: 'drive_file_rename_outline',
         },
