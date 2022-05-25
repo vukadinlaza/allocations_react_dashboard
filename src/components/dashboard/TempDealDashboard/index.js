@@ -68,6 +68,8 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
+  console.log({ deal_id });
+
   const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -113,7 +115,7 @@ const TempDealDashboard = () => {
       try {
         if (remoteFundManagerDashboard) {
           const res = await fetch(
-            `${process.env.REACT_APP_BUILD_FRONTEND_URL}api/deals/${deal_id}`,
+            `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
           const deal = await res.json();
           if (deal?.phases?.length === 6) {
@@ -318,6 +320,8 @@ const TempDealDashboard = () => {
         <AllocationsLoader />
       </div>
     );
+
+  console.log(serviceDeal, 'SERVICe');
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {remoteFundManagerDashboard ? (
