@@ -68,8 +68,6 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  console.log({ deal_id });
-
   const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -321,7 +319,6 @@ const TempDealDashboard = () => {
       </div>
     );
 
-  console.log(serviceDeal, 'SERVICe');
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {remoteFundManagerDashboard ? (
