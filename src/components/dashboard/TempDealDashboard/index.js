@@ -113,7 +113,7 @@ const TempDealDashboard = () => {
       try {
         if (remoteFundManagerDashboard) {
           const res = await fetch(
-            `${process.env.REACT_APP_BUILD_FRONTEND_URL}api/deals/${deal_id}`,
+            `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
           const deal = await res.json();
           if (deal?.phases?.length === 6) {
@@ -318,6 +318,7 @@ const TempDealDashboard = () => {
         <AllocationsLoader />
       </div>
     );
+
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {remoteFundManagerDashboard ? (
