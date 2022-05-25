@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip, Button } from '@material-ui/core';
+import { Tooltip, Button, Typography } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
+import { Typography as AllocationsTypography } from '@allocations/design-system';
 import { phone, tablet } from '../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   boxTitleContainer: {
     width: '100%',
-    height: '71px',
+    height: '90px',
     background: `${theme.colors.white[100]} 0% 0% no-repeat padding-box`,
     borderBottom: `1px solid ${theme.colors.gray[200]}`,
     borderRadius: '10px 10px 0px 0px',
@@ -188,7 +189,7 @@ export const SimpleBox = ({
   title,
   autoHeight,
   titleData,
-  fontSize,
+  // fontSize,
   buttonAction,
   buttonText,
   fullWidthContent,
@@ -204,12 +205,7 @@ export const SimpleBox = ({
     <div className={`${classes.box} ${autoHeight ? classes.dynamicHeight : ''}`}>
       <div className={classes.boxTitleContainer} style={{ justifyContent: 'space-between' }}>
         <div className={classes.boxTitleText}>
-          <Typography
-            className={classes.boxTitle}
-            style={fontSize === 'small' ? { fontSize: '14px' } : {}}
-          >
-            {title}
-          </Typography>
+          <AllocationsTypography content={title} variant="heading5Small" />
           {tooltipContent && (
             <ModalTooltip
               title={title}

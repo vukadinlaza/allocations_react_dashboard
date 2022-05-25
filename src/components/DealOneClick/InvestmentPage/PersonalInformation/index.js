@@ -193,9 +193,12 @@ function PersonalInformation({
         </FormControl>
       )}
 
-      {['tpl_y3GEaLkZMDqhHT6SqE', 'tpl_zbmQNPrkqXnJmFMD7C', 'tpl_sCjzLb53RKfSd7ZErJ'].includes(
-        docSpringTemplateId,
-      ) && (
+      {[
+        'tpl_y3GEaLkZMDqhHT6SqE',
+        'tpl_zbmQNPrkqXnJmFMD7C',
+        'tpl_sCjzLb53RKfSd7ZErJ',
+        'tpl_ZAZ2ppLSMkjbRGzzT5',
+      ].includes(docSpringTemplateId) && (
         <TextField
           className={classes.root}
           variant="outlined"

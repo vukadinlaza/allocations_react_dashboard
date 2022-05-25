@@ -117,7 +117,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
 
   return (
     <Grid container spacing={2} className={classes.section}>
-      <Grid item xs={12} lg>
+      <Grid item xs={6} lg>
         <SimpleBox
           size="fourth"
           title="Total Capital Received"
@@ -139,7 +139,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid item xs={6} lg>
         <SimpleBox
           size="fourth"
           title="Total Committed"
@@ -158,7 +158,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid item xs={6} lg>
         <SimpleBox
           size="fourth"
           title="Total Invested"
@@ -182,7 +182,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid item xs={6} lg>
         <SimpleBox
           size="fourth"
           title="Multiple (Estimated)"
@@ -204,7 +204,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid item xs={6} lg>
         <SimpleBox
           size="fourth"
           title="Total Portfolio Value (Est.)"
@@ -230,27 +230,29 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} md={6}>
-        <ChartBox title="Portfolio Overview" info="Explanation">
-          <div className={classes.chartContainer}>
-            <DoughnutChart series={formatDoughnutSeries(series)} />
-          </div>
-          <div className={classes.tableContainer}>
-            <DefaultChartTable
-              series={formatDoughnutSeries(series)}
-              title="Investments"
-              secondColumnHeader="USD"
-              sumLabel="Total"
-              seriesTotal={seriesTotal}
-              seriesLabelKey="label"
-            />
-          </div>
-        </ChartBox>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <ChartBox title="Total Invested" info="Explanation">
-          <LineChart dataset={steppedChartData} />
-        </ChartBox>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={6}>
+          <ChartBox title="Portfolio Overview" info="Explanation">
+            <div className={classes.chartContainer}>
+              <DoughnutChart series={formatDoughnutSeries(series)} />
+            </div>
+            <div className={classes.tableContainer}>
+              <DefaultChartTable
+                series={formatDoughnutSeries(series)}
+                title="Investments"
+                secondColumnHeader="USD"
+                sumLabel="Total"
+                seriesTotal={seriesTotal}
+                seriesLabelKey="label"
+              />
+            </div>
+          </ChartBox>
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <ChartBox title="Total Invested" info="Explanation">
+            <LineChart dataset={steppedChartData} />
+          </ChartBox>
+        </Grid>
       </Grid>
     </Grid>
   );
