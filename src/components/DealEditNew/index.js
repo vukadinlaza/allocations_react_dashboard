@@ -353,7 +353,14 @@ function DealEditNew() {
         toggleDifferentSPVTerms={toggleDifferentSPVTerms}
       />
     ),
-    deal: <DealSettings formData={formData} setFormData={setFormData} refetch={refetch} />,
+    deal: (
+      <DealSettings
+        formData={formData}
+        setFormData={setFormData}
+        handleFormSubmit={handleFormSubmit}
+        refetch={refetch}
+      />
+    ),
     fund: <FundTerms formData={formData} setFormData={setFormData} />,
     portfolio: <PortfolioCompanySettings formData={formData} setFormData={setFormData} />,
   };

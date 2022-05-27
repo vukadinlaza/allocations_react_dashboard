@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
     height: '3.5rem',
   },
 
+  textInputDocspring: {
+    margin: '5px 5px 5px 0px',
+    height: '3.5rem',
+    width: '75%',
+  },
+
   copyButton: {
     width: 'max-content',
     padding: '7.5px',
@@ -259,6 +265,17 @@ const useStyles = makeStyles((theme) => ({
     left: '0',
     bottom: '5%',
     right: '0',
+  },
+  saveButton: {
+    textTransform: 'none',
+    backgroundColor: theme.colors.primary[500],
+    color: 'white',
+    width: '6rem',
+    margin: '5px 0px',
+    height: '3.5rem',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
   },
 }));
 
