@@ -34,7 +34,6 @@ import DealOneClick from './components/DealOneClick';
 import Build from './components/Build';
 import PostBuild from './components/PostBuild';
 
-import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
@@ -45,6 +44,7 @@ import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard'
 import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
 import RemoteTaxBanner from './components/RemoteTaxBanner';
+import useStyles from './styles';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -57,17 +57,15 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const SideBar = ({ isAuthenticated }) => {
   const { federatedSidebar } = useFlags();
-  return (
-    <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
-      {federatedSidebar ? <Sidebar /> : <SidebarOld />}
-    </div>
-  );
+  const styles = useStyles({ isAuthenticated });
+  return <div className={styles.sidebar}>{federatedSidebar ? <Sidebar /> : <SidebarOld />}</div>;
 };
 
 const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard } = useFlags();
+  const styles = useStyles({ isAuthenticated });
   return (
-    <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
+    <div className={styles.mainRoute}>
       <div style={{ maxHeight: '30%' }}>
         <div
           style={{
@@ -161,14 +159,11 @@ const MainApp = ({ isAuthenticated }) => {
 const LayOut = () => {
   const ldclient = useLDClient();
   const { isAuthenticated, userProfile } = useAuth();
+  const styles = useStyles({ isAuthenticated });
   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
   if (launchDarklyUser.key && launchDarklyUser.email) {
     ldclient?.identify(launchDarklyUser, userProfile._id);
   }
-  const unAuthenticatedStyle = {
-    gridTemplateColumns: 'auto',
-    gridTemplateAreas: `'mainRoute'`,
-  };
 
   if (isAuthenticated) {
     window.DD_RUM.setUser({ email: userProfile.email });
@@ -177,7 +172,7 @@ const LayOut = () => {
 
   return (
     <CurrentAccountProvider>
-      <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
+      <div className={styles.app}>
         <SideBar isAuthenticated={isAuthenticated} />
         <MainApp isAuthenticated={isAuthenticated} />
       </div>
