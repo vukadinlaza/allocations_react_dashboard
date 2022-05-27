@@ -142,7 +142,6 @@ function DealSettings({ formData, setFormData, handleFormSubmit, refetch }) {
   };
 
   const handleFormChange = ({ target }) => {
-    console.log('TARGET:', target.name, target.value);
     const dealParamFields = [
       'managementFees',
       'managementFeeType',
