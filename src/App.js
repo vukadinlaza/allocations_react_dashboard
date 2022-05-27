@@ -34,7 +34,6 @@ import DealOneClick from './components/DealOneClick';
 import Build from './components/Build';
 import PostBuild from './components/PostBuild';
 
-import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
