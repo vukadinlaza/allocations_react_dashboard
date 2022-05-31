@@ -6,7 +6,7 @@ export const Box = ({ box, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <Grid {...rest} item lg={2} xs={10}>
+    <Grid {...rest} item lg={2} md={5} xs={10}>
       <Paper elevation={0} className={classes.smallBox}>
         <Typography className={classes.boxTitle}>{box.title}</Typography>
         <Typography className={classes.boxValue}>{box.value}</Typography>
