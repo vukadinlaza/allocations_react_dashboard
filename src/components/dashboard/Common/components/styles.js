@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none !important',
     padding: '24px',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center !important',
     alignItems: 'flex-start',
     marginTop: '56px',
     opacity: '0.8',
