@@ -315,19 +315,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           <Grid item xs={1} />
         </Grid>
         <Grid container spacing={2} className={classes.computerBoxes}>
-          <Grid item xs={1} />
           {dashboardBoxes.map((box) => (
             <Box key={uuidv4()} box={box} />
-          ))}
-          <Grid item xs={1} />
-        </Grid>
-        <Grid container spacing={2} className={classes.mobileBoxes}>
-          {dashboardBoxes.map((box) => (
-            <Grid container spacing={2} key={uuidv4()} className={classes.box}>
-              <Grid item xs={1} />
-              <Box key={uuidv4()} box={box} />
-              <Grid item xs={1} />
-            </Grid>
           ))}
         </Grid>
         <Grid container spacing={2} className={classes.searchContainer}>

@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { phone } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   bigBox: {
@@ -25,11 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
   boxValue: {
     fontWeight: 700,
-    fontSize: '40px',
+    fontSize: '2.5vw',
     color: theme.colors.black[50],
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '16px',
+    },
   },
   smallBox: {
-    height: '116px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
     width: '100%',
     borderRadius: '8px',
     boxShadow: 'none !important',
