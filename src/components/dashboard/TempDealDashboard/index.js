@@ -7,7 +7,6 @@ import { Typography as AllocationsTypography } from '@allocations/design-system'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
-import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
@@ -21,10 +20,10 @@ import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
 import { phone } from '../../../utils/helpers';
+import PostBuild from '../../PostBuild';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
-const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -110,7 +109,13 @@ let BASE = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
-let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+let spvTabs = [
+  'Deal Progress',
+  'Investor Onboarding Status',
+  'Investors',
+  'Documents',
+  'Deal Page',
+];
 
 const TempDealDashboard = () => {
   const { width } = useViewport();
@@ -127,12 +132,7 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const {
-    fundManagerBankingTab,
-    capitalCallsDealSpecific,
-    cryptoPaymentInBuild,
-    remoteFundManagerDashboard,
-  } = useFlags();
+  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -148,15 +148,6 @@ const TempDealDashboard = () => {
   });
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
-
-  if (userProfile.admin) {
-    const bankingTabName = 'Banking';
-    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
-    if (fundManagerBankingTab) {
-      if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
-      if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
-    }
-  }
 
   if (userProfile.admin && cryptoPaymentInBuild) {
     // const cryptoTabName = 'Crypto';
@@ -178,7 +169,13 @@ const TempDealDashboard = () => {
   );
 
   useEffect(() => {
-    spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+    spvTabs = [
+      'Deal Progress',
+      'Investor Onboarding Status',
+      'Investors',
+      'Documents',
+      'Deal Page',
+    ];
     (async () => {
       try {
         if (remoteFundManagerDashboard) {
@@ -316,6 +313,9 @@ const TempDealDashboard = () => {
       case 'Investments':
         return <Investments classes={classes} data={fundData} />;
 
+      case 'Deal Progress':
+        return <PostBuild dealId={dealData?.deal._id} />;
+
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
@@ -355,15 +355,6 @@ const TempDealDashboard = () => {
             handleLinkCopy={handleLinkCopy}
           />
         );
-      case 'Banking':
-        return (
-          <Banking
-            dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
-            deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
-            virtual_account_number={dealData.deal.virtual_account_number || null}
-            classes={classes}
-          />
-        );
       case 'Crypto':
         return (
           <Crypto
@@ -374,14 +365,6 @@ const TempDealDashboard = () => {
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
-        );
-      case 'Deal Progress':
-        return (
-          <div style={{ marginTop: '20px' }}>
-            <Suspense fallback={<Loader />}>
-              <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
-            </Suspense>
-          </div>
         );
       default:
         return <p>No Data</p>;
