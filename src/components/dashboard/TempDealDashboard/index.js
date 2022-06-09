@@ -169,13 +169,7 @@ const TempDealDashboard = () => {
   );
 
   useEffect(() => {
-    spvTabs = [
-      'Deal Progress',
-      'Investor Onboarding Status',
-      'Investors',
-      'Documents',
-      'Deal Page',
-    ];
+    spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
         if (remoteFundManagerDashboard) {
