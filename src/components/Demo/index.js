@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
+import { colors } from '@allocations/design-system';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,21 +24,20 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 32,
   },
   h5: {
-    color: '#707070',
+    color: theme.colors.gray[500],
   },
   body: {
-    color: '#707070',
+    color: theme.colors.gray[500],
   },
   button: {
     textTransform: 'capitalize',
-    color: '#205DF5',
+    color: theme.colors.primary[600],
     fontSize: '1.4rem',
     marginLeft: -10,
     marginTop: 8,
   },
   blueContainer: {
-    background:
-      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
+    background: `linear-gradient(180deg, ${theme.colors.primary[600]} 0%, ${theme.colors.primary[500]} 160px, ${theme.colors.white[100]} 160px)`,
     padding: '1.5rem',
   },
   a: {
@@ -69,7 +69,7 @@ export default () => {
   return (
     <>
       <div className={classes.blueContainer}>
-        <Typography variant="h3" style={{ color: 'white' }}>
+        <Typography variant="h3" style={{ color: colors.white[100] }}>
           Demo
         </Typography>
         <Grid container spacing={12} justify="space-between" className={classes.gridContainer}>

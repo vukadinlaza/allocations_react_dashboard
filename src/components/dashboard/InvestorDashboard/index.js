@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { gql } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import { Typography } from '@allocations/design-system';
 import { getMomentFromId } from '@allocations/nextjs-common';
-import { useAuth } from '../../../auth/useAuth';
+import { useParams } from 'react-router';
 import 'chartjs-plugin-datalabels';
 import styles from './styles';
 import AllocationsLoader from '../../utils/AllocationsLoader';
@@ -13,43 +13,11 @@ import InvestmentsList from './components/InvestmentsList';
 import InvestorCharts from './components/InvestorCharts';
 import InvestorHighlights from './components/InvestorHighlights';
 import FundsInvestments from './components/FundsInvestments';
-import ResignModal from './components/ResignModal';
 import CapitalAccountsModal from './components/CapitalAccountsModal';
 
-const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
-      _id
-      email
-      investments {
-        _id
-        value
-        amount
-        status
-        created_at
-        documents {
-          path
-          link
-        }
-        submissionData {
-          submissionId
-        }
-        deal {
-          _id
-          slug
-          company_name
-          investmentType
-          status
-          dealParams {
-            dealMultiple
-          }
-          organization {
-            _id
-            slug
-          }
-        }
-      }
-    }
+const GET_NEW_INVESTOR = gql`
+  query NewUserInvestments($_id: String) {
+    newUserInvestments(_id: $_id)
   }
 `;
 
@@ -58,61 +26,72 @@ const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 const UserHome = ({ classes }) => {
-  const { userProfile, loading, refetch } = useAuth(GET_INVESTOR);
-  const [resignInvestment, showResignInvestment] = useState(false);
+  const params = useParams();
+  const [getNewInvestor, { data: { newUserInvestments = [] } = {}, loading }] =
+    useLazyQuery(GET_NEW_INVESTOR);
   const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
   const [dealsData, setDealsData] = useState({});
   const [funds, setFunds] = useState([]);
   const [fundInvestments, setFundInvestments] = useState({});
-  const userInvestments = useMemo(
-    () =>
-      userProfile.investments?.map((investment) => ({
-        _id: investment._id,
-        amount: investment.amount,
-        type: investment.deal?.investmentType,
-        dealName: investment.deal?.company_name,
-        dealMultiple: investment.deal?.dealParams?.dealMultiple || 1,
-        dealStatus: investment.deal?.status,
-        investmentDate: getMomentFromId(investment._id).format('MM/DD/YYYY'),
-        metadata: {
-          dealSlug: investment.deal?.slug,
-          orgSlug: investment.deal?.organization?.slug,
-          dealId: investment.deal?._id,
-          submissionId: investment.submissionData?.submissionId,
-          documents: investment.documents,
-        },
-      })) || [],
-    [userProfile],
-  );
+  const userInvestments = useMemo(() => {
+    if (newUserInvestments) {
+      return (
+        newUserInvestments
+          ?.filter((i) => i._id)
+          .map((investment) => {
+            return {
+              _id: investment._id,
+              amount: investment.total_committed_amount,
+              type: investment.deal?.type,
+              dealName: investment.deal?.name,
+              dealMultiple: investment.deal?.deal_multiple || 1,
+              dealStatus: investment.deal?.phase,
+              investmentDate: getMomentFromId(investment._id).format('MM/DD/YYYY'),
+              metadata: {
+                dealId: investment.deal?._id,
+                investmentSigned: !!Object.keys(investment.submission_data || {}).length,
+                documents: investment.documents,
+              },
+            };
+          }) || []
+      );
+    }
+    return [];
+  }, [newUserInvestments]);
+
+  useEffect(() => {
+    getNewInvestor({ variables: { _id: params.id } });
+  }, []);
+
   const userHasFunds = useMemo(
     () => !!userInvestments.find((i) => i.type === 'fund'),
     [userInvestments],
   );
   const userFunds = useMemo(() => {
-    if (!loading) {
+    if (newUserInvestments?.length) {
       const dealsIds = [];
-      const funds = userProfile?.investments
+      const funds = newUserInvestments
         ?.filter((investment) => {
           if (
             dealsIds.includes(investment?.deal?._id) ||
-            investment?.deal?.investmentType !== 'fund' ||
+            investment?.deal?.type !== 'fund' ||
             !investment?.deal?._id
           )
             return false;
-          dealsIds.push(investment.deal._id);
+          dealsIds.push(investment?.deal?._id);
           return true;
         })
         .map((investment) => {
-          return investment.deal;
+          return investment?.deal;
         });
       return funds;
     }
-  }, [loading]);
+  }, [newUserInvestments]);
 
   const createDealsATFilter = () => {
     if (!userFunds.length) return `({Deal Name}="Invalid deal")`;
     const dealsFilters = userFunds
-      .map((fund) => `({Deal Name}="${encodeURIComponent(fund.company_name || 'Invalid name')}")`)
+      .map((fund) => `({Deal Name}="${encodeURIComponent(fund.name || 'Invalid name')}")`)
       .join(', ');
 
     return `OR(${dealsFilters})`;
@@ -121,7 +100,7 @@ const UserHome = ({ classes }) => {
   const createInvestmentsATFilter = () => {
     if (!userFunds.length) return `(FIND("No Funds found", {Deals}))`;
     const fundsFilters = userFunds
-      .map((fund) => `FIND("${encodeURIComponent(fund.company_name || 'Invalid name')}" , {Deals})`)
+      .map((fund) => `FIND("${encodeURIComponent(fund.name || 'Invalid name')}" , {Deals})`)
       .join(', ');
 
     return `OR(${fundsFilters})`;
@@ -151,7 +130,7 @@ const UserHome = ({ classes }) => {
     if (atFundData?.length) {
       const funds = userFunds.map((deal) => {
         const dealInvestments = atFundData
-          .filter((investment) => investment.fields.Deals.includes(dealsData[deal.company_name]))
+          .filter((investment) => investment.fields.Deals.includes(dealsData[deal.name]))
           .map((investment) => {
             return { ...investment.fields, createdTime: investment.createdTime };
           });
@@ -171,7 +150,6 @@ const UserHome = ({ classes }) => {
   };
 
   if (
-    !Object.keys(userProfile).length ||
     loading ||
     (Object.keys(dealsData)?.length && atFundDataStatus !== 'fetched') ||
     (userHasFunds && atDealStatus !== 'fetched')
@@ -186,7 +164,7 @@ const UserHome = ({ classes }) => {
           classes={classes}
           fundInvestments={fundInvestments.investments}
           showInvestments={showInvestments}
-          dealName={fundInvestments.company_name}
+          dealName={fundInvestments.name}
         />
       );
     }
@@ -221,8 +199,7 @@ const UserHome = ({ classes }) => {
           userInvestments={userInvestments}
           showInvestments={showInvestments}
           fundInvestments={fundInvestments}
-          showResignInvestment={showResignInvestment}
-          userProfile={userProfile}
+          investor_email={userInvestments?.[0]?.investor_email}
           setShowCapitalAccounts={setShowCapitalAccounts}
         />
       </Grid>
@@ -236,14 +213,8 @@ const UserHome = ({ classes }) => {
         <CapitalAccountsModal
           setShowCapitalAccounts={setShowCapitalAccounts}
           showCapitalAccounts={showCapitalAccounts}
-          refetch={refetch}
         />
       )}
-      <ResignModal
-        showResignModal={resignInvestment}
-        setShowResignModal={showResignInvestment}
-        refetch={refetch}
-      />
     </Grid>
   );
 };

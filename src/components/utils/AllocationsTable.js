@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import Collapse from '@material-ui/core/Collapse';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,39 +18,39 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Box } from '@material-ui/core';
 import { nWithCommas } from '../../utils/numbers';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   cellText: {
-    color: '#2A2B54 !important',
+    color: `${theme.colors.black[50]} !important`,
   },
   headerText: {
-    color: '#2A2B54 !important',
+    color: `${theme.colors.black[50]} !important`,
     fontWeight: '400',
   },
   row: {
     '&:hover': {
-      background: '#f1f4fb',
+      background: theme.colors.gray[100],
     },
   },
   selectedCheckbox: {
     color: theme.palette.primary.main,
   },
   tableContainer: {
-    background: '#FBFCFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640 !important',
+    background: `${theme.colors.primary[25]} 0% 0% no-repeat padding-box`,
+    boxShadow: `0px 3px 6px ${theme.colors.black[100]}29`,
+    border: `1px solid ${theme.colors.gray[400]}40 !important`,
     borderRadius: '10px',
     overflowX: 'auto',
     padding: '20px 0',
   },
   table: {},
   totalRow: {
-    background: '#FFFFFF',
+    background: theme.colors.white[100],
   },
   totalCell: {
-    color: '#2A2B54 !important',
+    color: `${theme.colors.black[50]} !important`,
     fontWeight: '600 !important',
   },
-});
+}));
 
 /*
 	PROPS NEEDED (example):
@@ -104,7 +104,6 @@ const styles = (theme) => ({
 */
 
 const AllocationsTable = ({
-  classes,
   data,
   headers,
   rowSelector,
@@ -137,6 +136,7 @@ const AllocationsTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
   const [orderBy, setOrderBy] = React.useState(sortField || headers[0].value);
   const [order, setOrder] = React.useState(sortOrder);
+  const classes = useStyles();
 
   useEffect(() => {
     setPage(currentPage);
@@ -419,4 +419,4 @@ const AllocationsTable = ({
   );
 };
 
-export default withStyles(styles)(AllocationsTable);
+export default AllocationsTable;

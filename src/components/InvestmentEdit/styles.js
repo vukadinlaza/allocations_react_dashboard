@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles(() => ({
+const styles = makeStyles((theme) => ({
   addDoc: {
     display: 'inline-block',
     height: '90px',
@@ -9,11 +9,11 @@ const styles = makeStyles(() => ({
     borderRadius: '5px',
     verticalAlign: 'top',
     textAlign: 'center',
-    backgroundColor: '#f48fb1',
+    backgroundColor: theme.colors.error[400],
     opacity: 0.7,
   },
   doc: {
-    border: '1px dotted gray',
+    border: `1px dotted ${theme.colors.gray[300]}`,
     position: 'relative',
   },
   docs: {
@@ -26,7 +26,7 @@ const styles = makeStyles(() => ({
     marginRight: '10px',
   },
   faFilePdf: {
-    color: '#f48fb1',
+    color: theme.colors.error[400],
     fontSize: '2em',
     position: 'absolute',
     right: '16px',
