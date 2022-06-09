@@ -24,7 +24,6 @@ import PostBuild from '../../PostBuild';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
-const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -133,12 +132,7 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const {
-    fundManagerBankingTab,
-    capitalCallsDealSpecific,
-    cryptoPaymentInBuild,
-    remoteFundManagerDashboard,
-  } = useFlags();
+  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -371,14 +365,6 @@ const TempDealDashboard = () => {
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
-        );
-      case 'Deal Progress':
-        return (
-          <div style={{ marginTop: '20px' }}>
-            <Suspense fallback={<Loader />}>
-              <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
-            </Suspense>
-          </div>
         );
       default:
         return <p>No Data</p>;
