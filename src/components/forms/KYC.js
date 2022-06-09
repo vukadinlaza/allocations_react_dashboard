@@ -2,7 +2,6 @@ import React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Paper, Tooltip } from '@material-ui/core';
-import { colors } from '@allocations/design-system';
 import { toast } from 'react-toastify';
 import { useSimpleReducer } from '../../utils/hooks';
 
@@ -75,7 +74,7 @@ function PassportUploader({ investor, updates, update }) {
     return (
       <div className="file-uploader">
         <span className="file-label">Passport</span>
-        <FontAwesomeIcon size="lg" icon="check-circle" color={colors.success[500]} />
+        <FontAwesomeIcon size="lg" icon="check-circle" color="green" />
       </div>
     );
   }
@@ -113,7 +112,7 @@ function AccredidationUploader({ investor, updates, update }) {
     return (
       <div className="file-uploader">
         <span className="file-label">Accredited Investor Certificate</span>
-        <FontAwesomeIcon size="lg" icon="check-circle" color={colors.success[500]} />
+        <FontAwesomeIcon size="lg" icon="check-circle" color="green" />
       </div>
     );
   }

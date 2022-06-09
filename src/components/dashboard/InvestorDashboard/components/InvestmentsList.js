@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Chip, Icon, Input, List, Menu, Typography, colors } from '@allocations/design-system';
 import {
@@ -67,15 +67,12 @@ const headers = [
 ];
 
 const getChipColor = {
-  new: 'blue',
-  build: 'blue',
-  'post-build': 'green',
-  'pre-onboarding': 'green',
+  'post-build': 'gray',
+  'pre-onboarding': 'blue',
   onboarding: 'green',
   closing: 'yellow',
   'post-closing': 'red',
   closed: 'black',
-  archived: 'gray',
 };
 
 const BASE = 'appLhEikZfHgNQtrL';
@@ -85,40 +82,65 @@ const InvestmentsList = ({
   classes,
   userInvestments,
   showInvestments,
-  investor_email,
+  showResignInvestment,
+  userProfile,
   setShowCapitalAccounts,
 }) => {
-  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, investor_email || '');
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
   const [selectedItem, setSelectedItem] = useState('');
+  const [userDocuments, setUserDocuments] = useState([]);
   const [loadingDownloadDocs, setLoadingDownloadDoc] = useState(false);
+
+  useEffect(() => {
+    const userDocs = [];
+    if (userInvestments) {
+      userInvestments.forEach((inv) => {
+        inv.metadata.documents.forEach((doc) => {
+          const docNameArray = doc.path.split('/');
+          const docName = docNameArray[docNameArray.length - 1];
+          userDocs.push({
+            ...doc,
+            documentName: docName, // have same key document Name for all docs
+            type: /K1|K-1/.test(doc.path.toUpperCase())
+              ? 'K-1'
+              : /AGREEMENT|SUBSCRIPTION|DOCS/.test(doc.path.toUpperCase())
+              ? 'Investment Agreement'
+              : 'N/A',
+            status: 'Complete',
+            dealName: inv.dealName,
+          });
+        });
+      });
+      setUserDocuments(userDocs);
+    }
+  }, [userInvestments]);
 
   const handleZip = async (dealName) => {
     setLoadingDownloadDoc(true);
 
     try {
       const zip = new JSZip();
-      const filteredDocs = (userInvestments || [])
-        .filter((investment) => {
-          return investment.dealName === dealName;
-        })
-        .reduce((acc, investment) => [...acc, ...investment.metadata.documents], []);
+      const filteredDocs = (userDocuments || []).filter((d) => {
+        return d.dealName === dealName && d.link;
+      });
 
-      if (filteredDocs?.length === 0) {
+      if (filteredDocs.length === 0) {
         return toast.success('There are no documents to download.');
       }
       const files = await Promise.all(
-        filteredDocs?.map((doc) => ({
-          fileData: fetch(doc.link.includes('https') ? doc.link : `https://${doc.link}`).then(
-            (res) => res.blob(),
+        filteredDocs.map((doc) =>
+          fetch(doc.link.includes('https') ? doc.link : `https://${doc.link}`).then((res) =>
+            res.blob(),
           ),
-          fileName: doc.title,
-        })),
+        ),
       );
 
-      files.forEach((file) => zip.file(file.fileName, file.fileData));
+      files.forEach((file, i) =>
+        zip.file(`${filteredDocs[i].documentName.replace('.pdf', '')}.pdf`, file),
+      );
 
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `${dealName}_Investment_Documents.zip`);
@@ -134,21 +156,25 @@ const InvestmentsList = ({
     setMenuOpen(index);
   };
 
-  const handleMenuClose = () => {
-    setSelectedItem('');
+  const selectItem = (item) => {
+    setSelectedItem(item);
+  };
+
+  const handleMenuClose = (item) => {
+    selectItem(item);
+    setSelectedItem(item.id);
     setMenuOpen(false);
     setAnchorEl(null);
   };
 
   const handleItemClick = ({ id, capitalAccounts }, { metadata, ...investment }) => {
-    const { dealId } = metadata;
-    console.log({ investment, dealId, metadata });
+    const { orgSlug, dealSlug, dealId } = metadata;
     switch (id) {
       case 'dealPage':
-        openInNewTab(`/deals/${dealId}`);
+        openInNewTab(`/deals/${orgSlug}/${dealSlug}`);
         break;
       case 'nextSteps':
-        openInNewTab(`/next-steps/${investment._id}`);
+        openInNewTab(`/next-steps/${orgSlug}/${dealSlug}?investmentId=${investment._id}`);
         break;
       case 'downloadDocs':
         loadingDownloadDocs ? console.log('loading') : handleZip(investment.dealName);
@@ -157,7 +183,7 @@ const InvestmentsList = ({
         showInvestments(dealId);
         break;
       case 'resign':
-        openInNewTab(`/invest/${dealId}/${investment._id}`);
+        showResignInvestment(investment);
         break;
       case 'capitalAccounts':
         setShowCapitalAccounts(capitalAccounts);
@@ -165,7 +191,6 @@ const InvestmentsList = ({
       default:
         console.log('no item with that id');
     }
-    handleMenuClose();
   };
 
   const getRowItems = ({ metadata, dealName, ...investment }) => {
@@ -185,6 +210,13 @@ const InvestmentsList = ({
           iconName: 'dns',
         },
       },
+      {
+        id: 'downloadDocs',
+        label: 'Download Documents',
+        startIcon: {
+          iconName: 'description',
+        },
+      },
     ];
 
     if (investment.type === 'fund') {
@@ -196,21 +228,12 @@ const InvestmentsList = ({
         },
       });
     }
-    if (metadata.investmentSigned) {
+    if (metadata.submissionId) {
       rowItems.push({
         id: 'resign',
-        label: 'Edit Investment',
+        label: 'Resign Documents',
         startIcon: {
           iconName: 'drive_file_rename_outline',
-        },
-      });
-    }
-    if (metadata.documents.length) {
-      rowItems.push({
-        id: 'downloadDocs',
-        label: 'Download Documents',
-        startIcon: {
-          iconName: 'description',
         },
       });
     }

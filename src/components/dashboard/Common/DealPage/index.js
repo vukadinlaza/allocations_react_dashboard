@@ -47,12 +47,12 @@ export default function DealPage({
   goToEditDeal,
   handleLinkCopy,
 }) {
-  const { dealPageRedesign, remoteInvestPage } = useFlags();
+  const { dealPageRedesign } = useFlags();
   const { width } = useViewport();
   const [openModal, setOpenModal] = useState(false);
   const dealSlug = dealData?.metadata?.slug || dealData?.slug;
 
-  if (dealPageRedesign && remoteInvestPage) return <RemoteDealPage />;
+  if (dealPageRedesign) return <RemoteDealPage />;
 
   const handleClose = () => {
     setOpenModal(false);

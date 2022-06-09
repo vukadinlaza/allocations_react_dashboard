@@ -13,7 +13,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import { colors } from '@allocations/design-system';
 import AddAccountModal from '../../profileModals/AddAccountModal';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,20 +20,20 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   tableHeaderText: {
-    color: `${theme.colors.black[50]} !important`,
+    color: '#2A2B54 !important',
   },
   row: {
-    background: theme.colors.primary[25],
+    background: '#FBFCFF',
     '&:hover': {
-      background: theme.colors.gray[100],
+      background: '#f1f4fb',
     },
   },
   rowText: {
-    color: `${theme.colors.black[50]} !important`,
+    color: '#2A2B54 !important',
   },
   table: {
-    boxShadow: `0px 3px 6px ${theme.colors.black[100]}29`,
-    border: `1px solid ${theme.colors.gray[400]}40 !important`,
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'auto',
     width: '100%',
@@ -99,8 +98,8 @@ const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, use
                       disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
                       style={
                         data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id
-                          ? { backgroundColor: colors.gray[300], color: colors.white[100] }
-                          : { backgroundColor: colors.error[600], color: colors.white[100] }
+                          ? { backgroundColor: 'grey', color: 'white' }
+                          : { backgroundColor: 'red', color: 'white' }
                       }
                       onClick={() => {
                         removeUser({

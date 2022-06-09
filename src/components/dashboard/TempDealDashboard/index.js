@@ -7,33 +7,92 @@ import { Typography as AllocationsTypography } from '@allocations/design-system'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
+import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
+import Investors from './sections/Investors';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import useStyles from './styles';
+import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
 import { phone } from '../../../utils/helpers';
-import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
-const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
 const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
-const GET_DEAL_WITH_INVESTMENTS = gql`
-  query NewDealInvestments($deal_id: String) {
+const GET_DEAL = gql`
+  query GetDeal($_id: String!) {
+    deal(_id: $_id) {
+      _id
+      company_name
+      company_description
+      target
+      raised
+      slug
+      date_closed
+      investmentType
+      status
+      AUM
+      organization {
+        _id
+        name
+        high_volume_partner
+      }
+      dealParams {
+        signDeadline
+        wireDeadline
+        dealType
+        dealMultiple
+        totalCarry
+        fundTotalCarry
+        managementFees
+        managementFeesDollar
+        fundManagementFeesDollar
+        fundManagementFees
+        managementFeeType
+        fundManagementFeeType
+      }
+      virtual_account_number
+      viewedUsers {
+        _id
+        first_name
+        last_name
+        email
+      }
+      investments {
+        _id
+        amount
+        capitalWiredAmount
+        status
+        submissionData {
+          legalName
+        }
+        investor {
+          _id
+          first_name
+          last_name
+          name
+          email
+          accredidation_status
+        }
+        documents {
+          path
+          link
+        }
+      }
+    }
     investor {
       _id
       admin
       documents
       created_at
     }
-    newDealInvestments(deal_id: $deal_id)
   }
 `;
 
@@ -68,7 +127,12 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
+  const {
+    fundManagerBankingTab,
+    capitalCallsDealSpecific,
+    cryptoPaymentInBuild,
+    remoteFundManagerDashboard,
+  } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -79,14 +143,20 @@ const TempDealDashboard = () => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
 
-  const { data: { newDealInvestments: dealData, investor } = {}, refetch } = useQuery(
-    GET_DEAL_WITH_INVESTMENTS,
-    {
-      variables: { deal_id },
-    },
-  );
+  const { data: dealData, refetch } = useQuery(GET_DEAL, {
+    variables: { _id: deal_id },
+  });
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+
+  if (userProfile.admin) {
+    const bankingTabName = 'Banking';
+    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
+    if (fundManagerBankingTab) {
+      if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+      if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    }
+  }
 
   if (userProfile.admin && cryptoPaymentInBuild) {
     // const cryptoTabName = 'Crypto';
@@ -135,14 +205,14 @@ const TempDealDashboard = () => {
   }, [deal_id]);
 
   useEffect(() => {
-    if (dealData?.name) {
-      setDealName(dealData?.name);
+    if (dealData?.deal?.company_name) {
+      setDealName(dealData?.deal?.company_name);
     }
   }, [dealData]);
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
-      const newTabs = dealData.type === 'fund' ? fundTabs : spvTabs;
+      const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
 
       if (newTabs.includes('Deal Progress')) {
         setTabIndex(newTabs.indexOf('Deal Progress'));
@@ -181,21 +251,23 @@ const TempDealDashboard = () => {
   }, [atDeal]);
 
   const handleLinkCopy = () => {
-    if (orgSlug && dealData?.slug) {
-      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.slug}` || ''));
+    if (orgSlug && dealData?.deal?.slug) {
+      navigator.clipboard.writeText(
+        window.origin + (`/deals/${orgSlug}/${dealData.deal.slug}` || ''),
+      );
       toast.info('Copied deal link to clipboard');
     }
   };
 
   const goToDeal = () => {
-    if (orgSlug && dealData?.slug) {
-      window.open(`/deals/${orgSlug}/${dealData.slug}`);
+    if (orgSlug && dealData?.deal?.slug) {
+      window.open(`/deals/${orgSlug}/${dealData.deal.slug}`);
     }
   };
 
   const goToEditDeal = () => {
-    if (orgSlug && dealData?._id) {
-      window.open(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
+    if (orgSlug && dealData?.deal?._id) {
+      window.open(`/admin/${orgSlug}/deals/${dealData.deal._id}/edit`);
     }
   };
 
@@ -250,24 +322,27 @@ const TempDealDashboard = () => {
             classes={classes}
             width={width}
             data={dealData}
-            dealType={dealData?.offering_type}
-            investor={investor}
+            dealType={dealData?.deal?.dealParams?.dealType}
+            superAdmin={dealData?.investor?.admin}
             refetch={refetch}
           />
         );
       case 'Investors':
-        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
+        return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteOnboarding deal_id={dealData?._id} />
+            <RemoteInvestors deal_id={dealData?.deal?._id} />
           </Suspense>
         ) : (
-          <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?._id} />
-          </Suspense>
+          <Investors
+            classes={classes}
+            data={dealData}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
         );
 
       case 'Documents':
-        return <RemoteInvestorsDocuments />;
+        return <DocumentsTab classes={classes} data={dealData} refetch={refetch} />;
 
       case 'Deal Page':
         return (
@@ -280,13 +355,22 @@ const TempDealDashboard = () => {
             handleLinkCopy={handleLinkCopy}
           />
         );
+      case 'Banking':
+        return (
+          <Banking
+            dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
+            deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
+            virtual_account_number={dealData.deal.virtual_account_number || null}
+            classes={classes}
+          />
+        );
       case 'Crypto':
         return (
           <Crypto
             orgSlug={orgSlug}
             classes={classes}
-            deal_id={dealData._id}
-            virtual_account_number={dealData.nd_virtual_account_number || null}
+            deal_id={dealData.deal._id}
+            virtual_account_number={dealData.deal.virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
@@ -311,22 +395,23 @@ const TempDealDashboard = () => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-
   if (!dealData || !atFundData || loading)
     return (
       <div className={classes.loaderContainer}>
         <AllocationsLoader />
       </div>
     );
-
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {remoteFundManagerDashboard ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
-            progress={getTotalRaiseAmount(serviceDeal?.target_raise_goal || 0, dealData?.raised)}
-            currentAmount={dealData?.raised}
+            progress={getTotalRaiseAmount(
+              serviceDeal?.target_raise_goal || 0,
+              dealData?.deal?.raised,
+            )}
+            currentAmount={dealData?.deal?.raised}
             goalAmount={serviceDeal?.target_raise_goal || 0}
           />
         </Suspense>

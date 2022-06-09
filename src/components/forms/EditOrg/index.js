@@ -13,35 +13,35 @@ const useStyles = makeStyles((theme) => ({
     margin: '16px -16px',
   },
   tabs: {
-    borderTop: `1px solid ${theme.colors.gray[200]}`,
-    borderBottom: `1px solid ${theme.colors.gray[200]}`,
-    background: theme.colors.gray[50],
+    borderTop: '1px solid #dfe3e9',
+    borderBottom: '1px solid #dfe3e9',
+    background: '#f7f9fa',
     minHeight: 44,
     margin: '40px 0',
   },
   text: {
-    color: theme.colors.gray[400],
+    color: '#7f8ea3',
   },
   tab: {
     height: 42,
     width: '100%',
   },
   subtitle: {
-    color: theme.colors.gray[600],
+    color: '#3A506B',
     marginTop: 16,
   },
   activeTab: {
     height: 42,
     paddingTop: 3,
     width: '100%',
-    borderBottom: `3px solid ${theme.colors.primary[600]}`,
+    borderBottom: '3px solid #205DF5',
     outline: '0 !important',
   },
   button: {
     margin: '.5rem',
   },
   orgName: {
-    color: theme.colors.gray[600],
+    color: '#3A506B',
     fontWeight: 'bolder',
   },
 }));

@@ -5,7 +5,6 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
-import { colors } from '@allocations/design-system';
 import AppModal from '../../../../Modal/AppModal';
 
 const PROFILE_IMAGE = gql`
@@ -126,7 +125,7 @@ const ProfilePhoto = ({ investor, refetch }) => {
       border: `2px solid ${theme.palette.background.paper}`,
       backgroundColor: theme.palette.primary.main,
       '&:hover': {
-        backgroundColor: theme.colors.success[400],
+        backgroundColor: '#56db40',
         cursor: 'pointer',
       },
     },
@@ -154,7 +153,7 @@ const ProfilePhoto = ({ investor, refetch }) => {
         }
       >
         {!imageInDatabase ? (
-          <Avatar style={{ border: `3px solid ${colors.primary[800]}` }} className={classes.avatar}>
+          <Avatar style={{ border: 'solid blue 3px' }} className={classes.avatar}>
             <PersonIcon className={classes.noAvatar} />
           </Avatar>
         ) : (
@@ -165,7 +164,7 @@ const ProfilePhoto = ({ investor, refetch }) => {
                 ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${imageInDatabase}`
                 : ''
             }
-            style={{ border: `3px solid ${colors.primary[800]}` }}
+            style={{ border: 'solid blue 3px' }}
             className={classes.avatar}
           />
         )}
@@ -210,7 +209,7 @@ const ProfilePhoto = ({ investor, refetch }) => {
             ) : (
               <Button
                 variant="contained"
-                style={{ backgroundColor: colors.error[600], color: colors.white[100] }}
+                style={{ backgroundColor: 'red', color: 'white' }}
                 onClick={handleDelete}
               >
                 Delete

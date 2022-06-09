@@ -58,7 +58,7 @@ const DEAL = gql`
 
 type Props = WithStyles<typeof styles>;
 
-const Investors = React.lazy(() => import('invest/Onboarding'));
+const Investors = React.lazy(() => import('invest/Investors'));
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
