@@ -35,10 +35,6 @@ const dealInvestmentsHeaders = [
 const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName }) => {
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    document.querySelector('.mainRoute').scrollTo(0, 0);
-  }, []);
-
   const getFormattedData = () =>
     fundInvestments.length
       ? fundInvestments.map((investment) => {
