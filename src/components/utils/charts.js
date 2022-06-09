@@ -1,14 +1,13 @@
 import React from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { nWithCommas, titleCase } from '@allocations/nextjs-common';
-import { colors } from '@allocations/design-system';
 import { phone } from '../../utils/helpers';
 import { useViewport } from '../../utils/hooks';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   dataTable: {
     height: '250px',
     width: '100%',
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     position: 'sticky',
     top: '0',
-    backgroundColor: theme.colors.white[100],
+    backgroundColor: 'white',
     color: theme.palette.text.secondary,
   },
   rowColor: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   secondColumnHeader: {
     position: 'sticky',
     top: '0',
-    backgroundColor: theme.colors.white[100],
+    backgroundColor: 'white',
     paddingRight: '15px',
     textAlign: 'right',
     justifyContent: 'flex-end',
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '15px',
     width: '35%',
     justifyContent: 'flex-end',
-    color: theme.colors.brand[300],
+    color: '#0040FE',
     fontWeight: 'bold',
   },
   seriesLabel: {
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   seriesTotal: {
     position: 'sticky',
     top: 0,
-    backgroundColor: theme.colors.white[100],
+    backgroundColor: 'white',
     borderTop: '1px solid rgba(0, 0, 0, 0.1)',
   },
   sLabel: {
@@ -93,47 +92,47 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
-}));
+});
 
-export const DefaultChartTable = ({
-  series,
-  seriesLabelKey, // String
-}) => {
-  const classes = useStyles();
+export const DefaultChartTable = withStyles(styles)(
+  ({
+    classes,
+    series,
+    seriesLabelKey, // String
+  }) => {
+    if (!series) {
+      return <div />;
+    }
+    return (
+      <table className={classes.dataTable}>
+        <tbody className={classes.tableBody}>
+          {series.map((s, i) => (
+            <tr key={`series_${i}`}>
+              <td
+                align="left"
+                style={{
+                  width: '100%',
+                  minWidth: '65%',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'row',
+                  marginBottom: '10px',
+                }}
+              >
+                <div style={{ backgroundColor: s.backgroundColor }} className={classes.rowColor} />
+                <div className={classes.sLabel}>
+                  {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  },
+);
 
-  if (!series) {
-    return <div />;
-  }
-
-  return (
-    <table className={classes.dataTable}>
-      <tbody className={classes.tableBody}>
-        {series.map((s, i) => (
-          <tr key={`series_${i}`}>
-            <td
-              align="left"
-              style={{
-                width: '100%',
-                minWidth: '65%',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                flexDirection: 'row',
-                marginBottom: '10px',
-              }}
-            >
-              <div style={{ backgroundColor: s.backgroundColor }} className={classes.rowColor} />
-              <div className={classes.sLabel}>
-                {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-export const DoughnutChart = ({ series }) => {
+export const DoughnutChart = withStyles(styles)(({ series }) => {
   const addAlpha = (color, opacity) => {
     const _opacity = Math.round(Math.min(Math.max(opacity || 1, 0), 1) * 255);
     return color + _opacity.toString(16).toUpperCase();
@@ -219,7 +218,7 @@ export const DoughnutChart = ({ series }) => {
         plugins: {
           datalabels: {
             display: false,
-            color: colors.white[100],
+            color: 'white',
             labels: dataLabels,
             formatter(value, ctx) {
               const chartId = ctx.chart?.id;
@@ -249,19 +248,19 @@ export const DoughnutChart = ({ series }) => {
               return data.labels[tooltipItem.index];
             },
           },
-          backgroundColor: colors.white[100],
+          backgroundColor: '#FFF',
           titleFontSize: 16,
-          titleFontColor: colors.black[50],
-          bodyFontColor: colors.gray[400],
+          titleFontColor: '#2A2B54',
+          bodyFontColor: '#94A3B8',
         },
         maintainAspectRatio: false,
         cutoutPercentage: 55,
       }}
     />
   );
-};
+});
 
-export const LineChart = ({ dataset: { data, labels } }) => {
+export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   const lineChartPlugin = {
     afterDraw(chart) {
       if (chart.tooltip._active && chart.tooltip._active.length) {
@@ -275,7 +274,7 @@ export const LineChart = ({ dataset: { data, labels } }) => {
         ctx.moveTo(x, y);
         ctx.lineTo(x, bottomY);
         ctx.lineWidth = 2;
-        ctx.strokeStyle = colors.primary[600];
+        ctx.strokeStyle = '#0461FF';
         ctx.setLineDash([3]);
         ctx.stroke();
         ctx.restore();
@@ -286,20 +285,20 @@ export const LineChart = ({ dataset: { data, labels } }) => {
   const lineData = (canvas) => {
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 400, 400);
-    gradient.addColorStop(0, colors.primary[600]);
-    gradient.addColorStop(0.5, `${colors.primary[600]}1A`);
-    gradient.addColorStop(1, `${colors.white[100]}00`);
+    gradient.addColorStop(0, 'rgba(4, 97, 255, 1)');
+    gradient.addColorStop(0.5, 'rgba(4, 97, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0');
     return {
       labels,
       datasets: [
         {
           label: 'Dataset',
           data,
-          borderColor: colors.primary[600],
+          borderColor: '#0461FF',
           backgroundColor: gradient,
           fill: true,
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: colors.primary[600],
+          pointHoverBackgroundColor: '#0461FF',
         },
       ],
     };
@@ -354,10 +353,10 @@ export const LineChart = ({ dataset: { data, labels } }) => {
               return data.labels[tooltipItem.index];
             },
           },
-          backgroundColor: colors.white[100],
+          backgroundColor: '#FFF',
           titleFontSize: 16,
-          titleFontColor: colors.black[50],
-          bodyFontColor: colors.gray[400],
+          titleFontColor: '#2A2B54',
+          bodyFontColor: '#94A3B8',
           bodyFontSize: 14,
           displayColors: false,
           mode: 'index',
@@ -384,7 +383,7 @@ export const LineChart = ({ dataset: { data, labels } }) => {
               beginAtZero: false,
               gridLines: {
                 borderDash: [8, 4],
-                color: colors.white[100],
+                color: 'rgba(0, 0, 0, 0)',
                 drawBorder: false,
                 display: false,
               },
@@ -394,7 +393,7 @@ export const LineChart = ({ dataset: { data, labels } }) => {
             {
               gridLines: {
                 borderDash: [8, 4],
-                color: colors.white[100],
+                color: 'rgba(0, 0, 0, 0)',
                 drawBorder: false,
                 display: false,
               },
@@ -412,4 +411,4 @@ export const LineChart = ({ dataset: { data, labels } }) => {
       }}
     />
   );
-};
+});

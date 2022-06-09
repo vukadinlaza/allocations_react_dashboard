@@ -1,29 +1,27 @@
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   back: {
-    color: theme.colors.black[50],
+    color: '#2A2B54',
     cursor: 'pointer',
     padding: '6px 8px',
     '&:hover': {
-      backgroundColor: theme.colors.gray[100],
+      backgroundColor: '#8493A61A',
       borderRadius: '5px',
     },
   },
 
   button: {
-    color: theme.colors.white[100],
+    color: 'white',
     fontSize: '16px',
     '&:focus': { outline: 'none', border: 'none' },
   },
   buttonUser: {
-    color: theme.colors.brand[300],
+    color: '#0040FE',
     fontSize: '1rem',
     marginLeft: '1em',
     cursor: 'pointer',
     textTransform: 'none',
     '&:hover': {
-      backgroundColor: theme.colors.gray[100],
+      backgroundColor: '#8493A61A',
     },
     '&:focus': {
       outline: 'none',
@@ -33,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
   buttonLink: {
     borderRadius: '100%',
-    backgroundColor: theme.colors.primary[600],
+    backgroundColor: '#0462FF',
     padding: '8px',
     display: 'flex',
     justifyContent: 'center',
@@ -43,19 +41,19 @@ const useStyles = makeStyles((theme) => ({
     height: '32px',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: theme.colors.primary[300],
+      backgroundColor: '#3f85f9',
     },
   },
   cancelButton: {
     width: '100%',
-    color: theme.colors.black[50],
+    color: '#2A2C54',
     fontWeight: '500',
     fontSize: '16px',
     marginTop: '5px',
     textTransform: 'none',
     '&:hover': {
-      backgroundColor: theme.colors.gray[100],
-      color: theme.colors.primary[900],
+      backgroundColor: '#8493A61A',
+      color: '#242973',
     },
     '&:focus': {
       outline: 'none',
@@ -63,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cellText: {
-    color: `${theme.colors.black[50]} !important`,
+    color: '#2A2B54 !important',
   },
   contentContainer: {
     padding: '2rem',
@@ -72,14 +70,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   createButton: {
-    backgroundColor: theme.colors.success[500],
+    backgroundColor: '#39C522',
     display: 'flex',
     alignItems: 'center',
-    color: theme.colors.white[100],
+    color: 'white',
     textTransform: 'none',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: theme.colors.success[400],
+      backgroundColor: '#56db40',
     },
     '&:focus': {
       outline: 'none',
@@ -108,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     left: '0',
     top: '0',
-    background: theme.colors.white[100],
+    background: 'white',
   },
   dataContainer: {
     display: 'flex',
@@ -127,27 +125,27 @@ const useStyles = makeStyles((theme) => ({
 
   editMultiple: {
     cursor: 'pointer',
-    color: theme.colors.gray[400],
+    color: '#a9a9a9',
     fontSize: '1.2rem',
     marginLeft: '0.5rem',
     '&:hover': {
-      color: theme.colors.primary[600],
+      color: '#0462FF',
     },
   },
   fieldTitle: {
     fontWeight: 'bold',
-    color: `${theme.colors.black[50]}C4`,
+    color: 'rgb(42,43,84,77%)',
     marginBottom: '8px',
   },
   fieldValue: {
-    color: `${theme.colors.black[50]}C4`,
+    color: 'rgb(42,43,84,77%)',
   },
 
   formContainer: {
-    backgroundColor: theme.colors.primary[25],
+    backgroundColor: '#FBFCFF',
   },
   headerText: {
-    color: `${theme.colors.black[50]} !important`,
+    color: '#2A2B54 !important',
     fontWeight: '400',
   },
   investmentsMainTitle: {
@@ -182,7 +180,7 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     '&:hover': {
-      background: theme.colors.gray[100],
+      background: '#f1f4fb',
     },
   },
   searchContainer: {
@@ -191,9 +189,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     marginBottom: '25px',
-    background: theme.colors.white[100],
+    background: 'white',
     padding: '15px 20px',
-    border: `solid 1px ${theme.colors.gray[200]}`,
+    border: 'solid 1px #dadada',
     boxShadow: '0px 3px 5px -5px',
     borderRadius: '3px',
   },
@@ -217,7 +215,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '20px',
     fontWeight: 'bold',
     marginBottom: '28px',
-    color: `${theme.colors.black[50]}C4`,
+    color: 'rgb(42,43,84,77%)',
   },
 
   selectedCheckbox: {
@@ -226,7 +224,7 @@ const useStyles = makeStyles((theme) => ({
   selectedTab: {
     fontWeight: 'bold !important',
     '& $tabWrapper': {
-      backgroundColor: `${theme.colors.primary[600]}25`,
+      backgroundColor: 'rgb(32 93 245 / 16%)',
       borderRadius: '10px',
     },
   },
@@ -239,9 +237,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableContainer: {
-    background: `${theme.colors.primary[25]} 0% 0% no-repeat padding-box`,
-    boxShadow: `0px 3px 6px ${theme.colors.black[100]}29`,
-    border: `1px solid ${theme.colors.gray[400]}40`,
+    background: '#FBFCFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640',
     borderRadius: '10px',
     marginBottom: '50px',
   },
@@ -273,7 +271,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     margin: '0 0 26px 0',
     fontWeight: '500',
-    color: theme.colors.black[50],
+    color: '#2A2C54',
     fontSize: '18px',
   },
   titleContainer: {
@@ -286,17 +284,18 @@ const useStyles = makeStyles((theme) => ({
 
   updateButton: {
     width: '100%',
-    color: theme.colors.white[100],
-    backgroundColor: theme.colors.black[50],
+    color: 'white',
+    backgroundColor: '#2A2B54',
     fontWeight: '500',
     fontSize: '16px',
     marginTop: '10px',
     padding: '10px',
     textTransform: 'none',
     '&:hover': {
-      backgroundColor: theme.colors.primary[900],
+      backgroundColor: '#242973',
+      //     backgroundColor: '#2A2B54',
     },
   },
-}));
+});
 
-export default useStyles;
+export default styles;

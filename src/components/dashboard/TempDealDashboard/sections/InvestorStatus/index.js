@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import _ from 'lodash';
 import MailIcon from '@material-ui/icons/Mail';
 import {
   Avatar,
@@ -107,7 +108,7 @@ const InvestorBox = ({
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
-        <Avatar className={classes.avatar}>{investor.name?.charAt(0).toUpperCase()}</Avatar>
+        <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
         {dealType === '506c' ? (
           <div
@@ -169,7 +170,7 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
   const [showModal, setShowModal] = useState(false);
   const [showCreateInvModal, setShowCreateInvModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
@@ -177,7 +178,6 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
   const [investorId, setInvestorId] = useState(null);
   const [sortField, setSortField] = useState('name');
   const [reminderModalOpen, setReminderModalOpen] = useState(false);
-  const superAdmin = investor?.admin;
 
   const onClose = () => {
     setInvestmentId(null);
@@ -192,7 +192,7 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
     setShowCreateInvModal: () => setShowCreateInvModal(false),
   };
 
-  if (!data?.investments) {
+  if (!data?.deal?.investments) {
     return (
       <div className={classes.loaderContainer}>
         <Loader />
@@ -200,26 +200,30 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
     );
   }
 
-  const { investments } = data;
-  const viewedUsers = [];
+  const { investments } = data.deal;
+
+  const viewedUsers = data?.deal?.viewedUsers || [];
 
   const investors = investments
-    .filter((inv) => inv?.user_id)
+    .filter((inv) => inv?.investor?._id)
     .map((inv) => {
-      const name = inv?.submission_data?.member_name || inv.investor_name;
+      const firstName = _.get(inv, 'investor.first_name', '');
+      const n = _.get(inv, 'investor.name', '');
+      const name = inv?.submissionData?.legalName ? inv?.submissionData?.legalName : n || firstName;
       const timestamp = inv._id.toString().substring(0, 8);
       const date = new Date(parseInt(timestamp, 16) * 1000);
 
       return {
         name,
-        amount: inv.transactions?.length
-          ? inv.transactions.map((t) => t.wired_amount).reduce((acc, amount) => acc + amount, 0)
-          : inv.total_committed_amount,
-        status: inv.phase,
-        accredidation_status: inv.submission_data?.accredited_investor_type_individual,
-        id: inv.user_id,
+        amount:
+          inv.capitalWiredAmount !== null && inv.capitalWiredAmount
+            ? inv.capitalWiredAmount
+            : inv.amount,
+        status: inv.status,
+        accredidation_status: inv.investor.accredidation_status,
+        id: inv.investor._id,
         investmentId: inv._id,
-        dealId: data._id,
+        dealId: data.deal._id,
         date,
       };
     });
@@ -240,9 +244,14 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
     let columnInvestors = investors.filter((inv) => inv.status === status);
     let total = 0;
     if (columnInvestors.length) {
+      // For deals that support capitalWiredAmount, we should look for capitalWiredAmount on wired investments, for old deals we just rely on the wired status and use amount
       total = Math.round(
         columnInvestors
-          .map((inv) => inv.amount)
+          .map((inv) =>
+            ['wired', 'completed'].includes(status)
+              ? inv.capitalWiredAmount || inv.amount
+              : inv.amount,
+          )
           .reduce((acc, n) => {
             return acc + n;
           }),
@@ -332,7 +341,7 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
                   setInvestmentId={setInvestmentId}
                   setDealId={setDealId}
                   setInvestorId={setInvestorId}
-                  dealId={data?._id}
+                  dealId={data?.deal?._id}
                   dealType={dealType}
                 />
               );
@@ -418,7 +427,7 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
           onClose={() => setShowCreateInvModal(false)}
           maxWidth="md"
         >
-          <CreateInvestment deal={data} handleUpdate={handleUpdate} />
+          <CreateInvestment deal={data.deal} handleUpdate={handleUpdate} />
         </AppModal>
         <AppModal
           maxWidth="md"
@@ -426,7 +435,7 @@ const InvestorStatus = ({ classes, width, data, investor, refetch, dealType }) =
           isOpen={reminderModalOpen}
           onClose={() => setReminderModalOpen(false)}
         >
-          <SendWireReminder signedInvestors={signedInvestors} deal={data} />
+          <SendWireReminder signedInvestors={signedInvestors} deal={data.deal} />
         </AppModal>
       </Grid>
     </>

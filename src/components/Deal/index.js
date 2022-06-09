@@ -4,7 +4,6 @@ import BN from 'bignumber.js';
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
 import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import { Paper, List, ListItem, ListItemText, Grid, Button } from '@material-ui/core';
-import { colors } from '@allocations/design-system';
 import queryString from 'query-string';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import moment from 'moment';
@@ -187,15 +186,15 @@ export function DealParams({ deal, deal_slug }) {
       {(dealParams.signDeadline || dealParams.wireDeadline) && (
         <div
           style={{
-            backgroundColor: colors.gray[50],
+            backgroundColor: '#f7f9fa',
             height: 44,
             display: 'flex',
             justifyContent: 'space-between',
             marginTop: 8,
             textAlign: 'left',
             padding: '10px',
-            borderTop: `1px solid ${colors.gray[200]}`,
-            borderBottom: `1px solid ${colors.gray[200]}`,
+            borderTop: '1px solid #dfe3e9',
+            borderBottom: '1px solid #dfe3e9',
           }}
         >
           <span>Deadlines</span>
@@ -228,15 +227,15 @@ export function DealParams({ deal, deal_slug }) {
         dealParams.managementFeesDollar) && (
         <div
           style={{
-            backgroundColor: colors.gray[50],
+            backgroundColor: '#f7f9fa',
             height: 44,
             display: 'flex',
             justifyContent: 'space-between',
             marginTop: 8,
             textAlign: 'left',
             padding: '10px',
-            borderTop: `1px solid ${colors.gray[200]}`,
-            borderBottom: `1px solid ${colors.gray[200]}`,
+            borderTop: '1px solid #dfe3e9',
+            borderBottom: '1px solid #dfe3e9',
           }}
         >
           <span>SPV Terms</span>
@@ -310,15 +309,15 @@ export function DealParams({ deal, deal_slug }) {
         dealParams.portfolioManagementFeesDollar) && (
         <div
           style={{
-            backgroundColor: colors.gray[50],
+            backgroundColor: '#f7f9fa',
             height: 44,
             display: 'flex',
             justifyContent: 'space-between',
             marginTop: 8,
             textAlign: 'left',
             padding: '10px',
-            borderTop: `1px solid ${colors.gray[200]}`,
-            borderBottom: `1px solid ${colors.gray[200]}`,
+            borderTop: '1px solid #dfe3e9',
+            borderBottom: '1px solid #dfe3e9',
           }}
         >
           <span>Portfolio Company Terms</span>
@@ -388,15 +387,15 @@ export function DealParams({ deal, deal_slug }) {
         dealParams.fundEstimatedTerm) && (
         <div
           style={{
-            backgroundColor: colors.gray[50],
+            backgroundColor: '#f7f9fa',
             height: 44,
             display: 'flex',
             justifyContent: 'space-between',
             marginTop: 8,
             textAlign: 'left',
             padding: '10px',
-            borderTop: `1px solid ${colors.gray[200]}`,
-            borderBottom: `1px solid ${colors.gray[200]}`,
+            borderTop: '1px solid #dfe3e9',
+            borderBottom: '1px solid #dfe3e9',
           }}
         >
           <span>Fund Terms</span>
@@ -474,15 +473,15 @@ function InvestorData({ investor }) {
     <>
       <div
         style={{
-          backgroundColor: colors.gray[50],
+          backgroundColor: '#f7f9fa',
           height: 44,
           display: 'flex',
           justifyContent: 'space-between',
           marginTop: 16,
           textAlign: 'left',
           padding: '10px',
-          borderTop: `1px solid ${colors.gray[200]}`,
-          borderBottom: `1px solid ${colors.gray[200]}`,
+          borderTop: '1px solid #dfe3e9',
+          borderBottom: '1px solid #dfe3e9',
         }}
       >
         <span>My Info</span>
@@ -617,7 +616,7 @@ export default function Deal() {
           bottom: 0,
           right: 0,
           width: !mobile ? 300 : '100%',
-          borderLeft: !mobile ? `1px solid ${colors.gray[200]}` : 0,
+          borderLeft: !mobile ? '1px solid #dfe2e5' : 0,
         }}
       >
         <DealParams deal={deal} deal_slug={deal_slug} />

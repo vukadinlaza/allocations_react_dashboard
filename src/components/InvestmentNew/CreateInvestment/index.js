@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import { gql, useMutation } from '@apollo/client';
+
 import {
   Button,
   TextField,
@@ -12,22 +13,23 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
-import { colors } from '@allocations/design-system';
 import styles from '../styles';
 import { UserSearch } from '..';
 
 const CREATE_INVESTMENT = gql`
-  mutation NewCreateInvestment($investment: Object!) {
-    newCreateInvestment(investment: $investment)
+  mutation CreateInvestment($investment: InvestmentInput!) {
+    createInvestment(investment: $investment) {
+      _id
+    }
   }
 `;
 
 function validate({ investment, user, deal }) {
   const errors = [];
-  if (!investment.total_committed_amount) errors.push('total_committed_amount');
+  if (!investment.amount) errors.push('amount');
   if (!user) errors.push('user');
   if (!deal) errors.push('deal');
-  if (!investment.phase) errors.push('phase');
+  if (!investment.status) errors.push('status');
   return errors;
 }
 
@@ -60,11 +62,11 @@ export default function CreateInvestment({ deal, handleUpdate }) {
     createInvestment({
       variables: {
         investment: {
-          total_committed_amount: Math.floor(investment.total_committed_amount),
-          wired_amount: investment.wired_amount,
+          amount: Math.floor(investment.amount),
+          capitalWiredAmount: investment.capitalWiredAmount,
           user_id: user._id,
           deal_id: deal._id,
-          phase: investment.phase,
+          status: investment.status,
         },
       },
     });
@@ -89,7 +91,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(deal, 'name', '')} ${get(deal, 'description', '')}`}
+                value={`${get(deal, 'company_name', '')} ${get(deal, 'company_description', '')}`}
                 disabled
                 label="Deal"
                 variant="outlined"
@@ -105,13 +107,13 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                error={errors.includes('total_committed_amount')}
-                value={get(investment, 'total_committed_amount', '') || undefined}
+                error={errors.includes('amount')}
+                value={get(investment, 'amount', '') || undefined}
                 placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'total_committed_amount',
+                    prop: 'amount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -130,11 +132,11 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
                 placeholder="0"
-                value={get(investment, 'wired_amount', '') || undefined}
+                value={get(investment, 'capitalWiredAmount', '') || undefined}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'wired_amount',
+                    prop: 'capitalWiredAmount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -147,10 +149,10 @@ export default function CreateInvestment({ deal, handleUpdate }) {
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
               <Select
-                error={errors.includes('phase')}
-                value={investment?.phase || ''}
-                onChange={(e) => updateInvestmentProp({ prop: 'phase', newVal: e.target.value })}
-                inputProps={{ name: 'phase' }}
+                error={errors.includes('status')}
+                value={investment?.status || ''}
+                onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
+                inputProps={{ name: 'status' }}
               >
                 <MenuItem value="invited">Invited</MenuItem>
                 <MenuItem value="signed">Signed</MenuItem>
@@ -172,7 +174,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
           >
             <Button
               variant="contained"
-              style={{ backgroundColor: colors.black[50] }}
+              style={{ backgroundColor: '#2A2B54' }}
               onClick={handleCreateInvestment}
               color="primary"
             >

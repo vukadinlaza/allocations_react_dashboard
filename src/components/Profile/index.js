@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
 import ProfileInfo from './profileSections/ProfileInfo';
 import Loader from '../utils/Loader';
-import useStyles from './styles';
+import styles from './styles';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -45,8 +46,7 @@ const GET_INVESTOR = gql`
 
 const dashboardTabs = ['Personal Information'];
 
-const Profile = () => {
-  const classes = useStyles();
+const Profile = ({ classes }) => {
   const { userProfile, refetch, loading, logout } = useAuth(GET_INVESTOR);
   const [formStatus, setFormStatus] = useState('edit');
 
@@ -120,4 +120,4 @@ const Profile = () => {
   );
 };
 
-export default withRouter(Profile);
+export default withStyles(styles)(withRouter(Profile));
