@@ -161,9 +161,6 @@ function Sidebar(props) {
             </Drawer>
           </Hidden>
         </nav>
-        <main className={classes.content} style={{ background: 'white' }}>
-          {props.children}
-        </main>
       </div>
     </div>
   );
