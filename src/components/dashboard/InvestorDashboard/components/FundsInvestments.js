@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { Input, List, Typography, colors } from '@allocations/design-system';
 import {
