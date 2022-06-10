@@ -132,7 +132,7 @@ const TempDealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
+  const { capitalCallsDealSpecific, cryptoPaymentInBuild, dealProgress } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -172,7 +172,7 @@ const TempDealDashboard = () => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
-        if (remoteFundManagerDashboard) {
+        if (dealProgress) {
           const res = await fetch(
             `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
@@ -380,7 +380,7 @@ const TempDealDashboard = () => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {remoteFundManagerDashboard ? (
+      {dealProgress ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
