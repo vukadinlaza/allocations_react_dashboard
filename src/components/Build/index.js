@@ -21,8 +21,15 @@ export default function Build() {
   const history = useHistory();
   const organization = useCurrentOrganization();
   const [createDeal, { error }] = useMutation(CREATE_DEAL, {
-    onCompleted: ({ createDeal }) =>
-      history.push(`/admin/${organization.slug}/deals/${createDeal._id}`),
+    onCompleted: ({ createDeal }) => {
+      if (organization?.slug) {
+        history.push(`/admin/${organization.slug}/deals/${createDeal._id}`);
+      } else if (userProfile?.organizations_admin?.[0]?.slug) {
+        history.push(`/admin/${userProfile.organizations_admin[0].slug}/deals/${createDeal._id}`);
+      } else {
+        history.push(`/new-build/deal?id=${createDeal._id}`);
+      }
+    },
   });
 
   return (
