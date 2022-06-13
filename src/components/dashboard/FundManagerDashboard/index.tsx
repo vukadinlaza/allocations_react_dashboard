@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { Redirect } from 'react-router';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, InputAdornment, TextField } from '@material-ui/core';
@@ -267,6 +268,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const updateSearch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchTerm(event.currentTarget.value);
   };
+
+  if (data && data.organization === null) return <Redirect to="/404" />;
 
   if (!data || !figuresCalculated) return <AllocationsLoader fullHeight />;
 
