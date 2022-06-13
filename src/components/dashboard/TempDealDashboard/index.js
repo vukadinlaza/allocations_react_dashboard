@@ -176,6 +176,9 @@ const TempDealDashboard = () => {
           const res = await fetch(
             `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
+
+          if (!res.ok) return;
+
           const deal = await res.json();
           if (deal?.phases?.length === 6) {
             spvTabs = [
@@ -186,6 +189,7 @@ const TempDealDashboard = () => {
               'Deal Page',
             ];
           }
+
           setServiceDeal(deal);
           setDealName(deal?.name);
         }
