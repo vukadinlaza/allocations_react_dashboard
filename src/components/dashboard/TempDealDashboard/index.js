@@ -383,7 +383,7 @@ const TempDealDashboard = () => {
       {dealProgress ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
-            deal={serviceDeal || { name: dealName }}
+            deal={serviceDeal || { name: dealData?.deal?.company_name }}
             progress={getTotalRaiseAmount(
               serviceDeal?.target_raise_goal || 0,
               dealData?.deal?.raised,
