@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { Redirect } from 'react-router';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, InputAdornment, TextField } from '@material-ui/core';
@@ -268,6 +269,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     setSearchTerm(event.currentTarget.value);
   };
 
+  if (data && data.organization === null) return <Redirect to="/404" />;
+
   if (!data || !figuresCalculated) return <AllocationsLoader fullHeight />;
 
   const spvs = getListData('spv');
@@ -315,19 +318,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           <Grid item xs={1} />
         </Grid>
         <Grid container spacing={2} className={classes.computerBoxes}>
-          <Grid item xs={1} />
           {dashboardBoxes.map((box) => (
-            <Box key={uuidv4()} box={box} />
-          ))}
-          <Grid item xs={1} />
-        </Grid>
-        <Grid container spacing={2} className={classes.mobileBoxes}>
-          {dashboardBoxes.map((box) => (
-            <Grid container spacing={2} key={uuidv4()} className={classes.box}>
-              <Grid item xs={1} />
-              <Box key={uuidv4()} box={box} />
-              <Grid item xs={1} />
-            </Grid>
+            <Box box={box} key={uuidv4()} />
           ))}
         </Grid>
         <Grid container spacing={2} className={classes.searchContainer}>

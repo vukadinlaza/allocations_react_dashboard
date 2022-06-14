@@ -41,7 +41,7 @@ const RM_LOGO = gql`
   }
 `;
 
-function DealSettings({ formData, setFormData, refetch }) {
+function DealSettings({ formData, setFormData, handleFormSubmit, refetch }) {
   const styles = useStyles();
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
@@ -360,13 +360,18 @@ function DealSettings({ formData, setFormData, refetch }) {
         <FormControl className={styles.field}>
           <FormLabel className={styles.fieldLabel}>
             DocSpring Template ID
-            <TextField
-              name="docSpringTemplateId"
-              onChange={handleFormChange}
-              value={docSpringTemplateId || ''}
-              className={styles.textInput}
-              variant="outlined"
-            />
+            <div>
+              <TextField
+                name="docSpringTemplateId"
+                onChange={handleFormChange}
+                value={docSpringTemplateId || ''}
+                className={styles.textInputDocspring}
+                variant="outlined"
+              />
+              <Button onClick={handleFormSubmit} className={styles.saveButton}>
+                Save
+              </Button>
+            </div>
           </FormLabel>
         </FormControl>
 
