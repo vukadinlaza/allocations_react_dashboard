@@ -19,7 +19,6 @@ import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import DealsTable from './components/dashboard/FundManagerDashboard/FundManagerDealsTable/DealsTablePage';
 import NotFound from './components/NotFound';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
 import Demo from './components/Demo';
@@ -154,7 +153,6 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
         {/** Whitelabel Routes * */}
-        <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
         <PrivateRoute path="/identity" component={Identity} />
         <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
