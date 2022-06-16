@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { MoreVertRounded } from '@material-ui/icons';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Typography, Button, Grid, Modal, Backdrop, Fade, Paper } from '@material-ui/core';
-// import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign';
 import { useViewport } from '../../../../utils/hooks';
 import { phone } from '../../../../utils/helpers';
 import { ReactComponent as Eye } from '../../../../assets/eye.svg';
@@ -47,12 +46,12 @@ export default function DealPage({
   goToEditDeal,
   handleLinkCopy,
 }) {
-  const { dealPageRedesign, remoteInvestPage } = useFlags();
+  const { dealPageRedesign } = useFlags();
   const { width } = useViewport();
   const [openModal, setOpenModal] = useState(false);
   const dealSlug = dealData?.metadata?.slug || dealData?.slug;
 
-  if (dealPageRedesign && remoteInvestPage) return <RemoteDealPage />;
+  if (dealPageRedesign) return <RemoteDealPage />;
 
   const handleClose = () => {
     setOpenModal(false);

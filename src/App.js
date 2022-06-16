@@ -119,16 +119,8 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-        <PrivateRoute
-          path={`/deals/:organization/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={DealOneClick}
-          exact
-        />
-        <PrivateRoute
-          path={`/deals/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={DealOneClick}
-          exact
-        />
+        <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
         {/* Invest */}
         <PrivateRoute
