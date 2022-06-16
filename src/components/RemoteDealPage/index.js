@@ -8,8 +8,8 @@ import Loader from '../utils/Loader';
 const DealPage = React.lazy(() => import('build/DealPage'));
 
 export const GET_DEAL = gql`
-  query Deal($deal_slug: String!, $fund_slug: String!) {
-    deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
+  query Deal($_id: String, $deal_slug: String, $fund_slug: String!) {
+    deal(_id: $_id, deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
     }
   }
@@ -19,10 +19,11 @@ export default function RemoteDealPage() {
   const { remoteInvestPage } = useFlags();
   const history = useHistory();
   const { pathname } = useLocation();
-  const { organization, deal_slug } = useParams();
+  const { organization, deal_slug, deal_id } = useParams();
   const { userProfile } = useAuth();
   const { data } = useQuery(GET_DEAL, {
     variables: {
+      _id: deal_id,
       deal_slug,
       fund_slug: organization || 'allocations',
     },
@@ -38,7 +39,7 @@ export default function RemoteDealPage() {
         dealId={deal._id}
         dealSlug={deal_slug}
         pathname={pathname}
-        pushToDealPage={() => history.push(`/admin/${organization}/${deal._id}`)}
+        pushToDealPage={() => history.push(`/admin/${organization}/deals/${deal._id}`)}
         goToInvestPage={() => {
           if (remoteInvestPage) {
             history.push(`/invest/${deal._id}`);
