@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
 
@@ -130,7 +130,8 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={Build} />
+        <Route path="/public/new-build" exact render={() => <Redirect to="/new-build" />} />
+        <PrivateRoute path="/new-build" exact component={Build} />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
