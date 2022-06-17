@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
 
-import DealDashboard from './components/dashboard/DealDashboard/index';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
 
@@ -39,7 +38,7 @@ import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
-import TempDealDashboard from './components/dashboard/TempDealDashboard';
+import DealDashboard from './components/dashboard/DealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
@@ -91,14 +90,9 @@ const MainApp = ({ isAuthenticated }) => {
           exact
         />
         <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-        <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
         <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
         <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
-        <PrivateRoute
-          path="/admin/:organization/deals/:deal_id"
-          component={TempDealDashboard}
-          exact
-        />
+        <PrivateRoute path="/admin/:organization/deals/:deal_id" component={DealDashboard} exact />
 
         {/* Investor */}
         <PrivateRoute path="/" exact component={InvestorDashboard} />
@@ -119,16 +113,8 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-        <PrivateRoute
-          path={`/deals/:organization/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={DealOneClick}
-          exact
-        />
-        <PrivateRoute
-          path={`/deals/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={DealOneClick}
-          exact
-        />
+        <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
         {/* Invest */}
         <PrivateRoute

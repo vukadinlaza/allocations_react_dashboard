@@ -13,7 +13,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
   const { search } = useLocation();
   const p = new URLSearchParams(search);
   const amount = p.get('amount');
-  const { cryptoPaymentInBuild } = useFlags();
+  const { cryptoPaymentInBuild, remoteInvestPage } = useFlags();
   const history = useHistory();
 
   const handleWaitlistSubmit = async () => {
@@ -84,9 +84,13 @@ function InvestPanel({ deal, deal_slug, organization }) {
           if (isClosed && isAuthenticated) {
             return handleWaitlistSubmit();
           }
-          history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`, {
-            amount: amount || false,
-          });
+          if (remoteInvestPage) {
+            history.push(`/invest/${deal._id}`);
+          } else {
+            history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`, {
+              amount: amount || false,
+            });
+          }
         }}
       >
         {isClosed ? 'Join Waitlist' : 'Invest'}
