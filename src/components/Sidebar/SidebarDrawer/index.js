@@ -25,7 +25,7 @@ const SidebarDrawer = ({
   classes,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const { prospectDealPage, taxDashboard } = useFlags();
+  const { taxDashboard } = useFlags();
   const [currentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const history = useHistory();
@@ -52,36 +52,18 @@ const SidebarDrawer = ({
   const menuSections = [
     {
       sectionTitle: 'ESSENTIALS',
-      menu: prospectDealPage
-        ? [
-            {
-              to: currentHomeUrl,
-              title: 'Dashboard',
-              icon: <HomeIcon fontSize="medium" />,
-            },
-            {
-              to: '/profile',
-              title: 'Profile',
-              icon: <PersonIcon fontSize="medium" />,
-            },
-            {
-              to: '/prospects',
-              title: 'Prospects',
-              icon: <BsBinocularsFill />,
-            },
-          ]
-        : [
-            {
-              to: currentHomeUrl,
-              title: 'Dashboard',
-              icon: <HomeIcon fontSize="medium" />,
-            },
-            {
-              to: '/profile',
-              title: 'Profile',
-              icon: <PersonIcon fontSize="medium" />,
-            },
-          ],
+      menu: [
+        {
+          to: currentHomeUrl,
+          title: 'Dashboard',
+          icon: <HomeIcon fontSize="medium" />,
+        },
+        {
+          to: '/profile',
+          title: 'Profile',
+          icon: <PersonIcon fontSize="medium" />,
+        },
+      ],
     },
   ];
 
