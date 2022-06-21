@@ -53,7 +53,7 @@ const DEALS_TABLE = 'Deals';
 
 let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
-const TempDealDashboard = () => {
+const DealDashboard = () => {
   const { width } = useViewport();
   const params = useParams();
   const { deal_id } = params;
@@ -356,4 +356,4 @@ const TempDealDashboard = () => {
   );
 };
 
-export default withRouter(TempDealDashboard);
+export default withRouter(DealDashboard);
