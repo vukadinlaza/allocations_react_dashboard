@@ -12,7 +12,6 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import BallotIcon from '@material-ui/icons/Ballot';
-import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 
 const SidebarDrawer = ({
