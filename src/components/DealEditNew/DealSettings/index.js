@@ -41,7 +41,7 @@ const RM_LOGO = gql`
   }
 `;
 
-function DealSettings({ formData, setFormData, handleFormSubmit, refetch }) {
+function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
   const styles = useStyles();
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
