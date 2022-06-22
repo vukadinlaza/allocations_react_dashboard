@@ -9,89 +9,31 @@ import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
-import Investors from './sections/Investors';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import useStyles from './styles';
-import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
 import { phone } from '../../../utils/helpers';
-import PostBuild from '../../PostBuild';
+import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
+const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
+const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
-const GET_DEAL = gql`
-  query GetDeal($_id: String!) {
-    deal(_id: $_id) {
-      _id
-      company_name
-      company_description
-      target
-      raised
-      slug
-      date_closed
-      investmentType
-      status
-      AUM
-      organization {
-        _id
-        name
-        high_volume_partner
-      }
-      dealParams {
-        signDeadline
-        wireDeadline
-        dealType
-        dealMultiple
-        totalCarry
-        fundTotalCarry
-        managementFees
-        managementFeesDollar
-        fundManagementFeesDollar
-        fundManagementFees
-        managementFeeType
-        fundManagementFeeType
-      }
-      virtual_account_number
-      viewedUsers {
-        _id
-        first_name
-        last_name
-        email
-      }
-      investments {
-        _id
-        amount
-        capitalWiredAmount
-        status
-        submissionData {
-          legalName
-        }
-        investor {
-          _id
-          first_name
-          last_name
-          name
-          email
-          accredidation_status
-        }
-        documents {
-          path
-          link
-        }
-      }
-    }
+const GET_DEAL_WITH_INVESTMENTS = gql`
+  query NewDealInvestments($deal_id: String) {
     investor {
       _id
       admin
       documents
       created_at
     }
+    newDealInvestments(deal_id: $deal_id)
   }
 `;
 
@@ -109,13 +51,7 @@ let BASE = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
-let spvTabs = [
-  'Deal Progress',
-  'Investor Onboarding Status',
-  'Investors',
-  'Documents',
-  'Deal Page',
-];
+let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
 const DealDashboard = () => {
   const { width } = useViewport();
@@ -132,7 +68,7 @@ const DealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { capitalCallsDealSpecific, cryptoPaymentInBuild, dealProgress } = useFlags();
+  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -143,9 +79,12 @@ const DealDashboard = () => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
 
-  const { data: dealData, refetch } = useQuery(GET_DEAL, {
-    variables: { _id: deal_id },
-  });
+  const { data: { newDealInvestments: dealData, investor } = {}, refetch } = useQuery(
+    GET_DEAL_WITH_INVESTMENTS,
+    {
+      variables: { deal_id },
+    },
+  );
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
 
@@ -172,13 +111,10 @@ const DealDashboard = () => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
-        if (dealProgress) {
+        if (remoteFundManagerDashboard) {
           const res = await fetch(
             `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
-
-          if (!res.ok) return;
-
           const deal = await res.json();
           if (deal?.phases?.length === 6) {
             spvTabs = [
@@ -188,10 +124,7 @@ const DealDashboard = () => {
               'Documents',
               'Deal Page',
             ];
-            setTabIndex(0);
-            setTabName('Deal Progress');
           }
-
           setServiceDeal(deal);
           setDealName(deal?.name);
         }
@@ -202,21 +135,25 @@ const DealDashboard = () => {
   }, [deal_id]);
 
   useEffect(() => {
-    if (dealData?.deal?.company_name) {
-      setDealName(dealData?.deal?.company_name);
+    if (dealData?.name) {
+      setDealName(dealData?.name);
     }
   }, [dealData]);
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
-      const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
+      const newTabs = dealData.type === 'fund' ? fundTabs : spvTabs;
 
-      const newTabIndex = newTabs.indexOf(tabName);
-      const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
-      const newTabName = newTabs[newIndex];
-      setTabIndex(newIndex);
-      setTabName(newTabName);
-
+      if (newTabs.includes('Deal Progress')) {
+        setTabIndex(newTabs.indexOf('Deal Progress'));
+        setTabName('Deal Progress');
+      } else {
+        const newTabIndex = newTabs.indexOf(tabName);
+        const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
+        const newTabName = newTabs[newIndex];
+        setTabIndex(newIndex);
+        setTabName(newTabName);
+      }
       setDashboardTabs(newTabs);
     }
   }, [dealData, serviceDeal]);
@@ -244,23 +181,21 @@ const DealDashboard = () => {
   }, [atDeal]);
 
   const handleLinkCopy = () => {
-    if (orgSlug && dealData?.deal?.slug) {
-      navigator.clipboard.writeText(
-        window.origin + (`/deals/${orgSlug}/${dealData.deal.slug}` || ''),
-      );
+    if (orgSlug && dealData?.slug) {
+      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.slug}` || ''));
       toast.info('Copied deal link to clipboard');
     }
   };
 
   const goToDeal = () => {
-    if (orgSlug && dealData?.deal?.slug) {
-      window.open(`/deals/${orgSlug}/${dealData.deal.slug}`);
+    if (orgSlug && dealData?.slug) {
+      window.open(`/deals/${orgSlug}/${dealData.slug}`);
     }
   };
 
   const goToEditDeal = () => {
-    if (orgSlug && dealData?.deal?._id) {
-      window.open(`/admin/${orgSlug}/deals/${dealData.deal._id}/edit`);
+    if (orgSlug && dealData?._id) {
+      window.open(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
     }
   };
 
@@ -309,36 +244,30 @@ const DealDashboard = () => {
       case 'Investments':
         return <Investments classes={classes} data={fundData} />;
 
-      case 'Deal Progress':
-        return <PostBuild dealId={dealData?.deal._id} />;
-
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
             classes={classes}
             width={width}
             data={dealData}
-            dealType={dealData?.deal?.dealParams?.dealType}
-            superAdmin={dealData?.investor?.admin}
+            dealType={dealData?.offering_type}
+            investor={investor}
             refetch={refetch}
           />
         );
       case 'Investors':
-        return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
+        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?.deal?._id} />
+            <RemoteOnboarding deal_id={dealData?._id} />
           </Suspense>
         ) : (
-          <Investors
-            classes={classes}
-            data={dealData}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-          />
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteInvestors deal_id={dealData?._id} />
+          </Suspense>
         );
 
       case 'Documents':
-        return <DocumentsTab classes={classes} data={dealData} refetch={refetch} />;
+        return <RemoteInvestorsDocuments />;
 
       case 'Deal Page':
         return (
@@ -356,11 +285,19 @@ const DealDashboard = () => {
           <Crypto
             orgSlug={orgSlug}
             classes={classes}
-            deal_id={dealData.deal._id}
-            virtual_account_number={dealData.deal.virtual_account_number || null}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.nd_virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
+        );
+      case 'Deal Progress':
+        return (
+          <div style={{ marginTop: '20px' }}>
+            <Suspense fallback={<Loader />}>
+              <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
+            </Suspense>
+          </div>
         );
       default:
         return <p>No Data</p>;
@@ -374,23 +311,22 @@ const DealDashboard = () => {
   };
 
   const [openModal, setOpenModal] = useState(false);
+
   if (!dealData || !atFundData || loading)
     return (
       <div className={classes.loaderContainer}>
         <AllocationsLoader />
       </div>
     );
+
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {dealProgress ? (
+      {remoteFundManagerDashboard ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
-            deal={serviceDeal || { name: dealData?.deal?.company_name }}
-            progress={getTotalRaiseAmount(
-              serviceDeal?.target_raise_goal || 0,
-              dealData?.deal?.raised,
-            )}
-            currentAmount={dealData?.deal?.raised}
+            deal={serviceDeal || { name: '' }}
+            progress={getTotalRaiseAmount(serviceDeal?.target_raise_goal || 0, dealData?.raised)}
+            currentAmount={dealData?.raised}
             goalAmount={serviceDeal?.target_raise_goal || 0}
           />
         </Suspense>

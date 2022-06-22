@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles({
+const styles = makeStyles((theme) => ({
   buttonContainer: {
     display: 'flex',
     margin: '2rem 0',
@@ -24,7 +24,7 @@ const styles = makeStyles({
     height: '8rem',
     minWidth: '10rem',
     width: '47.5%',
-    border: '2px solid #2a2b5480',
+    border: `2px solid ${theme.colors.black[50]}80`,
     textTransform: 'none',
     marginBottom: '1rem',
   },
@@ -42,18 +42,18 @@ const styles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    boxShadow: '0px 3px 6px #00000040 !important',
-    border: '1px solid rgb(226, 226, 226)',
+    boxShadow: `0px 3px 6px ${theme.colors.black[50]}40 !important`,
+    border: `1px solid ${theme.colors.gray[200]}`,
   },
   selectForm: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    boxShadow: '0px 3px 6px #00000040 !important',
+    boxShadow: `0px 3px 6px ${theme.colors.black[50]}40 !important`,
     padding: '2rem',
     margin: '2rem 0',
     borderRadius: '15px',
-    border: '1px solid rgb(226, 226, 226)',
+    border: `1px solid ${theme.colors.gray[200]}`,
   },
   text: {
     display: 'flex',
@@ -64,6 +64,6 @@ const styles = makeStyles({
       fontWeight: 500,
     },
   },
-});
+}));
 
 export default styles;

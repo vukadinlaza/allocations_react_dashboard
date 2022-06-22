@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Input, List, Typography, colors } from '@allocations/design-system';
 import {
@@ -34,6 +34,10 @@ const dealInvestmentsHeaders = [
 
 const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName }) => {
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    document.querySelector('.mainRoute').scrollTo(0, 0);
+  }, []);
 
   const getFormattedData = () =>
     fundInvestments.length

@@ -81,7 +81,6 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
       ...formData,
       federalclassification: {
         tax_classification: formData.tax_classification,
-        instructions: formData.tax_classification === 'IRA' ? 'IRA' : '',
       },
     };
     // format city/state/zip
@@ -128,7 +127,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               <MenuItem value="SMLLC">Sole proprietor or single-member LLC</MenuItem>
               <MenuItem value="Trust/estate">Trust/estate</MenuItem>
               <MenuItem value="Limited Liability Company">Limited Liability Company</MenuItem>
-              <MenuItem value="IRA">IRA</MenuItem>
+              <MenuItem value="N/A">N/A</MenuItem>
             </Select>
           </FormLabel>
         </FormControl>

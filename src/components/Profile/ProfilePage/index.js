@@ -1,9 +1,10 @@
 import React from 'react';
 import { Paper, Grid, Avatar, Typography, Box } from '@material-ui/core';
 import { gql, useQuery } from '@apollo/client';
+import { colors } from '@allocations/design-system';
 import { useParams, Redirect } from 'react-router-dom';
 import { TiSocialLinkedinCircular } from 'react-icons/ti';
-import { useStyles } from './styles';
+import useStyles from './styles';
 import Loader from '../../utils/Loader';
 
 const GET_PROFILE = gql`
@@ -72,8 +73,8 @@ const ProfilePage = () => {
               <Box
                 key={idx}
                 borderRadius={5}
-                color="#0461FF"
-                bgcolor="#DAE8FF"
+                color={colors.primary[600]}
+                bgcolor={colors.primary[50]}
                 paddingX="16px"
                 paddingY="8px"
                 mr="15px"
@@ -92,8 +93,8 @@ const ProfilePage = () => {
               <Box
                 key={idx}
                 borderRadius={5}
-                color="#0461FF"
-                bgcolor="#DAE8FF"
+                color={colors.primary[600]}
+                bgcolor={colors.primary[50]}
                 paddingX="16px"
                 paddingY="8px"
                 mr="15px"
@@ -117,7 +118,7 @@ const ProfilePage = () => {
             </Typography>
             {data.investor.linkedinUrl && (
               <a href={data.investor.linkedinUrl}>
-                <TiSocialLinkedinCircular size={23} color="0461FF" />
+                <TiSocialLinkedinCircular size={23} color={colors.primary[600]} />
               </a>
             )}
           </Grid>

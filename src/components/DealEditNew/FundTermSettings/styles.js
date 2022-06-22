@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   selected: {
-    border: '2px solid #0461ff',
+    border: `2px solid ${theme.colors.primary[600]}`,
   },
   buttonOptions: {
     margin: '5px 0',

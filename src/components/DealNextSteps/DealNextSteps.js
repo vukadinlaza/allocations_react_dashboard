@@ -467,11 +467,7 @@ function DealNextSteps() {
             setOpen={setCryptoPaymentOpen}
             deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
             deal_id={dealData?.deal?._id}
-            investor_name={
-              investmentData?.investment?.submissionData?.legalName ||
-              investmentData?.investment?.submissionData?.fullName ||
-              `${data?.investor.first_name} ${data?.investor.last_name}`
-            }
+            investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
             investment_amount={
               investmentData ? investmentData.investment.amount : currentInvestment.amount
             }
