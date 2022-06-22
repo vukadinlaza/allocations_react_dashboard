@@ -40,7 +40,6 @@ app.get('*', async (req, res) => {
         const companyName = response.data.company_name;
         const companyDescription = response.data.company_description;
         const coverImageKey = response.data.dealCoverImageKey;
-        console.log('Cover Image KEY', coverImageKey);
 
         if (companyName) {
           data = data.replace(/"Allocations"/g, `'${companyName}'`);
