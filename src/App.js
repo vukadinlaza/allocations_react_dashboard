@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
 
@@ -32,7 +32,6 @@ import DealOneClick from './components/DealOneClick';
 import Build from './components/Build';
 import PostBuild from './components/PostBuild';
 
-import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
@@ -47,6 +46,7 @@ import RemoteAddOrgAdmin from './components/RemoteAddOrgAdmin';
 import RemoteTaxBanner from './components/RemoteTaxBanner';
 import RemoteInvest from './components/RemoteInvest';
 import RemoteNextSteps from './components/RemoteNextSteps';
+import useStyles from './styles';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -59,18 +59,15 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const SideBar = ({ isAuthenticated }) => {
   const { federatedSidebar } = useFlags();
-  return (
-    <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
-      {federatedSidebar ? <Sidebar /> : <SidebarOld />}
-    </div>
-  );
+  const styles = useStyles({ isAuthenticated });
+  return <div className={styles.sidebar}>{federatedSidebar ? <Sidebar /> : <SidebarOld />}</div>;
 };
 
 const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard, remoteInvestPage } = useFlags();
-
+  const styles = useStyles({ isAuthenticated });
   return (
-    <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
+    <div className={styles.mainRoute}>
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
@@ -109,7 +106,8 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={Build} />
+        <Route path="/public/new-build" exact render={() => <Redirect to="/new-build" />} />
+        <PrivateRoute path="/new-build" exact component={Build} />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
@@ -152,14 +150,11 @@ const MainApp = ({ isAuthenticated }) => {
 const LayOut = () => {
   const ldclient = useLDClient();
   const { isAuthenticated, userProfile } = useAuth();
+  const styles = useStyles({ isAuthenticated });
   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
   if (launchDarklyUser.key && launchDarklyUser.email) {
     ldclient?.identify(launchDarklyUser, userProfile._id);
   }
-  const unAuthenticatedStyle = {
-    gridTemplateColumns: 'auto',
-    gridTemplateAreas: `'mainRoute'`,
-  };
 
   if (isAuthenticated) {
     window.DD_RUM.setUser({ email: userProfile.email });
@@ -168,7 +163,7 @@ const LayOut = () => {
 
   return (
     <CurrentAccountProvider>
-      <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
+      <div className={styles.app}>
         <SideBar isAuthenticated={isAuthenticated} />
         <MainApp isAuthenticated={isAuthenticated} />
       </div>
