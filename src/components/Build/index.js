@@ -32,41 +32,45 @@ export default function Build() {
     },
   });
 
+  const handleCreate = (deal) => {
+    const orgData = organization || deal?.legacyOrg;
+    return createDeal({
+      variables: {
+        org: orgData?.slug || 'lost-spvs',
+        deal: {
+          _id: deal._id,
+          status: deal.phase,
+          company_name: deal.name,
+          deal_lead: deal.manager.name,
+          company_description: deal.description,
+          date_closed: '',
+          pledge_link: '',
+          onboarding_link: '',
+          dealParams: {
+            dealType: deal.offering_type,
+            dealMultiple: '1',
+            totalCarry: `${deal.carry_fee * 100}%`,
+            managementFees: `${deal.management_fee * 100}`,
+            managementFeeType: deal.management_fee_frequency,
+            minimumInvestment: deal.minimum_investment.toString(),
+            signDeadline: deal.sign_deadline,
+            wireDeadline: deal.wire_deadline,
+            estimatedSetupCosts: deal.setup_cost.toString(),
+            estimatedTerm: deal.deal_term,
+            is3c7: deal.ica_exemption === '3(c)(7)',
+          },
+        },
+      },
+    });
+  };
+
   return (
     <>
       <Suspense fallback={<Loader />}>
         <RemoteBuild
           user={userProfile}
           onCreate={(deal) => {
-            if (!organization) return;
-            createDeal({
-              variables: {
-                org: organization.slug,
-                deal: {
-                  _id: deal._id,
-                  status: deal.phase,
-                  company_name: deal.name,
-                  deal_lead: deal.manager.name,
-                  company_description: deal.description,
-                  date_closed: '',
-                  pledge_link: '',
-                  onboarding_link: '',
-                  dealParams: {
-                    dealType: deal.offering_type,
-                    dealMultiple: '1',
-                    totalCarry: `${deal.carry_fee * 100}%`,
-                    managementFees: `${deal.management_fee * 100}`,
-                    managementFeeType: deal.management_fee_frequency,
-                    minimumInvestment: deal.minimum_investment.toString(),
-                    signDeadline: deal.sign_deadline,
-                    wireDeadline: deal.wire_deadline,
-                    estimatedSetupCosts: deal.setup_cost.toString(),
-                    estimatedTerm: deal.deal_term,
-                    is3c7: deal.ica_exemption === '3(c)(7)',
-                  },
-                },
-              },
-            });
+            handleCreate(deal);
           }}
         />
       </Suspense>
