@@ -33,10 +33,10 @@ export default function Build() {
   });
 
   const handleCreate = (deal) => {
-    const orgData = organization || deal?.legacyOrg;
+    const orgSlug = deal?.organizations_slug || organization?.slug || deal?.legacyOrg?.slug;
     return createDeal({
       variables: {
-        org: orgData?.slug || 'lost-spvs',
+        org: orgSlug || 'lost-spvs',
         deal: {
           _id: deal._id,
           status: deal.phase,
