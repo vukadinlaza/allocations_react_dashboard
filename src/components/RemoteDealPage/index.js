@@ -11,6 +11,7 @@ export const GET_DEAL = gql`
   query Deal($_id: String, $deal_slug: String, $fund_slug: String!) {
     deal(_id: $_id, deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      slug
     }
   }
 `;
@@ -31,20 +32,21 @@ export default function RemoteDealPage() {
 
   if (!data) return null;
   const { deal } = data;
+  const dealSlug = deal_slug || deal.slug;
 
   return (
     <Suspense fallback={<Loader />}>
       <DealPage
         orgSlug={organization}
         dealId={deal._id}
-        dealSlug={deal_slug}
+        dealSlug={dealSlug}
         pathname={pathname}
         pushToDealPage={() => history.push(`/admin/${organization}/deals/${deal._id}`)}
         goToInvestPage={() => {
           if (remoteInvestPage) {
-            history.push(`/invest/${deal._id}`);
+            history.push(`/invest/${deal_id}`);
           } else {
-            history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`);
+            history.push(`/invest${organization ? `/${organization}` : ''}/${dealSlug}`);
           }
         }}
         redirectTo404={() => <Redirect to="/404" />}
