@@ -8,13 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   button: {
     marginLeft: theme.spacing(1),
-    backgroundColor: theme.colors.success[500],
+    backgroundColor: 'rgba(87, 204, 100, 1)',
     paddingX: theme.spacing(1),
-    color: theme.colors.white[100],
+    color: '#FFFFFF',
   },
   adornment: {
-    backgroundColor: theme.colors.success[50],
-    color: `${theme.colors.gray[500]}80`,
+    backgroundColor: '#E3F8DF',
+    color: '#6F6F6F80',
     padding: theme.spacing(1.3),
   },
 }));

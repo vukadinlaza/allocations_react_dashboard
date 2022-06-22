@@ -33,7 +33,7 @@ export function formatDoughnutSeries(series) {
 }
 
 const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
-  const dealMultiple = _.toNumber(dealData?.deal_multiple || 1);
+  const dealMultiple = _.toNumber(dealData?.deal?.dealParams?.dealMultiple || 1);
 
   const setMonthsToShow = (data) => {
     const monthsArray = [];
@@ -96,23 +96,23 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
   const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n, 0) : 0;
   const steppedChartData = getSteppedChartData();
 
-  const investments = dealData?.investments?.length && dealData.investments;
+  const investments = dealData?.deal?.investments?.length && dealData.deal.investments;
 
   const totalRaised = investments
     ? investments
-        .filter((i) => ['wired', 'complete'].includes(i.phase))
+        .filter((i) => ['wired', 'complete'].includes(i.status))
         // .map((i) => i.amount)
         .map((i) => {
-          if (i.transactions?.[0]?.wired_amount !== null) {
-            return i.transactions?.[0]?.wired_amount;
+          if (i.capitalWiredAmount !== null) {
+            return i.capitalWiredAmount;
           }
-          return 0;
+          return i.amount;
         })
         .reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
   const totalCommitted = investments
-    ? investments.map((i) => i.total_committed_amount).reduce((acc, n) => acc + n, 0) || 0
+    ? investments.map((i) => i.amount).reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
   return (

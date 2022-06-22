@@ -9,8 +9,10 @@ const styles = (theme: Theme) => ({
     display: 'flex',
   },
   computerBoxes: {
-    display: 'flex',
     justifyContent: 'center',
+    [theme.breakpoints.down(phone)]: {
+      display: 'none',
+    },
   },
   input: {
     color: theme.colors.black[50],

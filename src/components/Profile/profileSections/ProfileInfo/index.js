@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import { colors } from '@allocations/design-system';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
 import SectorsAndStages from '../infoSections/SectorsAndStages';
@@ -52,10 +51,10 @@ const UPDATE_USER = gql`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
-    boxShadow: `0px 3px 6px ${theme.colors.black[100]}29`,
-    border: `1px solid ${theme.colors.gray[400]}40 !important`,
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'none',
     width: '100%',
@@ -68,11 +67,11 @@ const useStyles = makeStyles((theme) => ({
     width: '90%',
   },
   linkedin: {
-    color: theme.colors.primary[800],
+    color: 'blue',
   },
   linkedinInput: {
     '&:invalid': {
-      border: `2px solid ${theme.colors.error[500]}`,
+      border: 'red solid 2px',
     },
   },
   paperTitle: {
@@ -84,16 +83,16 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
   },
   paperMain: {
-    background: theme.colors.gray[100],
+    background: '#f1f4fb',
     padding: '.5rem',
     paddingBottom: '1.5rem',
     paddingRight: '1rem',
-    borderTop: `1px solid ${theme.colors.gray[400]}40 !important`,
+    borderTop: '1px solid #8493A640 !important',
   },
   helperText: {
     display: 'flex',
     justifyContent: 'flex-end',
-    background: theme.colors.gray[100],
+    background: '#f1f4fb',
     margin: '0px',
   },
 }));
@@ -125,7 +124,7 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
 
   return (
     <FormControl
-      style={{ background: colors.white[100] }}
+      style={{ background: 'white' }}
       required
       error={errors.includes('accredited_investor_status')}
       variant="outlined"
@@ -292,7 +291,7 @@ const ProfileInfo = ({
                 container
                 spacing={2}
                 className={classes.paperMain}
-                style={{ border: `3px solid ${colors.error[500]}` }}
+                style={{ border: 'solid red 3px' }}
               >
                 <Grid item xs={12}>
                   <Grid container spacing={1}>
@@ -320,7 +319,7 @@ const ProfileInfo = ({
                             error={errors.includes('first_name')}
                             value={get(investor, 'first_name') || ''}
                             onChange={handleChange('first_name')}
-                            style={{ background: colors.white[100] }}
+                            style={{ background: 'white' }}
                           />
                         </Grid>
                         <Grid item xs={12}>
@@ -332,7 +331,7 @@ const ProfileInfo = ({
                             error={errors.includes('last_name')}
                             value={get(investor, 'last_name') || ''}
                             onChange={handleChange('last_name')}
-                            style={{ background: colors.white[100] }}
+                            style={{ background: 'white' }}
                           />
                         </Grid>
                       </Grid>
@@ -345,7 +344,7 @@ const ProfileInfo = ({
                     required
                     disabled
                     variant="outlined"
-                    style={{ background: colors.white[100], width: '100%' }}
+                    style={{ background: 'white', width: '100%' }}
                   >
                     <TextField
                       error={errors.includes('email')}
@@ -363,7 +362,7 @@ const ProfileInfo = ({
                     required
                     disabled
                     variant="outlined"
-                    style={{ background: colors.white[100], width: '100%' }}
+                    style={{ background: 'white', width: '100%' }}
                   >
                     <TextField
                       error={errors.includes('city')}
@@ -382,7 +381,7 @@ const ProfileInfo = ({
                     select
                     fullWidth
                     error={errors.includes('country')}
-                    style={{ background: colors.white[100] }}
+                    style={{ background: 'white' }}
                     label="Country of Residence"
                     value={investor.country || ''}
                     onChange={handleChange('country')}
@@ -404,7 +403,7 @@ const ProfileInfo = ({
                   <TextField
                     select
                     fullWidth
-                    style={{ background: colors.white[100] }}
+                    style={{ background: 'white' }}
                     error={
                       investor.country === 'United States'
                         ? errors.includes('state')
@@ -435,7 +434,7 @@ const ProfileInfo = ({
                     value={investor.username || ''}
                     onChange={handleChange('username')}
                     fullWidth
-                    style={{ background: colors.white[100] }}
+                    style={{ background: 'white' }}
                   />
                 </Grid>
 
@@ -458,7 +457,7 @@ const ProfileInfo = ({
                       className: classes.helperText,
                     }}
                     fullWidth
-                    style={{ background: colors.white[100] }}
+                    style={{ background: 'white' }}
                     error={errors.includes('profileBio')}
                     value={get(investor, 'profileBio') || ''}
                     onChange={handleChange('profileBio')}
@@ -489,7 +488,7 @@ const ProfileInfo = ({
                         error={errors.includes('investor_type')}
                         variant="outlined"
                         fullWidth
-                        style={{ background: colors.white[100] }}
+                        style={{ background: 'white' }}
                       >
                         <InputLabel>Investor Type</InputLabel>
                         <Select
@@ -520,7 +519,7 @@ const ProfileInfo = ({
                           required
                           fullWidth
                           error={errors.includes('entity_name')}
-                          style={{ background: colors.white[100] }}
+                          style={{ background: 'white' }}
                           value={get(investor, 'entity_name') || ''}
                           onChange={handleChange('entity_name')}
                           label="Subscriber Entity Name"
@@ -577,7 +576,7 @@ const ProfileInfo = ({
                         label="LinkedIn Profile Link"
                         variant="outlined"
                         fullWidth
-                        style={{ background: colors.white[100] }}
+                        style={{ background: 'white' }}
                         error={errors.includes('linkedinUrl')}
                         value={get(investor, 'linkedinUrl') || ''}
                         onChange={handleChange('linkedinUrl')}

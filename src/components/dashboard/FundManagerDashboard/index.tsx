@@ -319,7 +319,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         </Grid>
         <Grid container spacing={2} className={classes.computerBoxes}>
           {dashboardBoxes.map((box) => (
-            <Box box={box} key={uuidv4()} />
+            <Box key={uuidv4()} box={box} />
           ))}
         </Grid>
         <Grid container spacing={2} className={classes.searchContainer}>

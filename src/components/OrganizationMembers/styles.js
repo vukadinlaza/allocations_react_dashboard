@@ -1,14 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles({
   assocOption: {
     '&:hover': {
-      backgroundColor: theme.colors.gray[100],
+      backgroundColor: '#ededed',
     },
   },
   noOutline: {
     outline: 'none',
   },
-}));
+});
 
 export default styles;

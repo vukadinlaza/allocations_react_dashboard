@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import _, { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
-import { Icon, colors } from '@allocations/design-system';
+import { Icon } from '@allocations/design-system';
 import {
   Button,
   TextField,
@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Loader from '../../utils/Loader';
+import { destroy } from '../../../api/investments';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import styles from '../styles';
 
@@ -30,31 +31,57 @@ import styles from '../styles';
  * Slight refactor of index.js in InvestmemtEdit with the goal of making this reusable
  * and migrating to this component once New Fund Dashboard is completed.
  * */
-
-const GET_INVESTOR = gql`
-  {
-    investor {
+const GET_INVESTMENT = gql`
+  query GetInvestment($_id: String!) {
+    investment(_id: $_id) {
       _id
-      accredidation_status
+      amount
+      capitalWiredAmount
+      status
+      wired_at
+      documents {
+        link
+        path
+      }
+      submissionData {
+        legalName
+      }
+      deal {
+        _id
+        company_name
+        company_description
+      }
+      investor {
+        _id
+        first_name
+        last_name
+        entity_name
+        investor_type
+        investingAs
+        accredidation_status
+        email
+      }
+    }
+  }
+`;
+const ADD_INVESTMENT_DOC = gql`
+  mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!, $isK1: Boolean) {
+    addInvestmentDoc(doc: $doc, investment_id: $investment_id, isK1: $isK1)
+  }
+`;
+const RM_INVESTMENT_DOC = gql`
+  mutation RmInvestmentDoc($file: String!, $investment_id: String!) {
+    rmInvestmentDoc(file: $file, investment_id: $investment_id)
+  }
+`;
+const UPDATE_INVESTMENT = gql`
+  mutation UpdateInvestment($investment: InvestmentInput!) {
+    updateInvestment(investment: $investment) {
+      _id
     }
   }
 `;
 
-const GET_INVESTMENT = gql`
-  query NewInvestment($_id: String) {
-    newInvestment(_id: $_id)
-  }
-`;
-const UPDATE_INVESTMENT = gql`
-  mutation NewUpdateInvestment($investment: Object!) {
-    newUpdateInvestment(investment: $investment)
-  }
-`;
-const DELETE_INVESTMENT = gql`
-  mutation NewDeleteInvestment($_id: String) {
-    newDeleteInvestment(_id: $_id)
-  }
-`;
 const UPDATE_USER = gql`
   mutation UpdateUser($input: UserInput!) {
     updateUser(input: $input) {
@@ -62,22 +89,13 @@ const UPDATE_USER = gql`
     }
   }
 `;
-const ADD_INVESTMENT_DOC = gql`
-  mutation newAddInvestmentDoc($doc: Upload!, $investment_id: String!) {
-    newAddInvestmentDoc(doc: $doc, investment_id: $investment_id)
-  }
-`;
-const RM_INVESTMENT_DOC = gql`
-  mutation NewDeleteDocument($document_id: String!) {
-    newDeleteDocument(document_id: $document_id)
-  }
-`;
 
-function Doc({ doc, getInvestment, matches }) {
-  const file = doc.title;
+function Doc({ doc, investment, getInvestment, matches }) {
+  const file =
+    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
-    variables: { document_id: doc._id },
+    variables: { file, investment_id: investment._id },
     onCompleted: () => {
       getInvestment();
       toast.success('Success! Document deleted');
@@ -106,7 +124,7 @@ function Doc({ doc, getInvestment, matches }) {
       <Grid item>
         <Tooltip title={file}>
           <Typography align="center" style={{ fontSize: '14px' }}>
-            <a href={doc.link} target="_blank" rel="noopener noreferrer">
+            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
               {_.truncate(file, { length: 25 })}
             </a>
           </Typography>
@@ -114,14 +132,14 @@ function Doc({ doc, getInvestment, matches }) {
       </Grid>
       <Grid item>
         <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
-          <Icon iconColor={colors.error[500]} iconName="clear" />
+          <Icon iconColor="#EF4444" iconName="clear" />
         </Box>
       </Grid>
     </Grid>
   );
 }
 
-function Docs({ investment, getInvestment }) {
+function Docs({ investment, getInvestment, isK1 }) {
   const matches = useMediaQuery('(min-width:600px)');
   const [uploadedDoc, setUploadedDoc] = useState(null);
 
@@ -140,10 +158,10 @@ function Docs({ investment, getInvestment }) {
   useEffect(() => {
     if (uploadedDoc) {
       addInvestmentDoc({
-        variables: { doc: uploadedDoc, investment_id: id },
+        variables: { doc: uploadedDoc, investment_id: id, isK1 },
       });
     }
-  }, [addInvestmentDoc, id, getInvestment, uploadedDoc]);
+  }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
 
   const docs = get(investment, 'documents', []);
 
@@ -153,7 +171,13 @@ function Docs({ investment, getInvestment }) {
     <Grid container wrap="nowrap" direction={matches ? 'row' : 'column'}>
       <Grid container>
         {docs.map((doc) => (
-          <Doc key={doc.path} doc={doc} getInvestment={getInvestment} matches={matches} />
+          <Doc
+            key={doc.path}
+            doc={doc}
+            investment={investment}
+            getInvestment={getInvestment}
+            matches={matches}
+          />
         ))}
       </Grid>
 
@@ -178,11 +202,8 @@ function Docs({ investment, getInvestment }) {
             alignItems: 'center',
             justifyContent: 'space-evenly',
           }}
-          shrink={false}
         >
-          <Typography style={{ color: colors.black[50], fontSize: '14px' }}>
-            Add New Document
-          </Typography>
+          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
           <input
             id="fileUpload"
             type="file"
@@ -193,7 +214,7 @@ function Docs({ investment, getInvestment }) {
           />
 
           <Box>
-            <Icon iconColor={colors.success[500]} iconName="add" />
+            <Icon iconColor="#10B981" iconName="add" />
           </Box>
         </InputLabel>
       </Grid>
@@ -201,7 +222,11 @@ function Docs({ investment, getInvestment }) {
   );
 }
 
-export default function InvestmentEdit({ investmentId = false, handleUpdate = false }) {
+export default function InvestmentEdit({
+  investmentId = false,
+  isK1 = false,
+  handleUpdate = false,
+}) {
   const classes = styles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
@@ -211,6 +236,9 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
   const [errors, setErrors] = useState([]);
   const id = investmentId || params.id;
 
+  const oldDatabaseWireDate = !investment?.wired_at ? '' : new Date(investment?.wired_at * 1);
+  const oldDatabaseWireDateTime = moment.utc(oldDatabaseWireDate).format('yyy-MM-DD');
+
   const {
     data,
     refetch: getInvestment,
@@ -219,9 +247,6 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
     variables: { _id: id },
     fetchPolicy: 'network-only',
   });
-
-  const [getInvestor, { data: { investor } = {}, refetch: refetchUser, loading: investorLoading }] =
-    useLazyQuery(GET_INVESTOR);
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
@@ -243,13 +268,13 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
       if (handleUpdate) {
         handleUpdate.refetch();
       }
-      refetchUser();
+      getInvestment();
     },
     onError: () =>
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
   });
 
-  const [deleteInvestment] = useMutation(DELETE_INVESTMENT, {
+  const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       if (handleUpdate) {
         handleUpdate.refetch();
@@ -267,21 +292,10 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
 
   useEffect(() => {
     if (data && !loading) {
-      const { newInvestment } = data;
-      if (newInvestment?.transactions?.length) {
-        newInvestment.wired_date = newInvestment.transactions[0].wired_date;
-        newInvestment.wired_amount = newInvestment.transactions[0].wired_amount;
-      }
-      setInvestment(newInvestment);
-      getInvestor({ variables: { _id: newInvestment.user_id } });
+      setInvestment(data.investment);
+      setUser(get(data, 'investment.investor', {}));
     }
   }, [data, loading]);
-
-  useEffect(() => {
-    if (investor && !investorLoading) {
-      setUser(investor);
-    }
-  }, [investor]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     if (prop === 'accredidation_status') {
@@ -293,8 +307,8 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
         setHasUserChanges(!isEqual(data, prev));
         return data;
       });
-    } else if (prop === 'wired_date') {
-      setInvestment((prev) => ({ ...prev, wired_date: new Date(newVal.replace(/-/g, '/')) }));
+    } else if (prop === 'wired_at') {
+      setInvestment((prev) => ({ ...prev, wired_at: Date.parse(newVal) }));
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
     }
@@ -304,14 +318,14 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
   const validate = (updatedInvestment) => {
     const errors = [];
 
-    (updatedInvestment?.phase === 'wired' || updatedInvestment?.phase === 'complete') &&
-    !updatedInvestment?.wired_amount
-      ? errors.push('wired_amount')
+    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+    !updatedInvestment?.capitalWiredAmount
+      ? errors.push('capitalWiredAmount')
       : errors.push();
 
-    (updatedInvestment?.phase === 'wired' || updatedInvestment?.phase === 'complete') &&
-    !updatedInvestment?.wired_date
-      ? errors.push('wired_date')
+    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+    !updatedInvestment?.wired_at
+      ? errors.push('wired_at')
       : errors.push();
 
     return errors;
@@ -324,11 +338,11 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
       toast.error('Error. Please supply the required fields.');
       return setErrors(e);
     }
-    if (e.includes('wired_date')) {
+    if (e.includes('wired_at')) {
       toast.error('Error. Please supply wired date.');
       return setErrors(e);
     }
-    if (e.includes('wired_amount')) {
+    if (e.includes('capitalWiredAmount')) {
       toast.error('Error. Please supply amount received.');
       return setErrors(e);
     }
@@ -337,13 +351,7 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
       updateInvestment({
         variables: {
           investment: {
-            ...pick(investment, [
-              '_id',
-              'phase',
-              'total_committed_amount',
-              'wired_amount',
-              'wired_date',
-            ]),
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount', 'wired_at']),
           },
         },
       });
@@ -367,13 +375,16 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
   }
 
   const name = function name() {
-    if (get(investment, 'investor_type')?.toLowerCase() === 'entity') {
-      return get(investment, 'submission_data.member_name');
+    if (get(investment, 'investor.investor_type') === 'entity') {
+      return get(investment, 'investor.entity_name');
     }
-    if (get(investment, 'investor_name')) {
-      return get(investment, 'investor_name');
+    if (get(investment, 'investor.first_name') && get(investment, 'investor.last_name')) {
+      return `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
     }
-    return get(investment, 'investor_email');
+    if (get(investment, 'submissionData.legalName')) {
+      return get(investment, 'submissionData.legalName');
+    }
+    return get(investment, 'investor.email');
   };
 
   const convertToPositiveInteger = (num) => {
@@ -403,7 +414,11 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(investment, 'deal.name', '')}`}
+                value={`${get(investment, 'deal.company_name', '')} ${get(
+                  investment,
+                  'deal.company_description',
+                  '',
+                )}`}
                 disabled
                 label="Deal"
                 variant="outlined"
@@ -421,12 +436,12 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={investment?.total_committed_amount || undefined}
+                value={investment?.amount || undefined}
                 placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'total_committed_amount',
+                    prop: 'amount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -443,17 +458,17 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
                 style={{ width: '100%' }}
                 type="number"
                 error={errors.includes('capitalWiredAmount')}
-                disabled={['signed', 'invited'].includes(investment?.phase)}
+                disabled={investment?.status === 'signed' || investment?.status === 'invited'}
                 InputProps={{
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={investment?.wired_amount || undefined}
+                value={investment?.capitalWiredAmount || undefined}
                 placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
-                    prop: 'wired_amount',
+                    prop: 'capitalWiredAmount',
                     newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
@@ -471,8 +486,8 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
                 label="Status"
                 variant="outlined"
                 size="small"
-                value={investment?.phase || ''}
-                onChange={(e) => updateInvestmentProp({ prop: 'phase', newVal: e.target.value })}
+                value={investment?.status || ''}
+                onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
               >
                 <MenuItem value="invited">Invited</MenuItem>
                 <MenuItem value="signed">Signed</MenuItem>
@@ -483,16 +498,16 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
           </Grid>
 
           {/* investment wire date */}
-          {(investment?.phase === 'wired' || investment?.phase === 'complete') && (
+          {(investment?.status === 'wired' || investment?.status === 'complete') && (
             <Grid item xs={12} md={6}>
               <FormControl variant="outlined" style={{ width: '100%' }} size="small">
                 <TextField
-                  value={moment(investment?.wired_date).format('YYYY-MM-DD') || ''}
-                  error={errors.includes('wired_date')}
+                  value={oldDatabaseWireDateTime || ''}
+                  error={errors.includes('wired_at')}
                   onChange={(e) =>
-                    updateInvestmentProp({ prop: 'wired_date', newVal: e.target.value })
+                    updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })
                   }
-                  disabled={investment?.phase === 'signed' || investment?.phase === 'invited'}
+                  disabled={investment?.status === 'signed' || investment?.status === 'invited'}
                   type="date"
                   label="Wired Date"
                   variant="outlined"
@@ -540,18 +555,18 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
             <Button
               disabled={!hasInvestmentChanges && !hasUserChanges}
               variant="contained"
-              style={{ backgroundColor: colors.black[50] }}
+              style={{ backgroundColor: '#2A2B54' }}
               onClick={handleInvestmentEdit}
               color="primary"
             >
               UPDATE
             </Button>
             <Button
-              style={{ marginTop: '5px', color: colors.error[600] }}
+              style={{ marginTop: '5px', color: '#FF0404' }}
               onClick={() => {
                 // eslint-disable-next-line no-alert
                 if (window.confirm('Are you sure you want to delete this investment?')) {
-                  return deleteInvestment({ variables: { _id: investmentId } });
+                  return deleteInvestment({ variables: { id: investmentId } });
                 }
               }}
             >
@@ -561,11 +576,11 @@ export default function InvestmentEdit({ investmentId = false, handleUpdate = fa
         </Grid>
 
         <Grid container>
-          <div className={classes.title} style={{ color: colors.black[50], margin: '15px 0' }}>
+          <div className={classes.title} style={{ color: '#2A2B54', margin: '15px 0' }}>
             Documents
           </div>
         </Grid>
-        <Docs investment={investment} getInvestment={getInvestment} />
+        <Docs investment={investment} getInvestment={getInvestment} isK1={isK1} />
       </form>
     </div>
   );

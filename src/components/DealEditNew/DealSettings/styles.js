@@ -77,13 +77,13 @@ const useStyles = makeStyles((theme) => ({
     width: '24%',
     minWidth: '250px',
     borderRadius: '20px',
-    background: `${theme.colors.white[100]} 0% 0% no-repeat padding-box`,
+    background: '#ffffff 0% 0% no-repeat padding-box',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: '1rem',
     position: 'relative',
-    boxShadow: `0px 3px 6px ${theme.colors.black[100]}1d`,
+    boxShadow: '0px 3px 6px #0000001d',
     [theme.breakpoints.down('md')]: {
       height: '8rem',
       width: '100%',
@@ -98,11 +98,11 @@ const useStyles = makeStyles((theme) => ({
     top: '15px',
     right: '15px',
     height: '1.5rem',
-    backgroundColor: theme.colors.gray[200],
+    backgroundColor: 'rgb(229, 229, 229)',
     width: '1.5rem',
     minWidth: '0',
     borderRadius: '100%',
-    outline: `${theme.colors.primary[500]}2f`,
+    outline: '#0561ff2f',
   },
 
   documentMenu: {
@@ -164,8 +164,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   deleteImage: {
-    backgroundColor: theme.colors.primary[500],
-    color: theme.colors.white[100],
+    backgroundColor: '#0561ff',
+    color: 'white',
     position: 'absolute',
     top: '10px',
     right: '10px',
@@ -204,8 +204,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '0.5rem',
     width: '12rem',
     height: '3rem',
-    backgroundColor: theme.colors.primary[500],
-    color: theme.colors.white[100],
+    backgroundColor: '#0561ff',
+    color: 'white',
     textTransform: 'none',
     [theme.breakpoints.down('md')]: {
       width: '50%',
@@ -224,16 +224,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '0.5rem',
     width: '12rem',
     height: '3rem',
-    backgroundColor: theme.colors.black[50],
-    color: theme.colors.white[100],
+    backgroundColor: '#2a2b54',
+    color: 'white',
     textTransform: 'none',
     [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },
   disabled: {
-    backgroundColor: `${theme.colors.black[50]}2a`,
-    color: `${theme.colors.gray[500]}80`,
+    backgroundColor: '#2a2b542a',
+    color: 'rgba(119, 119, 119, 0.5)',
   },
 
   imageCropContainer: {
@@ -256,7 +256,7 @@ const useStyles = makeStyles((theme) => ({
 
   cropButton: {
     zIndex: '20',
-    background: theme.colors.white[100],
+    background: 'white',
     width: '8rem',
     height: '2.5rem',
     overflow: 'auto',
@@ -266,6 +266,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: '5%',
     right: '0',
   },
+
   saveButton: {
     textTransform: 'none',
     backgroundColor: theme.colors.primary[500],
