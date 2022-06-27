@@ -19,6 +19,7 @@ import {
   Select,
   MenuItem,
   ListItemIcon,
+  Tooltip,
 } from '@material-ui/core';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
@@ -232,6 +233,9 @@ export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, err
         value={investor.is3c7_options_status || ''}
         onChange={handleChange('is3c7_options_status')}
         inputProps={{ name: 'is3c7_options_status' }}
+        MenuProps={{
+          className: classes.paper,
+        }}
       >
         <MenuItem value="" style={{ whiteSpace: 'normal' }} />
         {is3c7Options[investor_type].map((opt) => (
@@ -239,7 +243,17 @@ export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, err
             <ListItemIcon>
               <SendIcon fontSize="small" />
             </ListItemIcon>
-            {opt}
+            <Tooltip title={opt}>
+              <span
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {opt}
+              </span>
+            </Tooltip>
           </MenuItem>
         ))}
       </Select>
