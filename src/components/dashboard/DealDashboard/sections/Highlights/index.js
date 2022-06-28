@@ -33,7 +33,7 @@ export function formatDoughnutSeries(series) {
 }
 
 const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
-  const dealMultiple = _.toNumber(dealData?.deal_multiple || 1);
+  const dealMultiple = _.toNumber(dealData?.deal?.dealParams?.dealMultiple || 1);
 
   const setMonthsToShow = (data) => {
     const monthsArray = [];
@@ -96,28 +96,28 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
   const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n, 0) : 0;
   const steppedChartData = getSteppedChartData();
 
-  const investments = dealData?.investments?.length && dealData.investments;
+  const investments = dealData?.deal?.investments?.length && dealData.deal.investments;
 
   const totalRaised = investments
     ? investments
-        .filter((i) => ['wired', 'complete'].includes(i.phase))
+        .filter((i) => ['wired', 'complete'].includes(i.status))
         // .map((i) => i.amount)
         .map((i) => {
-          if (i.transactions?.[0]?.wired_amount !== null) {
-            return i.transactions?.[0]?.wired_amount;
+          if (i.capitalWiredAmount !== null) {
+            return i.capitalWiredAmount;
           }
-          return 0;
+          return i.amount;
         })
         .reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
   const totalCommitted = investments
-    ? investments.map((i) => i.total_committed_amount).reduce((acc, n) => acc + n, 0) || 0
+    ? investments.map((i) => i.amount).reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
   return (
     <Grid container spacing={2} className={classes.section}>
-      <Grid item xs={6} lg>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Capital Received"
@@ -139,7 +139,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Committed"
@@ -158,7 +158,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Invested"
@@ -182,7 +182,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Multiple (Estimated)"
@@ -204,7 +204,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Portfolio Value (Est.)"
@@ -230,29 +230,27 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
           </div>
         </SimpleBox>
       </Grid>
-      <Grid container spacing={2}>
-        <Grid item xs={12} lg={6}>
-          <ChartBox title="Portfolio Overview" info="Explanation">
-            <div className={classes.chartContainer}>
-              <DoughnutChart series={formatDoughnutSeries(series)} />
-            </div>
-            <div className={classes.tableContainer}>
-              <DefaultChartTable
-                series={formatDoughnutSeries(series)}
-                title="Investments"
-                secondColumnHeader="USD"
-                sumLabel="Total"
-                seriesTotal={seriesTotal}
-                seriesLabelKey="label"
-              />
-            </div>
-          </ChartBox>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <ChartBox title="Total Invested" info="Explanation">
-            <LineChart dataset={steppedChartData} />
-          </ChartBox>
-        </Grid>
+      <Grid item xs={12} md={6}>
+        <ChartBox title="Portfolio Overview" info="Explanation">
+          <div className={classes.chartContainer}>
+            <DoughnutChart series={formatDoughnutSeries(series)} />
+          </div>
+          <div className={classes.tableContainer}>
+            <DefaultChartTable
+              series={formatDoughnutSeries(series)}
+              title="Investments"
+              secondColumnHeader="USD"
+              sumLabel="Total"
+              seriesTotal={seriesTotal}
+              seriesLabelKey="label"
+            />
+          </div>
+        </ChartBox>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <ChartBox title="Total Invested" info="Explanation">
+          <LineChart dataset={steppedChartData} />
+        </ChartBox>
       </Grid>
     </Grid>
   );
