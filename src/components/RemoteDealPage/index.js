@@ -12,6 +12,9 @@ export const GET_DEAL = gql`
     deal(_id: $_id, deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
       slug
+      subscription_agreement {
+        investor_docspring_template_id
+      }
     }
   }
 `;
@@ -51,6 +54,9 @@ export default function RemoteDealPage() {
         }}
         redirectTo404={() => <Redirect to="/404" />}
         user={userProfile}
+        disableInvest={
+          remoteInvestPage ? !deal.subscription_agreement?.investor_docspring_template_id : false
+        }
       />
     </Suspense>
   );
