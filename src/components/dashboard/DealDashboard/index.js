@@ -19,6 +19,8 @@ import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
 import { phone } from '../../../utils/helpers';
 import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
+import Investors from './sections/Investors';
+import DocumentsTab from './sections/DocumentsTab';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
@@ -126,7 +128,12 @@ const DealDashboard = () => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { capitalCallsDealSpecific, cryptoPaymentInBuild, remoteFundManagerDashboard } = useFlags();
+  const {
+    capitalCallsDealSpecific,
+    cryptoPaymentInBuild,
+    remoteFundManagerDashboard,
+    investApiDocsAndInvestments,
+  } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -267,7 +274,6 @@ const DealDashboard = () => {
   };
 
   const getTabContent = () => {
-    console.log({ dealData });
     let fundData = atFundData.map((d) => d.fields);
     if (orgSlug === 'browder-capital') {
       fundData = fundData.filter((i) => {
@@ -275,6 +281,7 @@ const DealDashboard = () => {
       });
     }
 
+    console.log({ investApiDocsAndInvestments });
     switch (tabName) {
       case 'Setup':
         return (
@@ -314,18 +321,31 @@ const DealDashboard = () => {
           />
         );
       case 'Investors':
-        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
-          <Suspense fallback={<AllocationsLoader />}>
-            <RemoteOnboarding deal_id={dealData?.deal?._id} />
-          </Suspense>
+        return investApiDocsAndInvestments ? (
+          (capitalCallsDealSpecific || []).includes(dealData._id) ? (
+            <Suspense fallback={<AllocationsLoader />}>
+              <RemoteOnboarding deal_id={dealData?.deal?._id} />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<AllocationsLoader />}>
+              <RemoteInvestors deal_id={dealData?.deal?._id} />
+            </Suspense>
+          )
         ) : (
-          <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?.deal?._id} />
-          </Suspense>
+          <Investors
+            classes={classes}
+            data={dealData}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
         );
 
       case 'Documents':
-        return <RemoteInvestorsDocuments />;
+        return investApiDocsAndInvestments ? (
+          <RemoteInvestorsDocuments />
+        ) : (
+          <DocumentsTab classes={classes} data={dealData} refetch={refetch} />
+        );
 
       case 'Deal Page':
         return (
