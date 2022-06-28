@@ -267,6 +267,7 @@ const DealDashboard = () => {
   };
 
   const getTabContent = () => {
+    console.log({ dealData });
     let fundData = atFundData.map((d) => d.fields);
     if (orgSlug === 'browder-capital') {
       fundData = fundData.filter((i) => {
@@ -315,11 +316,11 @@ const DealDashboard = () => {
       case 'Investors':
         return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteOnboarding deal_id={dealData?._id} />
+            <RemoteOnboarding deal_id={dealData?.deal?._id} />
           </Suspense>
         ) : (
           <Suspense fallback={<AllocationsLoader />}>
-            <RemoteInvestors deal_id={dealData?._id} />
+            <RemoteInvestors deal_id={dealData?.deal?._id} />
           </Suspense>
         );
 
