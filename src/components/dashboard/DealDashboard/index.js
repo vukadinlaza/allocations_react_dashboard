@@ -131,7 +131,7 @@ const DealDashboard = () => {
   const {
     capitalCallsDealSpecific,
     cryptoPaymentInBuild,
-    remoteFundManagerDashboard,
+    dealProgress,
     investApiDocsAndInvestments,
   } = useFlags();
   const { userProfile } = useAuth();
@@ -173,7 +173,7 @@ const DealDashboard = () => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
-        if (remoteFundManagerDashboard) {
+        if (dealProgress) {
           const res = await fetch(
             `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
@@ -281,7 +281,6 @@ const DealDashboard = () => {
       });
     }
 
-    console.log({ investApiDocsAndInvestments });
     switch (tabName) {
       case 'Setup':
         return (
@@ -397,7 +396,7 @@ const DealDashboard = () => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {remoteFundManagerDashboard ? (
+      {dealProgress ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
