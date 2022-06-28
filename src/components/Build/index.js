@@ -33,7 +33,7 @@ export default function Build() {
   });
 
   const handleCreate = (deal) => {
-    const orgSlug = deal?.organizations_slug || deal?.legacyOrg?.slug || organization?.slug;
+    const orgSlug = deal?.organization_slug || deal?.legacyOrg?.slug || organization?.slug;
     return createDeal({
       variables: {
         org: orgSlug || 'lost-spvs',
