@@ -10,6 +10,9 @@ const CREATE_DEAL = gql`
   mutation CreateDeal($org: String!, $deal: DealInput!) {
     createDeal(org: $org, deal: $deal) {
       _id
+      organization {
+        slug
+      }
     }
   }
 `;
@@ -23,7 +26,7 @@ export default function Build() {
   const [createDeal, { error }] = useMutation(CREATE_DEAL, {
     onCompleted: ({ createDeal }) => {
       if (organization?.slug) {
-        history.push(`/admin/${organization.slug}/deals/${createDeal._id}`);
+        history.push(`/admin/${createDeal.organization.slug}/deals/${createDeal._id}`);
       } else if (userProfile?.organizations_admin?.[0]?.slug) {
         history.push(`/admin/${userProfile.organizations_admin[0].slug}/deals/${createDeal._id}`);
       } else {
@@ -34,6 +37,7 @@ export default function Build() {
 
   const handleCreate = (deal) => {
     const orgSlug = deal?.organization_slug || deal?.legacyOrg?.slug || organization?.slug;
+
     return createDeal({
       variables: {
         org: orgSlug || 'lost-spvs',
