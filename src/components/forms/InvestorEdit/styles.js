@@ -12,6 +12,11 @@ const useStyles = makeStyles({
       marginRight: '5px',
     },
   },
+  paper: {
+    '& div[class*="MuiMenu-paper"]': {
+      maxWidth: '45%',
+    },
+  },
 });
 
 export default useStyles;
