@@ -21,7 +21,7 @@ import { useCurrentOrganizationState } from '../../state/current-organization';
 
 const GET_INVESTOR = gql`
   {
-    investor {
+    user {
       _id
       name
       admin

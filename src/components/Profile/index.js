@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
+    user(email: $email, _id: $_id) {
       _id
       first_name
       last_name
