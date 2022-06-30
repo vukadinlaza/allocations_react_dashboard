@@ -198,7 +198,10 @@ function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
 
       canvas.toBlob(
         (blob) => {
-          setCroppedImage({ logo: blob, title: 'dealCoverImage.png' });
+          setCroppedImage({
+            logo: blob,
+            title: `dealCoverImage-${Math.round(new Date().getTime() / 1000)}.png`,
+          });
         },
         'image/png',
         1,
@@ -278,7 +281,7 @@ function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
                 </Button>
                 <p className={styles.pStyle}>
                   {dealCoverImageKey
-                    ? 'dealCoverImage.png'
+                    ? `dealCoverImage-${Math.round(new Date().getTime() / 1000)}.png`
                     : croppedImage?.title || 'No image selected'}
                 </p>
               </div>
