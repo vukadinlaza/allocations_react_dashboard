@@ -68,6 +68,31 @@ const MainApp = ({ isAuthenticated }) => {
   const styles = useStyles({ isAuthenticated });
   return (
     <div className={styles.mainRoute}>
+      <div style={{ maxHeight: '30%' }}>
+        <div
+          style={{
+            backgroundColor: '#0144e4',
+            width: '100%',
+            padding: '.5rem',
+            color: 'white',
+            textAlign: 'center',
+            marginBottom: '.25rem',
+          }}
+        >
+          Monday, July 4th is a federal holiday in the United States in observance of Independence
+          Day. Banks in the United States will be closed. Please contact{' '}
+          <a
+            href="https://www.allocations.com/contact-us"
+            style={{
+              color: 'white',
+              textDecoration: 'underline',
+            }}
+          >
+            support
+          </a>{' '}
+          for any assistance.
+        </div>
+      </div>
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
