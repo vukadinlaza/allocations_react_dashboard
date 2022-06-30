@@ -79,12 +79,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
         <Grid container spacing={3} direction="row" justifyContent="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <UserSearch
-                user={user}
-                setUser={setUser}
-                org_id={get(deal, 'organization', '')}
-                errors={errors}
-              />
+              <UserSearch user={user} setUser={setUser} errors={errors} />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
