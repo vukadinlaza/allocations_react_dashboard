@@ -42,19 +42,19 @@ function validate({ investment, user, deal }) {
   return errors;
 }
 
-export function UserSearch({ user, setUser, errors, deal_id }) {
+export function UserSearch({ user, setUser, errors, org_id }) {
   const classes = styles();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
 
   useEffect(() => {
-    search({ variables: { q, org: deal_id } });
-  }, [deal_id, q, search]);
+    search({ variables: { query: q, org_id } });
+  }, [org_id, q, search]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    if (searchRes.data && searchRes.data.users) {
+      setRecords(q === '' ? [] : searchRes.data.users);
     }
   }, [q, searchRes.data]);
 
@@ -261,7 +261,7 @@ export default function InvestmentNew() {
                   user={user}
                   setUser={setUser}
                   errors={errors}
-                  deal_id={get(deal, '_id', '')}
+                  org_id={get(deal, 'organization', '')}
                   classes={classes}
                 />
               </Col>

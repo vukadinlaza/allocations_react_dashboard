@@ -82,7 +82,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
               <UserSearch
                 user={user}
                 setUser={setUser}
-                deal_id={get(deal, '_id', '')}
+                org_id={get(deal, 'organization', '')}
                 errors={errors}
               />
             </FormControl>

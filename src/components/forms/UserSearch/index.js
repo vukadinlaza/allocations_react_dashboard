@@ -12,18 +12,18 @@ export default function UserSearch({
   label = 'Investor',
   showLabelOnSelect = false,
 }) {
-  const { organization: org } = useParams();
+  const { organization: org_id } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
 
   useEffect(() => {
-    search({ variables: { q, org } });
+    search({ variables: { query: q, org_id } });
   }, [q]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    if (searchRes.data && searchRes.data.users) {
+      setRecords(q === '' ? [] : searchRes.data.users);
     }
   }, [searchRes.data]);
 

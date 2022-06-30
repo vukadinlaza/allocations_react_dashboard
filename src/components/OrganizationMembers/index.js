@@ -89,19 +89,21 @@ function UserSearch({ refetch, classes }) {
   const { organization } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
-  const [search, searchRes] = useLazyQuery(API.users.search, { variables: { org: 'allocations' } });
+  const [search, searchRes] = useLazyQuery(API.users.search, {
+    variables: { org_id: '5e4d9a334ffe0530c9350d40' },
+  });
   const [addMembership] = useMutation(ADD_MEMBERSHIP, {
     variables: { slug: organization },
     onCompleted: () => refetch() && setQ('') && setRecords([]),
   });
 
   useEffect(() => {
-    search({ variables: { q, org: 'allocations' } });
+    search({ variables: { query: q, org_id: '5e4d9a334ffe0530c9350d40' } });
   }, [q]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    if (searchRes.data && searchRes.data.users) {
+      setRecords(q === '' ? [] : searchRes.data.users);
     }
   }, [searchRes.data]);
 

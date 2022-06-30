@@ -6,6 +6,7 @@ export const search = gql`
       _id
       company_name
       company_description
+      organization
     }
   }
 `;
