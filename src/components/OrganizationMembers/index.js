@@ -94,7 +94,7 @@ function UserSearch({ refetch, classes }) {
     variables: { slug: organization },
     onCompleted: () => refetch() && setQ('') && setRecords([]),
   });
-
+  console.log('first');
   useEffect(() => {
     search({ variables: { q, org: 'allocations' } });
   }, [q]);
