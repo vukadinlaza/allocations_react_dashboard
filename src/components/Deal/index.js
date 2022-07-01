@@ -22,7 +22,7 @@ import Loader from '../utils/Loader';
 
 export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
-    investor {
+    user {
       _id
       name
       first_name

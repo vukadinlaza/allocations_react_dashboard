@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
@@ -12,18 +11,17 @@ export default function UserSearch({
   label = 'Investor',
   showLabelOnSelect = false,
 }) {
-  const { organization: org } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
 
   useEffect(() => {
-    search({ variables: { q, org } });
+    search({ variables: { field: 'email', searchTerm: q } });
   }, [q]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    if (searchRes.data && searchRes.data.usersByField) {
+      setRecords(q === '' ? [] : searchRes.data.usersByField);
     }
   }, [searchRes.data]);
 

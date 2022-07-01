@@ -38,7 +38,7 @@ import InvestorEditForm from '../../forms/InvestorEdit';
 
 export const GET_INVESTOR = gql`
   query GetInvestor($deal_id: String!, $_id: String) {
-    investor(_id: $_id) {
+    user(_id: $_id) {
       _id
       email
       documents

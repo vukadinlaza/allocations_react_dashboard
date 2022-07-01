@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { get } from 'lodash';
 import {
   TextField,
   Table,
@@ -42,19 +41,19 @@ function validate({ investment, user, deal }) {
   return errors;
 }
 
-export function UserSearch({ user, setUser, errors, deal_id }) {
+export function UserSearch({ user, setUser, errors }) {
   const classes = styles();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
 
   useEffect(() => {
-    search({ variables: { q, org: deal_id } });
-  }, [deal_id, q, search]);
+    search({ variables: { field: 'email', searchTerm: q } });
+  }, [q, search]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    if (searchRes.data && searchRes.data.usersByField) {
+      setRecords(q === '' ? [] : searchRes.data.usersByField);
     }
   }, [q, searchRes.data]);
 
@@ -257,13 +256,7 @@ export default function InvestmentNew() {
             </Row>
             <Row>
               <Col sm={{ size: 4, offset: 1 }}>
-                <UserSearch
-                  user={user}
-                  setUser={setUser}
-                  errors={errors}
-                  deal_id={get(deal, '_id', '')}
-                  classes={classes}
-                />
+                <UserSearch user={user} setUser={setUser} errors={errors} classes={classes} />
               </Col>
               <Col sm={{ size: 4 }}>
                 <DealSearch deal={deal} setDeal={setDeal} errors={errors} classes={classes} />

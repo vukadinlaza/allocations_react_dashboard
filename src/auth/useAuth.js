@@ -6,7 +6,7 @@ import { useLazyQuery, gql } from '@apollo/client';
 
 const GET_INVESTOR = gql`
   {
-    investor {
+    user {
       _id
       email
       first_name
@@ -45,7 +45,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
   } = useAuth0();
 
   const [getInvestor, { data, error, called, refetch, loading }] = useLazyQuery(QUERY);
-  const userProfile = { ...(user || {}), ...(data?.investor || {}) };
+  const userProfile = { ...(user || {}), ...(data?.user || {}) };
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && !called) {

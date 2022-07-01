@@ -9,7 +9,7 @@ import Loader from '../../utils/Loader';
 
 const GET_PROFILE = gql`
   query GetInvestor($_id: String) {
-    investor(_id: $_id) {
+    user(_id: $_id) {
       first_name
       last_name
       country
