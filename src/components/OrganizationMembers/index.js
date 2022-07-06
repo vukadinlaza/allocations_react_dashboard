@@ -165,7 +165,7 @@ export default function OrganizationMembers({ data, refetch }) {
           <Paper style={{ marginTop: '15px' }}>
             <Table>
               <TableBody>
-                {data.organizationMembers.map((member) => (
+                {data.organization?.members?.map((member) => (
                   <Member
                     key={member._id}
                     org={data.organization}
