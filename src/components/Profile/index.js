@@ -28,9 +28,6 @@ const GET_INVESTOR = gql`
       profileImageKey
       city
       profileBio
-      account {
-        _id
-      }
       accredidation_doc {
         link
         path

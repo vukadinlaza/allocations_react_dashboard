@@ -51,7 +51,7 @@ const ORG_OVERVIEW = gql`
         }
       }
     }
-    investor {
+    user {
       _id
       admin
       documents

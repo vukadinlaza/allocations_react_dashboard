@@ -1,27 +1,12 @@
 import React, { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
 import { Grid, Typography, Switch, FormGroup, FormControlLabel } from '@material-ui/core';
 
-const DISPLAY_USERNAME_STATUS = gql`
-  mutation DisplayUsernameStatus($email: String!, $display_username: Boolean) {
-    displayUsernameStatus(email: $email, display_username: $display_username) {
-      _id
-      display_username
-      email
-    }
-  }
-`;
-
-const DisplayUsername = ({ investor }) => {
+const DisplayUsername = ({ investor, handleChange }) => {
   const [checked, setChecked] = useState(investor.display_username || false);
-  const [displayUsernameStatus] = useMutation(DISPLAY_USERNAME_STATUS);
 
   const handleUsernameStatus = (e) => {
-    e.persist();
     setChecked((prev) => !prev);
-    displayUsernameStatus({
-      variables: { email: investor.email, display_username: e.target.checked },
-    });
+    handleChange('display_username')({ target: { value: e.target.checked } });
   };
 
   return (

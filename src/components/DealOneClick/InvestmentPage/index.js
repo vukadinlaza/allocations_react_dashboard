@@ -92,7 +92,7 @@ const GET_DEAL = gql`
 
 const GET_PERSONAL_INFO = gql`
   query InvestorPersonalInfo {
-    investor {
+    user {
       _id
       investorPersonalInfo {
         investor {
@@ -199,7 +199,7 @@ function InvestmentPage() {
   }, [history]);
 
   const populateInvestorData = () => {
-    const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
+    const personalData = personalInfo?.user?.investorPersonalInfo?.submissionData;
     const editPersonalData = location?.state?.submission;
     let updatedInvestorData = { ...investorFormData };
     if (!personalData && !editPersonalData) return;

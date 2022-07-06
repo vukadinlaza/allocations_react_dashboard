@@ -1,45 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Chip, Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core';
-import { useMutation, gql } from '@apollo/client';
 import { colors } from '@allocations/design-system';
-
-const ADD_SECTORS = gql`
-  mutation AddSectors($email: String!, $sector: String!) {
-    addSectors(email: $email, sector: $sector) {
-      _id
-      sectors
-      email
-    }
-  }
-`;
-const DELETE_SECTORS = gql`
-  mutation DeleteSectors($email: String!, $sector: String!) {
-    deleteSectors(email: $email, sector: $sector) {
-      _id
-      sectors
-      email
-    }
-  }
-`;
-const ADD_STAGES = gql`
-  mutation AddStages($email: String!, $stage: String!) {
-    addStages(email: $email, stage: $stage) {
-      _id
-      stages
-      email
-    }
-  }
-`;
-const DELETE_STAGES = gql`
-  mutation DeleteStages($email: String!, $stage: String!) {
-    deleteStages(email: $email, stage: $stage) {
-      _id
-      stages
-      email
-    }
-  }
-`;
 
 const sectors = [
   'AI',
@@ -109,41 +71,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sectors = ({ investor }) => {
+const Sectors = ({ investor, handleChange }) => {
   const classes = useStyles();
   const [sectorData, setSectorData] = useState(investor?.sectors || []);
   const [stageData, setStageData] = useState(investor?.stages || []);
 
-  const [updateSectors] = useMutation(ADD_SECTORS);
-  const [deleteSectors] = useMutation(DELETE_SECTORS);
-  const [updateStages] = useMutation(ADD_STAGES);
-  const [deleteStages] = useMutation(DELETE_STAGES);
-
   const handleDelete = (sectorToDelete) => () => {
-    setSectorData((sectors) => sectors.filter((sector) => sector !== sectorToDelete));
-    deleteSectors({ variables: { email: investor.email, sector: sectorToDelete } });
+    const updatedSectors = sectorData.filter((sector) => sector !== sectorToDelete);
+    setSectorData(updatedSectors);
+    handleChange('sectors')({ target: { value: updatedSectors } });
   };
 
   const handleDeleteStage = (stageToDelete) => () => {
-    setStageData((stages) => stages.filter((stage) => stage !== stageToDelete));
-    deleteStages({ variables: { email: investor.email, stage: stageToDelete } });
+    const updatedStages = stageData.filter((stage) => stage !== stageToDelete);
+    setStageData(updatedStages);
+    handleChange('stages')({ target: { value: updatedStages } });
   };
 
   const handleSelectorAdd = (e) => {
-    e.persist();
     if (sectorData.length <= 5) {
-      setSectorData((prev) => [...prev, e.target.value]);
-      updateSectors({ variables: { email: investor.email, sector: e.target.value } });
+      const updatedSectors = [...sectorData, e.target.value];
+      setSectorData(updatedSectors);
+      handleChange('sectors')({ target: { value: updatedSectors } });
     }
-    return sectorData;
   };
   const handleStageAdd = (e) => {
-    e.persist();
     if (stageData.length <= 5) {
-      setStageData((prev) => [...prev, e.target.value]);
-      updateStages({ variables: { email: investor.email, stage: e.target.value } });
+      const updatedStages = [...stageData, e.target.value];
+      setStageData(updatedStages);
+      handleChange('stages')({ target: { value: updatedStages } });
     }
-    return stageData;
   };
 
   const uniqueSectors = [...new Set(sectorData)];
