@@ -299,14 +299,6 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
             <Grid item xs={12} lg={4} className={classes.buttonsContainer}>
               {userProfile?.admin && (
                 <AllocationsButton
-                  onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
-                  size="small"
-                  text="Create New Deal Page"
-                  variant="secondary"
-                />
-              )}
-              {userProfile?.admin && (
-                <AllocationsButton
                   onClick={() => history.push(`/admin/${orgSlug}/manager`)}
                   size="small"
                   text="Add Org Admin"

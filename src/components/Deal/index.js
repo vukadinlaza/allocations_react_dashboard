@@ -538,7 +538,7 @@ export default function Deal() {
 
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations');
-    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+    if (data && !data.user?.invitedDeal?.investment && !blocked) {
       let decodedParams = {};
       if (base64regex.test(search.substring(1)) && search && !search.includes('amount')) {
         decodedParams = base64.decode(search.substring(1));
@@ -549,8 +549,8 @@ export default function Deal() {
       // eslint-disable-next-line radix
       const amount = parseInt(p.get('amount')) || 0;
       const investment = {
-        deal_id: data.investor.invitedDeal?._id,
-        user_id: data.investor._id,
+        deal_id: data.user.invitedDeal?._id,
+        user_id: data.user._id,
         amount,
       };
       if (userProfile?.email && !didCreateInvestment) {
@@ -585,8 +585,8 @@ export default function Deal() {
   if (!data) return <Loader />;
 
   const {
-    investor,
-    investor: { invitedDeal: deal },
+    user,
+    user: { invitedDeal: deal },
   } = data;
   const { investment } = deal;
   return (
@@ -604,7 +604,7 @@ export default function Deal() {
         <InvestmentFlow
           deal={{ ...deal, deal_slug, organization }}
           investment={investment}
-          investor={investor}
+          investor={user}
           refetch={refetch}
         />
       </div>
@@ -621,7 +621,7 @@ export default function Deal() {
         }}
       >
         <DealParams deal={deal} deal_slug={deal_slug} />
-        <InvestorData investor={investor} />
+        <InvestorData investor={user} />
       </div>
     </>
   );

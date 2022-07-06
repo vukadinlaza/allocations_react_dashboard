@@ -41,8 +41,8 @@ const ProfilePage = () => {
         <Grid item xs={12} style={{ marginBottom: 34 }}>
           <Avatar
             src={
-              data.investor.profileImageKey
-                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.investor.profileImageKey}`
+              data.user.profileImageKey
+                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.user.profileImageKey}`
                 : ''
             }
             className={classes.avatar}
@@ -50,10 +50,10 @@ const ProfilePage = () => {
         </Grid>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-            {data.investor.first_name} {data.investor.last_name}
+            {data.user.first_name} {data.user.last_name}
           </Typography>
           <Typography variant="subtitle1">
-            {data.investor.city}, {data.investor.country}
+            {data.user.city}, {data.user.country}
           </Typography>
         </Grid>
       </Grid>
@@ -62,14 +62,14 @@ const ProfilePage = () => {
           <Typography className={classes.profileSectionTitle} variant="h6">
             Bio
           </Typography>
-          <Typography variant="body1">{data.investor.profileBio}</Typography>
+          <Typography variant="body1">{data.user.profileBio}</Typography>
         </Grid>
         <Grid container className={classes.profileSection}>
           <Grid item sm={6}>
             <Typography variant="h6" className={classes.profileSectionTitle}>
               Sectors
             </Typography>
-            {data.investor.sectors?.map((sector, idx) => (
+            {data.user.sectors?.map((sector, idx) => (
               <Box
                 key={idx}
                 borderRadius={5}
@@ -89,7 +89,7 @@ const ProfilePage = () => {
             <Typography variant="h6" className={classes.profileSectionTitle}>
               Deal Stages
             </Typography>
-            {data.investor.stages?.map((stage, idx) => (
+            {data.user.stages?.map((stage, idx) => (
               <Box
                 key={idx}
                 borderRadius={5}
@@ -116,8 +116,8 @@ const ProfilePage = () => {
             <Typography variant="h6" className={classes.profileSectionTitle}>
               Links
             </Typography>
-            {data.investor.linkedinUrl && (
-              <a href={data.investor.linkedinUrl}>
+            {data.user.linkedinUrl && (
+              <a href={data.user.linkedinUrl}>
                 <TiSocialLinkedinCircular size={23} color={colors.primary[600]} />
               </a>
             )}
