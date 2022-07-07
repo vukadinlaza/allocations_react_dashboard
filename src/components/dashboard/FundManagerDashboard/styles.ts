@@ -7,6 +7,7 @@ const styles = (theme: Theme) => ({
   },
   buttonsContainer: {
     display: 'flex',
+    justifyContent: 'flex-end',
   },
   computerBoxes: {
     display: 'flex',
