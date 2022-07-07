@@ -10,7 +10,6 @@ import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
 import Deals from './components/AllDeals';
-import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
 import InvestmentNew from './components/InvestmentNew';
@@ -34,7 +33,6 @@ import PostBuild from './components/PostBuild';
 
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
-import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import DealDashboard from './components/dashboard/DealDashboard';
@@ -68,31 +66,6 @@ const MainApp = ({ isAuthenticated }) => {
   const styles = useStyles({ isAuthenticated });
   return (
     <div className={styles.mainRoute}>
-      <div style={{ maxHeight: '30%' }}>
-        <div
-          style={{
-            backgroundColor: '#0144e4',
-            width: '100%',
-            padding: '.5rem',
-            color: 'white',
-            textAlign: 'center',
-            marginBottom: '.25rem',
-          }}
-        >
-          Monday, July 4th is a federal holiday in the United States in observance of Independence
-          Day. Banks in the United States will be closed. Please contact{' '}
-          <a
-            href="https://www.allocations.com/contact-us"
-            style={{
-              color: 'white',
-              textDecoration: 'underline',
-            }}
-          >
-            support
-          </a>{' '}
-          for any assistance.
-        </div>
-      </div>
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
@@ -112,7 +85,6 @@ const MainApp = ({ isAuthenticated }) => {
           exact
         />
         <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-        <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
         <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
         <PrivateRoute path="/admin/:organization/deals/:deal_id" component={DealDashboard} exact />
 
@@ -163,7 +135,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Whitelabel Routes * */}
         <PrivateRoute path="/identity" component={Identity} />
-        <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
         {/** catchall * */}
         <Route path={['*', '/404']} component={NotFound} />
