@@ -103,7 +103,7 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact render={() => <Redirect to="/new-build" />} />
+        <Route path="/public/new-build" exact component={Build} />
         <PrivateRoute path="/new-build" exact component={Build} />
 
         {/* Private  */}
