@@ -339,7 +339,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Grid container justifyContent="space-between" spacing={2}>
-              <Grid item xs={12} xl={6} className={classes.list}>
+              <Grid item xs={12} className={classes.list}>
                 <AllocationsTypography
                   component="div"
                   content="SPVs"
@@ -356,10 +356,14 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                     itemsPerPage={5}
                   />
                 ) : (
-                  <BigBox content="No SPVs created" />
+                  <BigBox
+                    content="No SPVs created"
+                    button={{ action: () => history.push('/new-build'), text: 'Create SPV' }}
+                    icon="business"
+                  />
                 )}
               </Grid>
-              <Grid item xs={12} xl={6} className={classes.list}>
+              <Grid item xs={12} className={classes.list}>
                 <AllocationsTypography
                   component="div"
                   content="Funds"
@@ -376,7 +380,11 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                     itemsPerPage={5}
                   />
                 ) : (
-                  <BigBox content="No Funds created" />
+                  <BigBox
+                    content="No Funds created"
+                    button={{ action: () => history.push('/new-build'), text: 'Create Fund' }}
+                    icon="business"
+                  />
                 )}
               </Grid>
             </Grid>
