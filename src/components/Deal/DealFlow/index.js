@@ -24,7 +24,7 @@ export const GET_INVESTOR = gql`
       email
       documents
       country
-      dealInvestments(deal_id: $deal_id) {
+      investments(deal_id: $deal_id) {
         _id
         status
         amount
@@ -64,7 +64,7 @@ export default function InvestmentFlow({ deal, investor }) {
   });
   if (!data) return null;
   const { investor: polledInvestor } = data;
-  const investment = _.get(polledInvestor, 'dealInvestments[0]', null);
+  const investment = _.get(polledInvestor, 'investments[0]', null);
 
   return (
     <>
