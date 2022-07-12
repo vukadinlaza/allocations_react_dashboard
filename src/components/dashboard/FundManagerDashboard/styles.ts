@@ -29,18 +29,15 @@ const styles = (theme: Theme) => ({
     marginTop: '20px',
   },
   list: {
-    [theme.breakpoints.up(1367)]: {
-      maxWidth: '49%',
-    },
+    width: '100%',
     [theme.breakpoints.down(phone)]: {
-      width: '100%',
       overflowX: 'scroll',
       maxWidth: '100%',
       marginBottom: '44px',
     },
   },
   listsContainer: {
-    marginTop: '50px',
+    margin: '50px 0px',
   },
   mainContainer: {
     [theme.breakpoints.down(phone)]: {
