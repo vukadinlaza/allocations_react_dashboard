@@ -186,6 +186,9 @@ const DealDashboard = () => {
               'Documents',
               'Deal Page',
             ];
+
+            setTabIndex(0);
+            setTabName('Deal Progress');
           }
           setServiceDeal(deal);
           setDealName(deal?.name);
@@ -206,16 +209,12 @@ const DealDashboard = () => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
 
-      if (newTabs.includes('Deal Progress')) {
-        setTabIndex(newTabs.indexOf('Deal Progress'));
-        setTabName('Deal Progress');
-      } else {
-        const newTabIndex = newTabs.indexOf(tabName);
-        const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
-        const newTabName = newTabs[newIndex];
-        setTabIndex(newIndex);
-        setTabName(newTabName);
-      }
+      const newTabIndex = newTabs.indexOf(tabName);
+      const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
+      const newTabName = newTabs[newIndex];
+      setTabIndex(newIndex);
+      setTabName(newTabName);
+
       setDashboardTabs(newTabs);
     }
   }, [dealData, serviceDeal]);

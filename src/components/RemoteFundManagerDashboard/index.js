@@ -13,7 +13,7 @@ export default function RemoteFundManagerDashboard() {
       <ManagerDashboard
         orgSlug={organization}
         pushToDealPage={(deal_id) => history.push(`/admin/${organization}/deals/${deal_id}`)}
-        pushToCreateNewDealPage={() => history.push(`/admin/${organization}/deal/new`)}
+        pushToCreateNewDealPage={() => history.push(``)}
         pushToAddNewOrgAdminPage={() => history.push(`/admin/${organization}/manager`)}
         redirectTo404={() => <Redirect to="/404" />}
       />

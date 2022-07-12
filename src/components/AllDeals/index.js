@@ -2,7 +2,6 @@ import React, { useEffect, useReducer, Fragment, useState } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import { useLazyQuery, gql } from '@apollo/client';
-import { Row, Col } from 'reactstrap';
 import {
   Table,
   TableBody,
@@ -127,17 +126,6 @@ export default function Deals({ showClosed }) {
   const maxPages = Math.ceil(data.organization.n_deals / OFFSET);
   return (
     <div>
-      {!showClosed && (
-        <Row>
-          <Col sm={{ size: 12 }}>
-            <Paper className={styles.dealData}>
-              <Button variant="contained" color="secondary">
-                <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
-              </Button>
-            </Paper>
-          </Col>
-        </Row>
-      )}
       {!showClosed && (
         <>
           <h5>

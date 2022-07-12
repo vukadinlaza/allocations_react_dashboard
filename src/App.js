@@ -10,7 +10,6 @@ import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
 import Deals from './components/AllDeals';
-import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
 import InvestmentNew from './components/InvestmentNew';
@@ -34,7 +33,6 @@ import PostBuild from './components/PostBuild';
 
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
-import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import DealDashboard from './components/dashboard/DealDashboard';
@@ -87,7 +85,6 @@ const MainApp = ({ isAuthenticated }) => {
           exact
         />
         <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-        <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
         <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
         <PrivateRoute path="/admin/:organization/deals/:deal_id" component={DealDashboard} exact />
 
@@ -106,7 +103,7 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact render={() => <Redirect to="/new-build" />} />
+        <Route path="/public/new-build" exact component={Build} />
         <PrivateRoute path="/new-build" exact component={Build} />
 
         {/* Private  */}
@@ -138,7 +135,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Whitelabel Routes * */}
         <PrivateRoute path="/identity" component={Identity} />
-        <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
         {/** catchall * */}
         <Route path={['*', '/404']} component={NotFound} />
