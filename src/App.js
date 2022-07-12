@@ -34,7 +34,6 @@ import PostBuild from './components/PostBuild';
 
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
-import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import DealDashboard from './components/dashboard/DealDashboard';
@@ -163,7 +162,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Whitelabel Routes * */}
         <PrivateRoute path="/identity" component={Identity} />
-        <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
         {/** catchall * */}
         <Route path={['*', '/404']} component={NotFound} />
