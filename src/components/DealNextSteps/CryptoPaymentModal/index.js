@@ -11,8 +11,11 @@ import CompletedMessage from './CompletedMessage/index';
 import { phone } from '../../../utils/helpers';
 
 const DEAL_WALLET_ADDRESS = gql`
-  query getCryptoWalletAddress($deal_id: String) {
-    getCryptoWalletAddress(deal_id: $deal_id)
+  query deal($_id: String) {
+    deal(_id: $_id) {
+      _id
+      crypto_wallet_address
+    }
   }
 `;
 
@@ -237,7 +240,7 @@ function CryptoPaymentModal({
                     />
                     <TransferInstructions
                       totalDue={totalDue}
-                      walletAddress={data?.getCryptoWalletAddress}
+                      walletAddress={data?.deal?.crypto_wallet_address}
                     />
                     <TransactionHashInput
                       transactionInfo={transactionInfo}
