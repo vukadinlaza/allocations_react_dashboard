@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import {
   Button,
   TextField,
@@ -11,10 +11,16 @@ import {
   MenuItem,
   InputLabel,
   InputAdornment,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
 } from '@material-ui/core';
 import { colors } from '@allocations/design-system';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from '../styles';
-import { UserSearch } from '..';
+import * as API from '../../../api';
 
 const CREATE_INVESTMENT = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {
@@ -23,6 +29,82 @@ const CREATE_INVESTMENT = gql`
     }
   }
 `;
+
+function UserSearch({ user, setUser, errors, deal_id }) {
+  const classes = styles();
+  const [q, setQ] = useState('');
+  const [records, setRecords] = useState([]);
+
+  const [search, searchRes] = useLazyQuery(API.users.search);
+
+  useEffect(() => {
+    search({ variables: { fields: ['first_name', 'last_name', 'email'], searchTerm: q } });
+  }, [deal_id, q, search]);
+
+  useEffect(() => {
+    if (searchRes.data && searchRes.data.searchUsers) {
+      setRecords(q === '' ? [] : searchRes.data.searchUsers);
+    }
+  }, [q, searchRes.data]);
+
+  if (user) {
+    return (
+      <Paper>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                {user.first_name} {user.last_name}
+              </TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>
+                <FontAwesomeIcon
+                  icon="times"
+                  onClick={() => {
+                    setQ('');
+                    setUser(null);
+                  }}
+                />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
+
+  return (
+    <div>
+      <TextField
+        style={{ width: '100%' }}
+        required
+        value={q}
+        error={errors.includes('user')}
+        label="Investor"
+        variant="outlined"
+        onChange={(e) => setQ(e.target.value)}
+      />
+      <Paper>
+        <Table>
+          <TableBody>
+            {records.map((record) => (
+              <TableRow
+                key={record._id}
+                className={classes.assocOption}
+                onClick={() => setUser(record)}
+              >
+                <TableCell>
+                  {record.first_name} {record.last_name}
+                </TableCell>
+                <TableCell>{record.email}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </div>
+  );
+}
 
 function validate({ investment, user, deal }) {
   const errors = [];

@@ -12,7 +12,6 @@ import Faq from './components/Faq';
 import Deals from './components/AllDeals';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
-import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew';
@@ -75,7 +74,6 @@ const MainApp = ({ isAuthenticated }) => {
           exact
         />
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
-        <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
         {/* Organization Admin */}
