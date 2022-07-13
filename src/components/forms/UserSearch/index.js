@@ -20,8 +20,8 @@ export default function UserSearch({
   }, [q]);
 
   useEffect(() => {
-    if (searchRes.data && searchRes.data.usersByField) {
-      setRecords(q === '' ? [] : searchRes.data.usersByField);
+    if (searchRes.data && searchRes.data.searchUsers) {
+      setRecords(q === '' ? [] : searchRes.data.searchUsers);
     }
   }, [searchRes.data]);
 
