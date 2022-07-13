@@ -45,6 +45,7 @@ import RemoteTaxBanner from './components/RemoteTaxBanner';
 import RemoteInvest from './components/RemoteInvest';
 import RemoteNextSteps from './components/RemoteNextSteps';
 import useStyles from './styles';
+import HolidayBanner from './components/HolidayBanner';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -62,10 +63,11 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard, remoteInvestPage } = useFlags();
+  const { remoteFundManagerDashboard, remoteInvestPage, holidayBannerContent } = useFlags();
   const styles = useStyles({ isAuthenticated });
   return (
-    <div className={styles.mainRoute}>
+    <div className={styles.mainRoute} id="holiday-banner">
+      {holidayBannerContent && <HolidayBanner />}
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
