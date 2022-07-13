@@ -45,6 +45,7 @@ import RemoteTaxBanner from './components/RemoteTaxBanner';
 import RemoteInvest from './components/RemoteInvest';
 import RemoteNextSteps from './components/RemoteNextSteps';
 import useStyles from './styles';
+import HolidayBanner from './components/HolidayBanner';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -65,34 +66,8 @@ const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard, remoteInvestPage, holidayBannerContent } = useFlags();
   const styles = useStyles({ isAuthenticated });
   return (
-    <div className={styles.mainRoute}>
-      {holidayBannerContent && (
-        <div style={{ maxHeight: '30%' }}>
-          <div
-            style={{
-              backgroundColor: '#0144e4',
-              width: '100%',
-              padding: '.5rem',
-              color: 'white',
-              textAlign: 'center',
-              marginBottom: '.25rem',
-            }}
-          >
-            {holidayBannerContent}
-            Banks in the United States will be closed. Please contact{' '}
-            <a
-              href="https://www.allocations.com/contact-us"
-              style={{
-                color: 'white',
-                textDecoration: 'underline',
-              }}
-            >
-              support
-            </a>{' '}
-            for any assistance.
-          </div>
-        </div>
-      )}
+    <div className={styles.mainRoute} id="holiday-banner">
+      {holidayBannerContent && <HolidayBanner />}
       <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
