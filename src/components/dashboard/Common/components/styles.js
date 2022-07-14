@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   boxValue: {
     fontWeight: 700,
-    fontSize: '2.5vw',
+    fontSize: '44px',
     color: theme.colors.black[50],
     [theme.breakpoints.down(phone)]: {
       fontSize: '16px',

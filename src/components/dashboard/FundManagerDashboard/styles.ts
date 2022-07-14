@@ -40,6 +40,14 @@ const styles = (theme: Theme) => ({
     margin: '20px 0px',
   },
   mainContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100vw',
+    },
+  },
+  mainLayout: {
+    maxWidth: '1400px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100vw',
     },

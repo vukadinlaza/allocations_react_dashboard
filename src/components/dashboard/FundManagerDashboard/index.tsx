@@ -287,7 +287,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const funds = getListData('fund');
   return (
     <Grid container spacing={2} className={classes.mainContainer}>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.mainLayout}>
         <Grid container spacing={2}>
           <Grid item xs={1} />
           <Grid
