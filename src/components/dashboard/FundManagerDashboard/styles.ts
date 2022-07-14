@@ -37,7 +37,7 @@ const styles = (theme: Theme) => ({
     },
   },
   listsContainer: {
-    margin: '50px 0px',
+    margin: '20px 0px',
   },
   mainContainer: {
     [theme.breakpoints.down(phone)]: {
@@ -50,6 +50,9 @@ const styles = (theme: Theme) => ({
     },
   },
   searchContainer: {
+    marginTop: '32px',
+  },
+  tabsContainer: {
     marginTop: '32px',
   },
   textFieldRoot: {

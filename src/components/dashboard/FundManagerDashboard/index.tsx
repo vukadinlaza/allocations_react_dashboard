@@ -11,6 +11,9 @@ import {
   List as AllocationsList,
   Icon as AllocationsIcon,
   colors,
+  Tabs,
+  TabList,
+  Tab,
 } from '@allocations/design-system';
 import { v4 as uuidv4 } from 'uuid';
 import { Box, BigBox } from '../Common/components';
@@ -119,6 +122,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const [orgAUM, setOrgAUM] = useState(null);
   const [orgMultiple, setOrgMultiple] = useState<string | null>(null);
   const [figuresCalculated, setFiguresCalculated] = useState(false);
+  const [selectedTabIndex, setSelectedTabIndex] = useState('0');
   const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
   const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
   const { data: totalFundsData } = useQuery(TOTAL_FUNDS_DATA, { variables: { slug: orgSlug } });
@@ -244,6 +248,12 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       });
   };
 
+  const handleChangeFn = (event: React.ChangeEvent<HTMLButtonElement>, newValue: string) => {
+    if (event && newValue !== selectedTabIndex) {
+      setSelectedTabIndex(newValue);
+    }
+  };
+
   const handleSort = (data: any, orderBy: any, direction: any): any => {
     const statusOrder = {
       'Pre-Onboarding': 1,
@@ -335,58 +345,74 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           </Grid>
           <Grid item xs={1} />
         </Grid>
+        <Grid container spacing={2} className={classes.tabsContainer}>
+          <Grid item xs={1} />
+          <Grid item xs={10}>
+            <Tabs value={selectedTabIndex}>
+              <TabList value={selectedTabIndex} onChange={handleChangeFn} variant="boxed">
+                <Tab label={`SPVs (${spvs.length})`} value="0" />
+                <Tab label={`Funds (${funds.length})`} value="1" />
+              </TabList>
+            </Tabs>
+          </Grid>
+          <Grid item xs={1} />
+        </Grid>
         <Grid container spacing={2} className={classes.listsContainer}>
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Grid container justifyContent="space-between" spacing={2}>
-              <Grid item xs={12} className={classes.list}>
-                <AllocationsTypography
-                  component="div"
-                  content="SPVs"
-                  fontWeight={700}
-                  variant="heading3"
-                />
-                {spvs.length ? (
-                  <AllocationsList
-                    data={spvs}
-                    headers={headers}
-                    customSort={handleSort}
-                    sortBy="amountRaised"
-                    sortDirection="desc"
-                    itemsPerPage={5}
+              {selectedTabIndex === '0' && (
+                <Grid item xs={12} className={classes.list}>
+                  <AllocationsTypography
+                    component="div"
+                    content="SPVs"
+                    fontWeight={700}
+                    variant="heading3"
                   />
-                ) : (
-                  <BigBox
-                    content="No SPVs created"
-                    button={{ action: () => history.push('/new-build'), text: 'Create SPV' }}
-                    icon="business"
+                  {spvs.length ? (
+                    <AllocationsList
+                      data={spvs}
+                      headers={headers}
+                      customSort={handleSort}
+                      sortBy="amountRaised"
+                      sortDirection="desc"
+                      itemsPerPage={5}
+                    />
+                  ) : (
+                    <BigBox
+                      content="No SPVs created"
+                      button={{ action: () => history.push('/new-build'), text: 'Create SPV' }}
+                      icon="business"
+                    />
+                  )}
+                </Grid>
+              )}
+              {selectedTabIndex === '1' && (
+                <Grid item xs={12} className={classes.list}>
+                  <AllocationsTypography
+                    component="div"
+                    content="Funds"
+                    fontWeight={700}
+                    variant="heading3"
                   />
-                )}
-              </Grid>
-              <Grid item xs={12} className={classes.list}>
-                <AllocationsTypography
-                  component="div"
-                  content="Funds"
-                  fontWeight={700}
-                  variant="heading3"
-                />
-                {funds.length ? (
-                  <AllocationsList
-                    data={funds}
-                    headers={headers}
-                    customSort={handleSort}
-                    sortBy="amountRaised"
-                    sortDirection="desc"
-                    itemsPerPage={5}
-                  />
-                ) : (
-                  <BigBox
-                    content="No Funds created"
-                    button={{ action: () => history.push('/new-build'), text: 'Create Fund' }}
-                    icon="business"
-                  />
-                )}
-              </Grid>
+                  {funds.length ? (
+                    <AllocationsList
+                      data={funds}
+                      headers={headers}
+                      customSort={handleSort}
+                      sortBy="amountRaised"
+                      sortDirection="desc"
+                      itemsPerPage={5}
+                    />
+                  ) : (
+                    <BigBox
+                      content="No Funds created"
+                      button={{ action: () => history.push('/new-build'), text: 'Create Fund' }}
+                      icon="business"
+                    />
+                  )}
+                </Grid>
+              )}
             </Grid>
           </Grid>
           <Grid item xs={false} md={1} />
