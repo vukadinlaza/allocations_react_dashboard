@@ -89,6 +89,8 @@ const GET_INVESTMENT = gql`
         path
       }
       submissionData {
+        fullName
+        legalName
         investor_type
         country
       }
