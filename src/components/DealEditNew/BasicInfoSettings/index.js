@@ -255,7 +255,9 @@ function BasicInfoSettings({ formData, setFormData }) {
                     dealParams.is3c7 === null ? true : dealParams.is3c7 === false,
                   )
                 }
-                className={`${styles.optionButton} ${dealParams.is3c7 === true && styles.selected}`}
+                className={`${styles.optionButton} ${
+                  dealParams.is3c7 === true && styles.selected
+                } `}
                 variant="outlined"
                 disabled={!userProfile.admin}
               >
