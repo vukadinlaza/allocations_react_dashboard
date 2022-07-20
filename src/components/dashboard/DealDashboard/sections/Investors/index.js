@@ -85,10 +85,10 @@ const Investors = ({ investments }) => {
     return investments.reduce((acc, investment) => {
       return `${acc}\n${
         investment.submissionData?.fullName || investment.submissionData?.legalName
-      },${investment.submissionData?.legalName},${investment.submissionData?.investor_type},${
+      };${investment.submissionData?.legalName};${investment.submissionData?.investor_type};${
         investment.investor.email
-      },${investment.status},${investment.amount},${investment.capitalWiredAmount}`;
-    }, `data:text/csv;charset=utf-8,${headers.join(',')}`);
+      };${investment.status};${investment.amount};${investment.capitalWiredAmount}`;
+    }, `data:text/csv;charset=utf-8,${headers.join(';')}`);
   };
 
   return (
