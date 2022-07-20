@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   selected: {
-    border: `2px solid ${theme.colors.primary[600]}`,
+    border: `2px solid ${theme.colors.primary[600]} !important`,
   },
 
   textInput: {
