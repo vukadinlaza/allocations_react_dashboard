@@ -1,106 +1,122 @@
 import React, { useState } from 'react';
-import { TextField, InputAdornment } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import { colors } from '@allocations/design-system';
-import AllocationsTable from '../../../../utils/AllocationsTable';
-import Loader from '../../../../utils/Loader';
+import { Box, Grid, Menu, MenuItem } from '@material-ui/core';
+import { Button, Chip, IconButton, List, Search } from '@allocations/design-system';
+import { nWithCommas } from '../../../../../utils/numbers';
+import { openInNewTab } from '../../../../../utils/helpers';
 
-const Investors = ({ classes, data, orgSlug, userProfile }) => {
-  const { investments } = data.deal;
+const statusColors = {
+  invited: 'gray',
+  signed: 'blue',
+  complete: 'green',
+  wired: 'green',
+};
+
+const investorTypeColor = {
+  entity: 'green',
+  individual: 'blue',
+};
+
+const headers = [
+  { id: 'name', label: 'Name' },
+  { id: 'investingAs', label: 'Investing As' },
+  { id: 'type', label: 'Type' },
+  { id: 'email', label: 'Email' },
+  { id: 'amount', label: 'Amount Committed' },
+  { id: 'wiredAmount', label: 'Wired Amount' },
+  { id: 'status', label: 'Status' },
+  { id: 'documents', label: 'Documents' },
+];
+
+const Investors = ({ investments }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const headers = [
-    { value: 'name', label: 'Name', type: 'name', align: 'left', alignHeader: true },
-    { value: 'email', label: 'Email', align: 'left', alignHeader: true },
-  ];
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [documents, setDocuments] = useState([]);
 
-  const getCellContent = (type, row) => {
-    switch (type) {
-      case 'name':
-        return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
-      case 'taxLink':
-        return row._id ? (
-          <a
-            href={`https://tax.allocations.com/admin/investor/${row.email}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Tax Activity
-          </a>
-        ) : (
-          <div />
-        );
-      case 'link':
-        return <a href={`/investor/${row._id}/home`}>Link</a>;
-      default:
-        return <div />;
-    }
-  };
-
-  if (['irishangels'].includes(orgSlug) || userProfile.admin) {
-    headers.push({
-      value: 'Tax Activity',
-      label: 'Tax Activity',
-      type: 'taxLink',
-      alignHeader: true,
-      keyNotInData: true,
+  const displayData = investments
+    ?.map((investment) => ({
+      name: investment.submissionData?.fullName || investment.submissionData?.legalName,
+      investingAs: investment.submissionData?.legalName,
+      type: (
+        <Chip
+          text={investment.submissionData?.investor_type || 'unknown'}
+          chipColor={investorTypeColor[investment.submissionData?.investor_type] || 'gray'}
+        />
+      ),
+      email: investment.investor.email,
+      amount: `$${nWithCommas(investment.amount)}`,
+      wiredAmount: `$${nWithCommas(investment.capitalWiredAmount)}`,
+      status: (
+        <Chip text={investment.status} chipColor={statusColors[investment.status] || 'black'} />
+      ),
+      documents: (
+        <>
+          <IconButton
+            text="Open"
+            size="small"
+            iconName="more_vert"
+            variant="ghost"
+            onClick={({ currentTarget }) => {
+              setAnchorEl(currentTarget);
+              setDocuments(investment.documents);
+            }}
+          />
+        </>
+      ),
+    }))
+    .filter((investment) => {
+      return (
+        investment.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        investment.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        investment.investingAs?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     });
 
-    headers.push({
-      value: '_id',
-      label: 'Dashboard Link',
-      type: 'link',
-      align: 'right',
-      alignHeader: true,
-    });
-  }
+  const createCSV = () => {
+    const headers = [
+      'Name',
+      'Investing As',
+      'Type',
+      'Email',
+      'Status',
+      'Committed Amount',
+      'Wired Amount',
+    ];
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    return investments.reduce((acc, investment) => {
+      return `${acc}\n${
+        investment.submissionData?.fullName || investment.submissionData?.legalName
+      };${investment.submissionData?.legalName};${investment.submissionData?.investor_type};${
+        investment.investor.email
+      };${investment.status};${investment.amount};${investment.capitalWiredAmount}`;
+    }, `data:text/csv;charset=utf-8,${headers.join(';')}`);
   };
-
-  let investorsData = investments.map((inv) => inv.investor).filter((investor) => investor);
-  if (!investorsData) return <Loader />;
-
-  if (searchTerm) {
-    investorsData = investorsData.filter((investor) =>
-      (investor?.first_name
-        ? `${investor['first_name']} ${investor['last_name']} ${investor.email}`
-        : `${investor.email}`
-      )
-        .toUpperCase()
-        .includes(searchTerm.toUpperCase()),
-    );
-  }
 
   return (
-    <div className={classes.section}>
-      <div className={classes.searchContainer}>
-        <TextField
-          label="Search"
-          placeholder="Search by investor name"
-          id="search-field"
-          fullWidth
-          onChange={handleSearch}
-          value={searchTerm || ''}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon style={{ color: colors.gray[500] }} />
-              </InputAdornment>
-            ),
-          }}
-          style={{ margin: '0 1em' }}
-        />
-      </div>
-      <AllocationsTable
-        data={investorsData}
+    <>
+      <Box my={3}>
+        <Grid container justifyContent="flex-end">
+          <Grid item>
+            <Button text="Export to CSV" onClick={() => window.open(createCSV())} />
+          </Grid>
+        </Grid>
+      </Box>
+      <Search value={searchTerm} onChange={({ target }) => setSearchTerm(target.value)} />
+      <List
+        loading={!investments}
         headers={headers}
-        getCellContent={getCellContent}
-        sortField="email"
-        sortOrder="desc"
-        noShadow
+        data={displayData}
+        sortBy="name"
+        sortDirection="asc"
+        stickyHeader
       />
-    </div>
+      <Menu open={anchorEl} anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>
+        {documents.map(({ path, link }) => (
+          <MenuItem onClick={() => openInNewTab({ url: `//${link}` })}>
+            {path.split('/').slice(-1)[0]}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
   );
 };
 
