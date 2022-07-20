@@ -21,8 +21,8 @@ import { phone } from '../../../utils/helpers';
 import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 import Investors from './sections/Investors';
 import DocumentsTab from './sections/DocumentsTab';
+import LegacyInvestors from './sections/Investors/LegacyInvestors';
 
-const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
 const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
@@ -72,6 +72,8 @@ const GET_DEAL = gql`
         capitalWiredAmount
         status
         submissionData {
+          investor_type
+          fullName
           legalName
         }
         investor {
@@ -133,6 +135,7 @@ const DealDashboard = () => {
     cryptoPaymentInBuild,
     dealProgress,
     investApiDocsAndInvestments,
+    investorList,
   } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -323,8 +326,10 @@ const DealDashboard = () => {
           <Suspense fallback={<AllocationsLoader />}>
             <RemoteOnboarding deal_id={dealData?.deal?._id} />
           </Suspense>
+        ) : investorList ? (
+          <Investors investments={dealData.deal.investments} />
         ) : (
-          <Investors
+          <LegacyInvestors
             classes={classes}
             data={dealData}
             orgSlug={orgSlug}
