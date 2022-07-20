@@ -6,9 +6,11 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { nWithCommas } from '../../../utils/numbers';
 import useStyles from './styles';
+import { useAuth } from '../../../auth/useAuth';
 
 function BasicInfoSettings({ formData, setFormData }) {
   const styles = useStyles();
+  const { userProfile } = useAuth();
   const handleFormChange = ({ target }) => {
     const dealParamFields = ['dealType', 'minimumInvestment'];
 
@@ -225,6 +227,7 @@ function BasicInfoSettings({ formData, setFormData }) {
                   dealParams.dealType === '506b' && styles.selected
                 }`}
                 variant="outlined"
+                disabled={!userProfile.admin}
               >
                 506b
               </Button>
@@ -234,6 +237,7 @@ function BasicInfoSettings({ formData, setFormData }) {
                   dealParams.dealType === '506c' && styles.selected
                 }`}
                 variant="outlined"
+                disabled={!userProfile.admin}
               >
                 506c
               </Button>
@@ -251,15 +255,17 @@ function BasicInfoSettings({ formData, setFormData }) {
                     dealParams.is3c7 === null ? true : dealParams.is3c7 === false,
                   )
                 }
-                className={`${styles.optionButton} ${dealParams.is3c7 === true && styles.selected}`}
+                className={`${styles.optionButton} ${
+                  dealParams.is3c7 === true && styles.selected
+                } `}
                 variant="outlined"
+                disabled={!userProfile.admin}
               >
                 3(c)(7)
               </Button>
             </div>
           </FormLabel>
         </FormControl>
-
         <FormControl className={`${styles.fieldButton} ${styles.field}`}>
           <FormLabel className={styles.fieldLabel}>
             <div className={styles.buttonOptions}>
