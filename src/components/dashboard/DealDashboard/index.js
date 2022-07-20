@@ -319,16 +319,10 @@ const DealDashboard = () => {
           />
         );
       case 'Investors':
-        return investApiDocsAndInvestments ? (
-          (capitalCallsDealSpecific || []).includes(dealData._id) ? (
-            <Suspense fallback={<AllocationsLoader />}>
-              <RemoteOnboarding deal_id={dealData?.deal?._id} />
-            </Suspense>
-          ) : (
-            <Suspense fallback={<AllocationsLoader />}>
-              <RemoteInvestors deal_id={dealData?.deal?._id} />
-            </Suspense>
-          )
+        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteOnboarding deal_id={dealData?.deal?._id} />
+          </Suspense>
         ) : (
           <Investors
             classes={classes}
