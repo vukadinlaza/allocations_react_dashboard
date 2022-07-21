@@ -322,7 +322,7 @@ const DealDashboard = () => {
           />
         );
       case 'Investors':
-        return (capitalCallsDealSpecific || []).includes(dealData._id) ? (
+        return (capitalCallsDealSpecific || []).includes(dealData?.deal?._id) ? (
           <Suspense fallback={<AllocationsLoader />}>
             <RemoteOnboarding deal_id={dealData?.deal?._id} />
           </Suspense>
