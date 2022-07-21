@@ -16,6 +16,7 @@ import { nWithCommas } from '../../../utils/numbers';
 import { useAuth } from '../../../auth/useAuth';
 import personalInfoValidation from '../../../utils/validation';
 import TechStarsCIFUSQuestion from './TechStarsCIFUSQuestion';
+import RealEstateUseage from './RealEstateUseage';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -325,6 +326,11 @@ function InvestmentPage() {
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
         <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={org} />
+        <RealEstateUseage
+          setInvestor={setInvestor}
+          errors={errors}
+          docSpringTemplateId={deal.docSpringTemplateId}
+        />
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
