@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
 import { useQuery, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Grid, ButtonBase } from '@material-ui/core';
@@ -18,13 +17,13 @@ import useStyles from '../styles';
  * */
 
 export const GET_INVESTOR = gql`
-  query GetInvestor($deal_id: String!, $_id: String) {
+  query GetInvestor($_id: String) {
     user(_id: $_id) {
       _id
       email
       documents
       country
-      investments(deal_id: $deal_id) {
+      investments {
         _id
         status
         amount
@@ -58,13 +57,16 @@ function DataRoom({ deal }) {
 export default function InvestmentFlow({ deal, investor }) {
   const [status, setStatus] = useState('invited');
   const classes = useStyles();
+  console.log(deal._id);
   const { data } = useQuery(GET_INVESTOR, {
     variables: { deal_id: deal._id, _id: investor._id },
     pollInterval: 1000,
   });
   if (!data) return null;
-  const { investor: polledInvestor } = data;
-  const investment = _.get(polledInvestor, 'investments[0]', null);
+  const { user: polledInvestor } = data;
+  const investment = polledInvestor.investments.find((i) => i.deal_id === deal._id) || null;
+
+  // const investment = _.get(polledInvestor, 'investments[0]', null);
 
   return (
     <>
