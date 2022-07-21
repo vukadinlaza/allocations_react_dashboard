@@ -8,14 +8,6 @@ import OrganizationMembers from '../../OrganizationMembers';
 
 const ORG_SUPERADMIN = gql`
   query GetMembers($slug: String!) {
-    organizationMembers(slug: $slug) {
-      _id
-      name
-      email
-      investor_type
-      first_name
-      last_name
-    }
     organization(slug: $slug) {
       _id
       name
@@ -23,6 +15,14 @@ const ORG_SUPERADMIN = gql`
         to
         status
         sent_at
+      }
+      members {
+        _id
+        name
+        email
+        investor_type
+        first_name
+        last_name
       }
     }
   }

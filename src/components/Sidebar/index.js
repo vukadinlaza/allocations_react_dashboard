@@ -12,7 +12,7 @@ import OrgDropDown from '../OrgDropDown';
 
 const GET_INVESTOR = gql`
   {
-    investor {
+    user {
       _id
       name
       admin
