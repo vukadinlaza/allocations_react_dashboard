@@ -177,7 +177,7 @@ const InvestmentsList = ({
         openInNewTab(`/next-steps/${orgSlug}/${dealSlug}?investmentId=${investment._id}`);
         break;
       case 'downloadDocs':
-        loadingDownloadDocs ? console.log('loading') : handleZip(investment.dealName);
+        loadingDownloadDocs ? console.log('loading!') : handleZip(investment.dealName);
         break;
       case 'fundsInvestments':
         showInvestments(dealId);

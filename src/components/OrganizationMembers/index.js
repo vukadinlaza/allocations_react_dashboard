@@ -89,14 +89,14 @@ function UserSearch({ refetch, classes }) {
   const { organization } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
-  const [search, searchRes] = useLazyQuery(API.users.search, { variables: { org: 'allocations' } });
+  const [search, searchRes] = useLazyQuery(API.users.search);
   const [addMembership] = useMutation(ADD_MEMBERSHIP, {
     variables: { slug: organization },
     onCompleted: () => refetch() && setQ('') && setRecords([]),
   });
-
+  console.log('first');
   useEffect(() => {
-    search({ variables: { q, org: 'allocations' } });
+    search({ variables: { field: 'email', searchTerm: q } });
   }, [q]);
 
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function OrganizationMembers({ data, refetch }) {
           <Paper style={{ marginTop: '15px' }}>
             <Table>
               <TableBody>
-                {data.organizationMembers.map((member) => (
+                {data.organization?.members?.map((member) => (
                   <Member
                     key={member._id}
                     org={data.organization}

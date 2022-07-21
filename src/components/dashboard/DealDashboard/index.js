@@ -90,7 +90,7 @@ const GET_DEAL = gql`
         }
       }
     }
-    investor {
+    user {
       _id
       admin
       documents
@@ -317,7 +317,7 @@ const DealDashboard = () => {
             width={width}
             data={dealData}
             dealType={dealData?.deal?.dealParams?.dealType}
-            superAdmin={dealData?.investor?.admin}
+            superAdmin={dealData?.user?.admin}
             refetch={refetch}
           />
         );

@@ -22,7 +22,7 @@ const CryptoPaymentModalRemote = React.lazy(() =>
 );
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
+    user(email: $email, _id: $_id) {
       _id
       first_name
       last_name
@@ -214,7 +214,7 @@ function DealNextSteps() {
   if (loading || !cryptoOptionsData || !data || !dealData) return null;
 
   const handleInvestmentEdit = () => {
-    const userInvestments = data?.investor?.investments;
+    const userInvestments = data?.user?.investments;
     const currentInvestment = userInvestments.find((inv) => inv.deal.slug === deal_slug);
     const { amount } = currentInvestment;
     const submission = currentInvestment.submissionData;
@@ -231,14 +231,14 @@ function DealNextSteps() {
     setAnchorEl(null);
   };
 
-  const userDocs = data?.investor?.documents || [];
+  const userDocs = data?.user?.documents || [];
   const hasKyc =
     userDocs.find((doc) => {
       return doc?.documentName.includes('W-9') || doc?.documentName.includes('W-8');
     }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
-  const currentInvestment = data?.investor?.investments.find((inv) => inv.deal.slug === deal_slug);
+  const currentInvestment = data?.user?.investments.find((inv) => inv.deal.slug === deal_slug);
 
   return (
     <>
@@ -369,25 +369,23 @@ function DealNextSteps() {
             <div className="action-item">
               <img
                 className="action-icon"
-                src={
-                  data?.investor.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo
-                }
+                src={data?.user.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo}
                 alt="submit-tax-img"
               />
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
                 <p className="action-sub-header">
-                  {data?.investor.accredidation_status === true
+                  {data?.user.accredidation_status === true
                     ? ''
                     : 'Complete your accredited investor questionnaire here (<5 mins to complete)'}
                 </p>
               </div>
-              {data?.investor.accredidation_status === true ? (
+              {data?.user.accredidation_status === true ? (
                 ''
               ) : (
                 <Button
                   className={
-                    data?.investor.accredidation_status === true
+                    data?.user.accredidation_status === true
                       ? 'completed-step-button'
                       : 'next-step-button'
                   }
@@ -399,7 +397,7 @@ function DealNextSteps() {
                     win.focus();
                   }}
                 >
-                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit'}
+                  {data?.user.accredidation_status === true ? 'Completed' : 'Submit'}
                 </Button>
               )}
             </div>
@@ -472,7 +470,7 @@ function DealNextSteps() {
             investor_name={
               investmentData?.investment?.submissionData?.legalName ||
               investmentData?.investment?.submissionData?.fullName ||
-              `${data?.investor.first_name} ${data?.investor.last_name}`
+              `${data?.user.first_name} ${data?.user.last_name}`
             }
             investment_amount={
               investmentData ? investmentData.investment.amount : currentInvestment.amount

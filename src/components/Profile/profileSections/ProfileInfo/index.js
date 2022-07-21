@@ -24,8 +24,8 @@ import ProfilePhoto from '../infoSections/ProfilePhoto';
 import Loader from '../../../utils/Loader';
 
 const UPDATE_USER = gql`
-  mutation UpdateUser($investor: UserInput!) {
-    updateUser(input: $investor) {
+  mutation UpdateUser($input: UserInput!) {
+    updateUser(input: $input) {
       _id
       first_name
       last_name
@@ -161,7 +161,6 @@ const ProfileInfo = ({
   const [investor, setInvestor] = useState(investorProfile);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-
   const reqs = [
     'country',
     investor?.country === 'United States' ? 'state' : '',
@@ -191,40 +190,39 @@ const ProfileInfo = ({
       ),
   });
 
-  const handleChange = (prop) => (e) => {
-    e.persist();
+  const handleChange =
+    (prop) =>
+    ({ target: { value } = {} }) => {
+      if (
+        prop === 'first_name' ||
+        prop === 'last_name' ||
+        prop === 'signer_full_name' ||
+        prop === 'city'
+      ) {
+        const capitalizeName = (str) =>
+          str
+            .toLowerCase()
+            .replace(/\w{0,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
 
-    if (
-      prop === 'first_name' ||
-      prop === 'last_name' ||
-      prop === 'signer_full_name' ||
-      prop === 'city'
-    ) {
-      const capitalizeName = (str) =>
-        str
-          .toLowerCase()
-          .replace(/\w{0,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
+        return setInvestor((prev) => ({
+          ...prev,
+          [prop]: capitalizeName(value),
+        }));
+      }
 
-      return setInvestor((prev) => ({
-        ...prev,
-        [prop]: capitalizeName(e.target.value),
-      }));
-    }
-
-    if (prop === 'investor_type') {
-      return setInvestor((prev) => ({
-        ...prev,
-        [prop]: e.target.value,
-        accredited_investor_status: '',
-      }));
-    }
-
-    return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
-  };
+      if (prop === 'investor_type') {
+        return setInvestor((prev) => ({
+          ...prev,
+          [prop]: value,
+          accredited_investor_status: '',
+        }));
+      }
+      return setInvestor((prev) => ({ ...prev, [prop]: value }));
+    };
 
   const submit = () => {
     // don't validate if noValidate flag passed
-    if (noValidate) return updateInvestor({ variables: { investor } });
+    if (noValidate) return updateInvestor({ variables: { input: { ...investor } } });
     const validation = validate(investor);
     const required =
       investor.investor_type === 'entity'
@@ -240,6 +238,8 @@ const ProfileInfo = ({
       'signer_full_name',
       'city',
       'profileBio',
+      'sectors',
+      'stages',
     ]);
     setErrors(validation);
 
@@ -247,12 +247,12 @@ const ProfileInfo = ({
       if (get(investor, 'email') !== investorProfile.email) {
         if (window.confirm('Changing your email will log you out, continue?')) {
           updateInvestor({
-            variables: { investor: payload },
+            variables: { input: { ...payload } },
           });
         }
       } else {
         updateInvestor({
-          variables: { investor: payload },
+          variables: { input: { ...payload } },
         });
       }
     }
@@ -440,7 +440,7 @@ const ProfileInfo = ({
                 </Grid>
 
                 {/* Display username boolean */}
-                <DisplayUsername investor={investor} />
+                <DisplayUsername investor={investor} handleChange={handleChange} />
 
                 {/* profile bio section */}
                 <Grid item xs={12}>
@@ -543,7 +543,11 @@ const ProfileInfo = ({
                     </Typography>
                   </Grid>
 
-                  <SectorsAndStages investor={investor} style={{ width: '100%' }} />
+                  <SectorsAndStages
+                    investor={investor}
+                    style={{ width: '100%' }}
+                    handleChange={handleChange}
+                  />
                 </Grid>
               </Paper>
             </Grid>
