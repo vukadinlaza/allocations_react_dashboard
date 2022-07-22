@@ -231,7 +231,7 @@ const InvestmentsList = ({
     if (metadata.submissionId) {
       rowItems.push({
         id: 'resign',
-        label: 'Resign Documents',
+        label: 'Re-sign Documents',
         startIcon: {
           iconName: 'drive_file_rename_outline',
         },
