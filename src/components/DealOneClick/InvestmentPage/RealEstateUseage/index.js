@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormControl, FormHelperText, Select } from '@material-ui/core';
 import { PanelContainer, PanelLabel } from '../../../Panel';
-import useStyles from './styles';
 
 function RealEstateUseage({ setInvestor, errors, isFromModal = false, docSpringTemplateId }) {
   if (docSpringTemplateId !== 'tpl_qbHh2KPqMkXaTyZbr7') return null;
