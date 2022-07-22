@@ -4,7 +4,6 @@ import { PanelContainer, PanelLabel } from '../../../Panel';
 import useStyles from './styles';
 
 function RealEstateUseage({ setInvestor, errors, isFromModal = false, docSpringTemplateId }) {
-  const classes = useStyles();
   if (docSpringTemplateId !== 'tpl_qbHh2KPqMkXaTyZbr7') return null;
 
   const handleChange = (event) => {
