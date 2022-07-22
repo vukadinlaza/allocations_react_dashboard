@@ -257,7 +257,11 @@ function InvestmentPage() {
       requireSecondSigChecked,
     );
     setErrors(validation);
-
+    if (
+      deal.docSpringTemplateId === 'tpl_qbHh2KPqMkXaTyZbr7' &&
+      !investorFormData?.realEstateUseage
+    )
+      return toast.warning('Please select a length option.');
     if (validation.length > 0) return toast.warning('Incomplete form');
     if (!amount) return toast.warning('Please enter a valid investment amount');
 
