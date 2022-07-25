@@ -1,10 +1,12 @@
-const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => {
+const personalInfoValidation = (investor, org, requireSecondSigChecked = {}, deal) => {
+  console.log({ investor });
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
     required = required.filter((d) => d !== 'accredited_investor_status');
   }
-  if (investor.is3c7_options_status) {
+  if (deal.dealParams.is3c7 && !investor.is3c7_options_status) {
     required = required.filter((d) => d !== 'accredited_investor_status');
+    required.push('is3c7_options_status');
   }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
@@ -18,6 +20,7 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
 
   let errors = [];
   errors = required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+
   if (requireSecondSigChecked.secondSigInfo) {
     if (org === 'irishangels') {
       errors.push(
