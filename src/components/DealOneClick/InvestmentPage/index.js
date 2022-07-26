@@ -214,6 +214,9 @@ function InvestmentPage() {
         setRequireSecondSig(true);
       }
     }
+    if (data.deal.dealParams.is3c7) {
+      updatedInvestorData = { ...updatedInvestorData, is3c7_options_status: '' };
+    }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
@@ -243,7 +246,6 @@ function InvestmentPage() {
     useMutation(GET_PREVIEW);
 
   if (!data || loading) return <Loader />;
-
   const { deal } = data;
   const {
     company_name,
@@ -255,6 +257,7 @@ function InvestmentPage() {
       investorFormData,
       organization,
       requireSecondSigChecked,
+      data.deal,
     );
     setErrors(validation);
     if (
