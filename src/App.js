@@ -45,6 +45,7 @@ import RemoteInvest from './components/RemoteInvest';
 import RemoteNextSteps from './components/RemoteNextSteps';
 import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
+import InvestmentNew from './components/InvestmentNew';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -77,7 +78,7 @@ const MainApp = ({ isAuthenticated }) => {
         />
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
-
+        <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
         {/* Organization Admin */}
         <PrivateRoute
           path="/admin/:organization"

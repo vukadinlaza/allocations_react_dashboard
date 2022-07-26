@@ -16,6 +16,7 @@ import { nWithCommas } from '../../../utils/numbers';
 import { useAuth } from '../../../auth/useAuth';
 import personalInfoValidation from '../../../utils/validation';
 import TechStarsCIFUSQuestion from './TechStarsCIFUSQuestion';
+import RealEstateUseage from './RealEstateUseage';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -256,7 +257,11 @@ function InvestmentPage() {
       requireSecondSigChecked,
     );
     setErrors(validation);
-
+    if (
+      deal.docSpringTemplateId === 'tpl_qbHh2KPqMkXaTyZbr7' &&
+      !investorFormData?.realEstateUseage
+    )
+      return toast.warning('Please select a duration option.');
     if (validation.length > 0) return toast.warning('Incomplete form');
     if (!amount) return toast.warning('Please enter a valid investment amount');
 
@@ -325,6 +330,11 @@ function InvestmentPage() {
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
         <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={org} />
+        <RealEstateUseage
+          setInvestor={setInvestor}
+          errors={errors}
+          docSpringTemplateId={deal.docSpringTemplateId}
+        />
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
