@@ -48,7 +48,6 @@ function TINAndAddress({
           error={errors.includes('address')}
           value={get(investor, 'address') || ''}
           onChange={handleChange('address')}
-          inputProps={{ maxLength: 11 }}
         />
         {errors.includes('address') && (
           <FormHelperText style={{ color: 'red' }}>Please enter an address</FormHelperText>
