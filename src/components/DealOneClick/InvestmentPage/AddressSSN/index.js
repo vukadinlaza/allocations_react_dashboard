@@ -19,9 +19,10 @@ function TINAndAddress({
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
 
-  const ssnOrTIN = investor.investor_type === 'individual' ? 'SSN' : 'TIN';
+  const ssnOrTIN =
+    investor.investor_type === 'individual' && investor.country === 'United States' ? 'SSN' : 'TIN';
   const addressText =
-    investor.state !== 'United States'
+    investor.country !== 'United States'
       ? 'Enter your Address, City and Zip Code'
       : 'Enter your Address, City, State and Zip Code';
 
@@ -29,21 +30,25 @@ function TINAndAddress({
     <PanelContainer isFromModal={isFromModal}>
       <FormControl style={{ padding: '2rem' }}>
         <TextField
+          style={{ marginTop: '15px' }}
           variant="outlined"
           placeholder={`Enter your ${ssnOrTIN}`}
           error={errors.includes('tax_identification_number')}
           value={get(investor, 'tax_identification_number') || ''}
           onChange={handleChange('tax_identification_number')}
+          inputProps={{ maxLength: 11 }}
         />
         {errors.includes('tax_identification_number') && (
           <FormHelperText style={{ color: 'red' }}>Please Enter your {ssnOrTIN}</FormHelperText>
         )}
         <TextField
+          style={{ marginTop: '15px' }}
           variant="outlined"
           placeholder={addressText}
           error={errors.includes('address')}
           value={get(investor, 'address') || ''}
           onChange={handleChange('address')}
+          inputProps={{ maxLength: 11 }}
         />
         {errors.includes('address') && (
           <FormHelperText style={{ color: 'red' }}>Please enter an address</FormHelperText>
