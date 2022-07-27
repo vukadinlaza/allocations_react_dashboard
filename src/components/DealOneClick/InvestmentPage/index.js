@@ -17,6 +17,7 @@ import { useAuth } from '../../../auth/useAuth';
 import personalInfoValidation from '../../../utils/validation';
 import TechStarsCIFUSQuestion from './TechStarsCIFUSQuestion';
 import RealEstateUseage from './RealEstateUseage';
+import TINAndAddress from './AddressSSN';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -255,6 +256,7 @@ function InvestmentPage() {
       investorFormData,
       organization,
       requireSecondSigChecked,
+      deal.docSpringTemplateId,
     );
     setErrors(validation);
     if (
@@ -334,6 +336,12 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           errors={errors}
           docSpringTemplateId={deal.docSpringTemplateId}
+        />
+        <TINAndAddress
+          setInvestor={setInvestor}
+          errors={errors}
+          docSpringTemplateId={deal.docSpringTemplateId}
+          investor={investorFormData}
         />
 
         <TermsAndConditionsPanel
