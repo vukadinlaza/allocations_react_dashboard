@@ -3,9 +3,9 @@ import { useHistory } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
-const RemoteBuild = React.lazy(() => import('build/Build'));
+const Build = React.lazy(() => import('build/Build'));
 
-export default function Build() {
+export default function RemoteBuild() {
   const { userProfile } = useAuth();
   const history = useHistory();
 
@@ -16,7 +16,7 @@ export default function Build() {
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <RemoteBuild
+        <Build
           user={userProfile}
           onCreate={(deal) => {
             handleCreate(deal);
