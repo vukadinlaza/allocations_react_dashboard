@@ -80,6 +80,9 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+
+        <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
+
         {/* Organization Admin */}
         <PrivateRoute
           path="/admin/:organization"
@@ -107,8 +110,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         <Route path="/public/new-build" exact component={RemoteBuild} />
         <PrivateRoute path="/new-build" exact component={RemoteBuild} />
-
-        <PrivateRoute path="/organization-onboarding" exact component={RemoteBuildV2} />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
