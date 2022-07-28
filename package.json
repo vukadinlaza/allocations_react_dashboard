@@ -10,6 +10,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
+    "lint": "eslint --cache --ext js,ts,tsx src/{components,state,utils}/",
+    "lint:fix": "yarn lint --fix",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "flow": "flow",
     "prepare": "husky install"
