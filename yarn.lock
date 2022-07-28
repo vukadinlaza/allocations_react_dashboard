@@ -15,10 +15,10 @@
     mongodb-memory-server "^8.1.0"
     mongoose "^6.0.6"
 
-"@allocations/design-system@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.2.1.tgz#58981e11dbaf8a73d549881d5cc9ac79ef13defa"
-  integrity sha512-fO7x7DB+PdYbQS+xMGBkD+QVHxy+9ZGzu2yX92aVaQz4jNfSflTBInp+JJO28aIXm5ZWxb6X7iW2gd63p095hw==
+"@allocations/design-system@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.2.3.tgz#9b4313941957c7613efbcf747471556c28526e3e"
+  integrity sha512-aLGcnvlf9Pyqpiv5sFYPWebdjhzPyeItpK1RWMlXgHyG8hqxt1IYHuUnq4HsuA/ABVptNjM6oj39iQUp6ucfVA==
   dependencies:
     clsx "^1.1.1"
     tslib "^2.3.1"

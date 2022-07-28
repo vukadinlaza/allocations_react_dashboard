@@ -27,8 +27,8 @@ import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
 // test
-import Build from './components/Build';
-import PostBuild from './components/PostBuild';
+import RemoteBuild from './components/RemoteBuild';
+import RemotePostBuild from './components/RemotePostBuild';
 
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
@@ -46,6 +46,7 @@ import RemoteNextSteps from './components/RemoteNextSteps';
 import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
+import RemoteBuildV2 from './components/RemoteBuildV2';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -79,6 +80,9 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+
+        <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
+
         {/* Organization Admin */}
         <PrivateRoute
           path="/admin/:organization"
@@ -104,11 +108,11 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={Build} />
-        <PrivateRoute path="/new-build" exact component={Build} />
+        <Route path="/public/new-build" exact component={RemoteBuild} />
+        <PrivateRoute path="/new-build" exact component={RemoteBuild} />
 
         {/* Private  */}
-        <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
+        <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
         <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
