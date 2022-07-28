@@ -13,6 +13,7 @@ function RealEstateUseage({ setInvestor, errors, isFromModal = false, docSpringT
   };
 
   const options = [
+    { short: '' },
     {
       short: '1 Month',
     },

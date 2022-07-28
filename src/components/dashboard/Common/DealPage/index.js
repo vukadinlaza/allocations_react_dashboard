@@ -55,12 +55,15 @@ export default function DealPage({
 
   const { deal: { _id: deal_id } = {} } = dealData;
   const isDealWhiteListed = newDealPage?.whiteListedDeals?.includes(deal_id);
+  const isDealBlackListed = newDealPage?.blackListedDeals?.includes(deal_id);
   const minimumDate = moment(newDealPage?.minDealCreationDate, 'MMMM DD, YYYY');
   const dealCreationDate = getMomentFromId(deal_id);
 
   const isDealCreatedAfterMinDate = dealCreationDate.diff(minimumDate, 'minutes') >= 0;
 
-  if (isDealWhiteListed || isDealCreatedAfterMinDate) return <RemoteDealPage />;
+  if (!isDealBlackListed && (isDealWhiteListed || isDealCreatedAfterMinDate)) {
+    return <RemoteDealPage />;
+  }
 
   const handleClose = () => {
     setOpenModal(false);

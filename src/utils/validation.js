@@ -1,4 +1,9 @@
-const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => {
+const personalInfoValidation = (
+  investor,
+  org,
+  requireSecondSigChecked = {},
+  docSpringTemplateId,
+) => {
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
     required = required.filter((d) => d !== 'accredited_investor_status');
@@ -14,6 +19,10 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
   }
   if (org === 'techstars') {
     required.push('cifusStatus');
+  }
+  if (docSpringTemplateId === 'tpl_eg24nTFZrC2Kqs3FMf') {
+    required.push('tax_identification_number');
+    required.push('address');
   }
 
   let errors = [];

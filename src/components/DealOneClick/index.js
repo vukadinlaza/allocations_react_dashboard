@@ -24,10 +24,16 @@ export default function DealOneClick() {
 
   const { deal: { _id: deal_id } = {} } = data;
   const isDealWhiteListed = newDealPage?.whiteListedDeals?.includes(deal_id);
+  const isDealBlackListed = newDealPage?.blackListedDeals?.includes(deal_id);
+
   const minimumDate = moment(newDealPage?.minDealCreationDate, 'MMMM DD, YYYY');
   const dealCreationDate = getMomentFromId(deal_id);
 
   const isDealCreatedAfterMinDate = dealCreationDate.diff(minimumDate, 'minutes') >= 0;
 
-  return isDealWhiteListed || isDealCreatedAfterMinDate ? <RemoteDealPage /> : <DealLandingPage />;
+  return !isDealBlackListed && (isDealWhiteListed || isDealCreatedAfterMinDate) ? (
+    <RemoteDealPage />
+  ) : (
+    <DealLandingPage />
+  );
 }
