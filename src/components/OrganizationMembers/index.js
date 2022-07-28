@@ -96,7 +96,7 @@ function UserSearch({ refetch, classes }) {
   });
   console.log('first');
   useEffect(() => {
-    search({ variables: { field: 'email', searchTerm: q } });
+    search({ variables: { fields: ['email'], searchTerm: q } });
   }, [q]);
 
   useEffect(() => {
