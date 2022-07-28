@@ -46,6 +46,7 @@ import RemoteNextSteps from './components/RemoteNextSteps';
 import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
+import RemoteBuildV2 from './components/RemoteBuildV2';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -106,6 +107,8 @@ const MainApp = ({ isAuthenticated }) => {
 
         <Route path="/public/new-build" exact component={RemoteBuild} />
         <PrivateRoute path="/new-build" exact component={RemoteBuild} />
+
+        <PrivateRoute path="/organization-onboarding" exact component={RemoteBuildV2} />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
