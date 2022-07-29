@@ -78,6 +78,11 @@ const TermsPanel = ({ deal }) => {
               </h3>
             </li>
           )}
+          {['62d0637a2d09f8b35de1e58f'].includes(deal._id) && (
+            <li>
+              <h5>See Special Provisions for Custom Fees</h5>
+            </li>
+          )}
         </ul>
       </section>
       {/* Specific request from Type One Ventures Fund Manager */}
