@@ -210,7 +210,7 @@ const DealDashboard = () => {
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
-      const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
+      const newTabs = dealData?.deal?.investmentType === 'fund' ? fundTabs : spvTabs;
 
       const newTabIndex = newTabs.indexOf(tabName);
       const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
