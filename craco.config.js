@@ -44,6 +44,10 @@ module.exports = {
             singleton: true,
             requiredVersion: false,
           },
+          '@allocations/nextjs-common': {
+            singleton: true,
+            requiredVersion: false,
+          },
         },
       }),
       new ExternalTemplateRemotesPlugin(),
