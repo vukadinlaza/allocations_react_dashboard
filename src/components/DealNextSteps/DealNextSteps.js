@@ -220,7 +220,7 @@ function DealNextSteps() {
     const submission = currentInvestment.submissionData;
 
     history.push({
-      pathname: `/invest/${organization}/${deal_slug}`,
+      pathname: `/invest/${dealData?._id}`,
       state: { submission, amount, investmentId: currentInvestment._id },
     });
   };

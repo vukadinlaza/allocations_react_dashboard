@@ -1,5 +1,6 @@
 import moment from 'moment';
 import _ from 'lodash';
+import { getMomentFromId } from '@allocations/nextjs-common';
 /** *
  *
  * Helpers in general
@@ -42,12 +43,6 @@ export const openInNewTab = ({ url }) => {
   if (newWindow) newWindow.opener = null;
 };
 
-export const getMomentFromId = (id, inMiliseconds) => {
-  const timeStamp = id.toString().substring(0, 8);
-  const date = moment.unix(new Date(parseInt(timeStamp, 16) * (inMiliseconds ? 1000 : 1)));
-  return date;
-};
-
 export const validateEmail = (email) => {
   return String(email)
     .toLowerCase()
@@ -88,4 +83,16 @@ export const sortByStatus = (statusOrder, data, field, order) => {
       : statusOrder[field ? _.get(b, `${field}`) : b] -
           statusOrder[field ? _.get(a, `${field}`) : a];
   });
+};
+
+export const shouldShowDealBasedFlag = (flag, deal_id) => {
+  if (!flag || !deal_id) return false;
+  const isDealWhiteListed = flag?.whiteListedDeals?.includes(deal_id);
+  const isDealBlackListed = flag?.blackListedDeals?.includes(deal_id);
+  const minimumDate = moment(flag?.minDealCreationDate, 'MMMM DD, YYYY');
+  const dealCreationDate = getMomentFromId(deal_id);
+
+  const isDealCreatedAfterMinDate = dealCreationDate.diff(minimumDate, 'minutes') >= 0;
+
+  return !!(!isDealBlackListed && (isDealWhiteListed || isDealCreatedAfterMinDate));
 };

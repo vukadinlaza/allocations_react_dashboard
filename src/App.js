@@ -22,7 +22,6 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import InvestmentPage from './components/DealOneClick/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
@@ -41,8 +40,7 @@ import SidebarOld from './components/SidebarOld';
 import RemoteAddOrgAdmin from './components/RemoteAddOrgAdmin';
 
 import RemoteTaxBanner from './components/RemoteTaxBanner';
-import RemoteInvest from './components/RemoteInvest';
-import RemoteNextSteps from './components/RemoteNextSteps';
+import InvestFlow from './components/InvestFlow';
 import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
@@ -64,7 +62,8 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard, remoteInvestPage, holidayBannerContent } = useFlags();
+  const { remoteFundManagerDashboard, holidayBannerContent } = useFlags();
+
   const styles = useStyles({ isAuthenticated });
   return (
     <div className={styles.mainRoute} id="holiday-banner">
@@ -117,25 +116,11 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
         {/* Invest */}
-        <PrivateRoute
-          path={`/invest/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
-          exact
-        />
-        <PrivateRoute
-          path={`/invest/${remoteInvestPage ? ':deal_id' : ':organization'}/${
-            remoteInvestPage ? ':investment_id' : ':deal_slug'
-          }`}
-          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
-          exact
-        />
+        <PrivateRoute path="/invest/:deal_id" component={InvestFlow} exact />
+        <PrivateRoute path="/invest/:deal_id/:investment_id" component={InvestFlow} exact />
 
         {/* Next Steps page */}
-        <PrivateRoute
-          path={`/next-steps/${remoteInvestPage ? ':investment_id' : ':deal_slug'}`}
-          component={remoteInvestPage ? RemoteNextSteps : DealNextSteps}
-          exact
-        />
+        <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
         <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
         {/** Whitelabel Routes * */}
