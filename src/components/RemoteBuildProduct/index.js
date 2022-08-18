@@ -8,7 +8,7 @@ const BuildProduct = React.lazy(() => import('build/BuildProduct'));
 
 export default function RemoteBuildProduct() {
   const { userProfile } = useAuth();
-  const history = useHistory();
+  // const history = useHistory();
 
   return (
     <>
@@ -16,7 +16,8 @@ export default function RemoteBuildProduct() {
         <BuildProduct
           user={userProfile}
           redirect={({ organization_slug, deal_id }) => {
-            history.push(`/admin/${organization_slug}/deals/${deal_id}`);
+            console.log(organization_slug, deal_id);
+            // history.push(`/admin/${organization_slug}/deals/${deal_id}`);
           }}
         />
       </Suspense>
