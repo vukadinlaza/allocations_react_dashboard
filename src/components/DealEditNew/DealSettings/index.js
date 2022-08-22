@@ -99,26 +99,28 @@ function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
           <img src={DocumentIcon} alt="document icon" />
           <p className={styles.documentTitle}>{document.path}</p>
         </a>
-        <Button
-          className={styles.documentMenuButton}
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={handleDocumentMenuClick}
-        >
-          <img src={DocumentMenuIcon} alt="document menu icon" />
-        </Button>
-
         {userProfile.admin && (
-          <Menu
-            className={styles.documentMenu}
-            id="simple-path"
-            anchorEl={documentMenuAnchorEl}
-            keepMounted
-            open={Boolean(documentMenuAnchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={deleteDealDocument}>Delete Document</MenuItem>
-          </Menu>
+          <>
+            <Button
+              className={styles.documentMenuButton}
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleDocumentMenuClick}
+            >
+              <img src={DocumentMenuIcon} alt="document menu icon" />
+            </Button>
+
+            <Menu
+              className={styles.documentMenu}
+              id="simple-path"
+              anchorEl={documentMenuAnchorEl}
+              keepMounted
+              open={Boolean(documentMenuAnchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={deleteDealDocument}>Delete Document</MenuItem>
+            </Menu>
+          </>
         )}
       </li>
     );
