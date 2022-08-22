@@ -8,6 +8,7 @@ import useStyles from './styles';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import DocumentMenuIcon from '../../../assets/document-menu-icon.svg';
+import { useAuth } from '../../../auth/useAuth';
 
 const ADD_DOC = gql`
   mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
@@ -43,6 +44,7 @@ const RM_LOGO = gql`
 
 function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
   const styles = useStyles();
+  const { userProfile } = useAuth();
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
       toast.success('Success! Your document has been added');
@@ -106,16 +108,18 @@ function DealSettings({ formData, setFormData, refetch, handleFormSubmit }) {
           <img src={DocumentMenuIcon} alt="document menu icon" />
         </Button>
 
-        <Menu
-          className={styles.documentMenu}
-          id="simple-path"
-          anchorEl={documentMenuAnchorEl}
-          keepMounted
-          open={Boolean(documentMenuAnchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={deleteDealDocument}>Delete Document</MenuItem>
-        </Menu>
+        {userProfile.admin && (
+          <Menu
+            className={styles.documentMenu}
+            id="simple-path"
+            anchorEl={documentMenuAnchorEl}
+            keepMounted
+            open={Boolean(documentMenuAnchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={deleteDealDocument}>Delete Document</MenuItem>
+          </Menu>
+        )}
       </li>
     );
   };
