@@ -172,6 +172,8 @@ const DealDashboard = () => {
     `{Deals}="${checkedAtDealDataName}"`,
   );
 
+  console.log({ dealData });
+
   useEffect(() => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
@@ -398,11 +400,8 @@ const DealDashboard = () => {
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
-            progress={getTotalRaiseAmount(
-              serviceDeal?.target_raise_goal || 0,
-              dealData?.deal?.raised,
-            )}
-            currentAmount={dealData?.deal?.raised}
+            progress={getTotalRaiseAmount(serviceDeal?.target_raise_goal || 0, dealData?.deal?.AUM)}
+            currentAmount={dealData?.deal?.AUM}
             goalAmount={serviceDeal?.target_raise_goal || 0}
           />
         </Suspense>
