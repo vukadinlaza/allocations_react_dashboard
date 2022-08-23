@@ -172,8 +172,6 @@ const DealDashboard = () => {
     `{Deals}="${checkedAtDealDataName}"`,
   );
 
-  console.log({ dealData });
-
   useEffect(() => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
