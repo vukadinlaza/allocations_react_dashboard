@@ -45,6 +45,9 @@ import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
 import RemoteBuildV2 from './components/RemoteBuildV2';
+import RemoteNewLead from './components/RemoteNewLead';
+import RemoteOrgDetails from './components/RemoteOrgDetails';
+import RemoteBuildProduct from './components/RemoteBuildProduct';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -62,7 +65,7 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard, holidayBannerContent } = useFlags();
+  const { remoteFundManagerDashboard, holidayBannerContent, buildV2 } = useFlags();
 
   const styles = useStyles({ isAuthenticated });
   return (
@@ -104,11 +107,15 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
 
+        {buildV2 && <Route path="/public/getting-started" component={RemoteNewLead} exact />}
+        {buildV2 && <Route path="/create-organization" component={RemoteOrgDetails} exact />}
+
         {/** Deals * */}
         {/* Public */}
 
         <Route path="/public/new-build" exact component={RemoteBuild} />
         <PrivateRoute path="/new-build" exact component={RemoteBuild} />
+        {buildV2 && <Route path="/build" component={RemoteBuildProduct} exact />}
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />

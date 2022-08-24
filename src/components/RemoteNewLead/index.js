@@ -4,18 +4,20 @@ import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
 React.lazy(() => import('passport/PassportDropdown'));
-const BuildV2 = React.lazy(() => import('build/BuildV2'));
+const NewLead = React.lazy(() => import('build/NewLead'));
 
-export default function RemoteBuildV2() {
+export default function RemoteNewLead() {
   const { userProfile } = useAuth();
   const history = useHistory();
 
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <BuildV2
+        <NewLead
           user={userProfile}
-          redirectToPostBuild={(deal) => history.push(`/new-build/deal?id=${deal._id}`)}
+          redirect={(params) => {
+            history.push(`/build?${params}`);
+          }}
         />
       </Suspense>
     </>
