@@ -107,7 +107,7 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
 
-        <Route path="/public/getting-started" component={RemoteNewLead} exact />
+        {buildV2 && <Route path="/public/getting-started" component={RemoteNewLead} exact />}
         {buildV2 && <Route path="/create-organization" component={RemoteOrgDetails} exact />}
 
         {/** Deals * */}
