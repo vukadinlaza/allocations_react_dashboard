@@ -70,6 +70,7 @@ const GET_DEAL = gql`
         _id
         amount
         capitalWiredAmount
+        wired_at
         status
         submissionData {
           investor_type

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Grid, Menu, MenuItem } from '@material-ui/core';
 import { Button, Chip, IconButton, List, Search } from '@allocations/design-system';
+import moment from 'moment';
 import { nWithCommas } from '../../../../../utils/numbers';
 import { openInNewTab } from '../../../../../utils/helpers';
 
@@ -80,14 +81,23 @@ const Investors = ({ investments }) => {
       'Status',
       'Committed Amount',
       'Wired Amount',
+      'Signed Date',
+      'Wired Date',
     ];
 
     return investments.reduce((acc, investment) => {
+      const timestamp = investment._id.toString().substring(0, 8);
+      const signedAt = moment.utc(new Date(parseInt(timestamp, 16) * 1000)).format('MMM DD YYYY');
+      const wiredAt = !investment?.wired_at
+        ? ''
+        : moment.utc(new Date(investment?.wired_at * 1)).format('MMM DD YYYY');
       return `${acc}\n${
         investment.submissionData?.fullName || investment.submissionData?.legalName
       };${investment.submissionData?.legalName};${investment.submissionData?.investor_type};${
         investment.investor.email
-      };${investment.status};${investment.amount};${investment.capitalWiredAmount}`;
+      };${investment.status};${investment.amount};${
+        investment.capitalWiredAmount || 0
+      };${signedAt};${wiredAt}`;
     }, `data:text/csv;charset=utf-8,${headers.join(';')}`);
   };
 
