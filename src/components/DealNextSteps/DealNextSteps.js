@@ -476,7 +476,7 @@ function DealNextSteps() {
               investmentData ? investmentData.investment.amount : currentInvestment.amount
             }
             investment_id={investmentData ? investmentData.investment._id : currentInvestment._id}
-            user_id={data._id}
+            user_id={data.user?._id}
           />
         </React.Suspense>
 
