@@ -22,13 +22,12 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import InvestmentPage from './components/DealOneClick/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
 // test
-import Build from './components/Build';
-import PostBuild from './components/PostBuild';
+import RemoteBuild from './components/RemoteBuild';
+import RemotePostBuild from './components/RemotePostBuild';
 
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
@@ -41,11 +40,14 @@ import SidebarOld from './components/SidebarOld';
 import RemoteAddOrgAdmin from './components/RemoteAddOrgAdmin';
 
 import RemoteTaxBanner from './components/RemoteTaxBanner';
-import RemoteInvest from './components/RemoteInvest';
-import RemoteNextSteps from './components/RemoteNextSteps';
+import InvestFlow from './components/InvestFlow';
 import useStyles from './styles';
 import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
+import RemoteBuildV2 from './components/RemoteBuildV2';
+import RemoteNewLead from './components/RemoteNewLead';
+import RemoteOrgDetails from './components/RemoteOrgDetails';
+import RemoteBuildProduct from './components/RemoteBuildProduct';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -63,7 +65,8 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard, remoteInvestPage, holidayBannerContent } = useFlags();
+  const { remoteFundManagerDashboard, holidayBannerContent, buildV2 } = useFlags();
+
   const styles = useStyles({ isAuthenticated });
   return (
     <div className={styles.mainRoute} id="holiday-banner">
@@ -79,6 +82,9 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+
+        <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
+
         {/* Organization Admin */}
         <PrivateRoute
           path="/admin/:organization"
@@ -101,37 +107,27 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
 
+        {buildV2 && <Route path="/public/getting-started" component={RemoteNewLead} exact />}
+        {buildV2 && <Route path="/create-organization" component={RemoteOrgDetails} exact />}
+
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={Build} />
-        <PrivateRoute path="/new-build" exact component={Build} />
+        <Route path="/public/new-build" exact component={RemoteBuild} />
+        <PrivateRoute path="/new-build" exact component={RemoteBuild} />
+        {buildV2 && <Route path="/build" component={RemoteBuildProduct} exact />}
 
         {/* Private  */}
-        <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
+        <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
         <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
         {/* Invest */}
-        <PrivateRoute
-          path={`/invest/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
-          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
-          exact
-        />
-        <PrivateRoute
-          path={`/invest/${remoteInvestPage ? ':deal_id' : ':organization'}/${
-            remoteInvestPage ? ':investment_id' : ':deal_slug'
-          }`}
-          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
-          exact
-        />
+        <PrivateRoute path="/invest/:deal_id" component={InvestFlow} exact />
+        <PrivateRoute path="/invest/:deal_id/:investment_id" component={InvestFlow} exact />
 
         {/* Next Steps page */}
-        <PrivateRoute
-          path={`/next-steps/${remoteInvestPage ? ':investment_id' : ':deal_slug'}`}
-          component={remoteInvestPage ? RemoteNextSteps : DealNextSteps}
-          exact
-        />
+        <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
         <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
         {/** Whitelabel Routes * */}

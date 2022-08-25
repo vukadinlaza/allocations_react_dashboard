@@ -3,23 +3,20 @@ import { useHistory } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
-const RemoteBuild = React.lazy(() => import('build/Build'));
+React.lazy(() => import('passport/PassportDropdown'));
+const OrgDetails = React.lazy(() => import('build/OrgDetails'));
 
-export default function Build() {
+export default function RemoteOrgDetails() {
   const { userProfile } = useAuth();
   const history = useHistory();
-
-  const handleCreate = (deal) => {
-    history.push(`/admin/${deal.organization_slug}/deals/${deal._id}`);
-  };
 
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <RemoteBuild
+        <OrgDetails
           user={userProfile}
-          onCreate={(deal) => {
-            handleCreate(deal);
+          redirect={(params) => {
+            history.push(`/build?${params}`);
           }}
         />
       </Suspense>

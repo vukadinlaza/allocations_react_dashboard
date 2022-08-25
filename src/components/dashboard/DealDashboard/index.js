@@ -70,6 +70,7 @@ const GET_DEAL = gql`
         _id
         amount
         capitalWiredAmount
+        wired_at
         status
         submissionData {
           investor_type
@@ -210,7 +211,7 @@ const DealDashboard = () => {
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
-      const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
+      const newTabs = dealData?.deal?.investmentType === 'fund' ? fundTabs : spvTabs;
 
       const newTabIndex = newTabs.indexOf(tabName);
       const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
@@ -398,11 +399,8 @@ const DealDashboard = () => {
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
-            progress={getTotalRaiseAmount(
-              serviceDeal?.target_raise_goal || 0,
-              dealData?.deal?.raised,
-            )}
-            currentAmount={dealData?.deal?.raised}
+            progress={getTotalRaiseAmount(serviceDeal?.target_raise_goal || 0, dealData?.deal?.AUM)}
+            currentAmount={dealData?.deal?.AUM}
             goalAmount={serviceDeal?.target_raise_goal || 0}
           />
         </Suspense>

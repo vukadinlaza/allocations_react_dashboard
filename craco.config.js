@@ -12,6 +12,7 @@ module.exports = {
         filename: 'remoteEntry.js',
         remotes: {
           invest: `invest@[window.investModuleFederationURL]`,
+          passport: `passport@[window.passportModuleFederationURL]`,
           build: 'build@[window.buildModuleFederationURL]',
           treasury: `treasury@[window.treasuryModuleFederationURL]`,
           blockchain: `blockchain@[window.cryptoModuleFederationURL]`,
@@ -40,6 +41,10 @@ module.exports = {
             requiredVersion: false,
           },
           'launchdarkly-react-client-sdk': {
+            singleton: true,
+            requiredVersion: false,
+          },
+          '@allocations/nextjs-common': {
             singleton: true,
             requiredVersion: false,
           },

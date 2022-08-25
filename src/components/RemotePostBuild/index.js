@@ -3,9 +3,9 @@ import { Redirect, useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
-const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
+const PostBuild = React.lazy(() => import('build/PostBuild'));
 
-export default function PostBuild({ dealId }) {
+export default function RemotePostBuild({ dealId }) {
   const { userProfile } = useAuth();
   const { search } = useLocation();
   const history = useHistory();
@@ -13,7 +13,7 @@ export default function PostBuild({ dealId }) {
 
   return (
     <Suspense fallback={<Loader />}>
-      <RemotePostBuild
+      <PostBuild
         user={userProfile}
         deal_id={dealId || params.get('id')}
         redirectToDashboard={() => history.push('/')}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button } from '@material-ui/core';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
@@ -20,9 +20,13 @@ import RealEstateUseage from './RealEstateUseage';
 import TINAndAddress from './AddressSSN';
 
 const GET_DEAL = gql`
-  query Deal($deal_slug: String!, $fund_slug: String!) {
-    deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
+  query Deal($_id: String) {
+    deal(_id: $_id) {
       _id
+      organization {
+        _id
+        slug
+      }
       approved
       created_at
       company_name
@@ -136,21 +140,20 @@ const ADD_USER_AS_VIEWED = gql`
   }
 `;
 
-function InvestmentPage() {
+function InvestmentPage({ deal_id }) {
   const history = useHistory();
   const location = useLocation();
-  const { organization: org, deal_slug } = useParams();
   const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
   const { userProfile } = useAuth();
-  const organization = org || 'allocations';
 
   const { data, refetch } = useQuery(GET_DEAL, {
     variables: {
-      deal_slug,
-      fund_slug: organization || 'allocations',
+      _id: deal_id,
     },
   });
 
+  const { organization: { slug: organization } = 'allocations', slug: deal_slug = '' } =
+    data?.deal || {};
   const { data: personalInfo } = useQuery(GET_PERSONAL_INFO);
 
   useEffect(() => {
@@ -323,7 +326,7 @@ function InvestmentPage() {
           <DealDocumentsPanel deal={deal} />
         </div>
         <PersonalInformation
-          org={org}
+          org={organization}
           errors={errors}
           investor={investorFormData}
           setInvestor={setInvestor}
@@ -331,7 +334,7 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
-        <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={org} />
+        <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={organization} />
         <RealEstateUseage
           setInvestor={setInvestor}
           errors={errors}
