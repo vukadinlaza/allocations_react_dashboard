@@ -7,7 +7,7 @@ React.lazy(() => import('passport/PassportDropdown'));
 const NewLead = React.lazy(() => import('build/NewLead'));
 
 export default function RemoteNewLead() {
-  const { userProfile } = useAuth();
+  const { userProfile, loginWithRedirect } = useAuth();
   const history = useHistory();
 
   return (
@@ -17,6 +17,13 @@ export default function RemoteNewLead() {
           user={userProfile}
           redirect={(params) => {
             history.push(`/build?${params}`);
+          }}
+          loginRedirect={(newLeadData) => {
+            localStorage.setItem('new-lead-phase', 'org-details');
+            localStorage.setItem('new-lead-data', JSON.stringify(newLeadData));
+            loginWithRedirect({
+              redirectUri: `${window.location.href}`,
+            });
           }}
         />
       </Suspense>
