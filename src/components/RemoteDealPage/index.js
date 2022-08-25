@@ -47,7 +47,7 @@ export default function RemoteDealPage() {
         pushToDealPage={() => history.push(`/admin/${organization}/deals/${deal._id}`)}
         goToInvestPage={() => {
           if (remoteInvestPage) {
-            history.push(`/invest/${deal_id}`);
+            history.push(`/invest/${deal_id || deal._id}`);
           } else {
             history.push(`/invest${organization ? `/${organization}` : ''}/${dealSlug}`);
           }
