@@ -108,14 +108,13 @@ const MainApp = ({ isAuthenticated }) => {
         <Route path="/getting-started" component={Faq} exact />
 
         {buildV2 && <Route path="/public/getting-started" component={RemoteNewLead} exact />}
-        {buildV2 && <Route path="/create-organization" component={RemoteOrgDetails} exact />}
+        {buildV2 && <PrivateRoute path="/create-organization" component={RemoteOrgDetails} exact />}
 
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={RemoteBuild} />
-        <PrivateRoute path="/new-build" exact component={RemoteBuild} />
-        {buildV2 && <Route path="/build" component={RemoteBuildProduct} exact />}
+        {buildV2 && <PrivateRoute path="/new-build" exact component={RemoteBuild} />}
+        {buildV2 && <PrivateRoute path="/build" component={RemoteBuildProduct} exact />}
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
