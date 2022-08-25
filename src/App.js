@@ -113,7 +113,7 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        {buildV2 && <PrivateRoute path="/new-build" exact component={RemoteBuild} />}
+        <PrivateRoute path="/new-build" exact component={RemoteBuild} />
         {buildV2 && <PrivateRoute path="/build" component={RemoteBuildProduct} exact />}
 
         {/* Private  */}
