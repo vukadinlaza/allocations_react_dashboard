@@ -15,8 +15,8 @@ export default function RemoteNewLead() {
       <Suspense fallback={<Loader />}>
         <NewLead
           user={userProfile}
-          redirect={(params) => {
-            history.push(`/build?${params}`);
+          redirect={(route) => {
+            history.push(route);
           }}
           loginRedirect={(newLeadData) => {
             localStorage.setItem('new-lead-phase', 'org-details');

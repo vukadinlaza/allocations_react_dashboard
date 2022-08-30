@@ -15,8 +15,8 @@ export default function RemoteOrgDetails() {
       <Suspense fallback={<Loader />}>
         <OrgDetails
           user={userProfile}
-          redirect={(params) => {
-            history.push(`/build?${params}`);
+          redirect={(route) => {
+            history.push(route);
           }}
         />
       </Suspense>

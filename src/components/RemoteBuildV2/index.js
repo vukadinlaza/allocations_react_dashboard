@@ -13,10 +13,7 @@ export default function RemoteBuildV2() {
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <BuildV2
-          user={userProfile}
-          redirectToPostBuild={(deal) => history.push(`/new-build/deal?id=${deal._id}`)}
-        />
+        <BuildV2 user={userProfile} redirectToPostBuild={(route) => history.push(route)} />
       </Suspense>
     </>
   );
