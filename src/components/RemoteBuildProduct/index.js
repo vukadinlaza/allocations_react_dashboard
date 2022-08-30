@@ -16,6 +16,7 @@ export default function RemoteBuildProduct() {
         <BuildProduct
           user={userProfile}
           redirectToPostBuild={(deal) => history.push(`/new-build/deal?id=${deal._id}`)}
+          redirect={(route) => history.push(route)}
         />
       </Suspense>
     </>

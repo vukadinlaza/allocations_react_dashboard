@@ -9,7 +9,6 @@ const NewLead = React.lazy(() => import('build/NewLead'));
 export default function RemoteNewLead() {
   const { userProfile, loginWithRedirect } = useAuth();
   const history = useHistory();
-
   return (
     <>
       <Suspense fallback={<Loader />}>
