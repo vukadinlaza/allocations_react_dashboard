@@ -9,14 +9,13 @@ const NewLead = React.lazy(() => import('build/NewLead'));
 export default function RemoteNewLead() {
   const { userProfile, loginWithRedirect } = useAuth();
   const history = useHistory();
-
   return (
     <>
       <Suspense fallback={<Loader />}>
         <NewLead
           user={userProfile}
-          redirect={(params) => {
-            history.push(`/build?${params}`);
+          redirect={(route) => {
+            history.push(route);
           }}
           loginRedirect={(newLeadData) => {
             localStorage.setItem('new-lead-phase', 'org-details');
