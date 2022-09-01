@@ -69,7 +69,7 @@ const MainApp = ({ isAuthenticated }) => {
 
   const styles = useStyles({ isAuthenticated });
   return (
-    <div className={styles.mainRoute} id="holiday-banner">
+    <div className={styles.mainRoute}>
       {holidayBannerContent && <HolidayBanner />}
       <RemoteTaxBanner />
       <Switch>
