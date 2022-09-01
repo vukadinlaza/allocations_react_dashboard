@@ -35,6 +35,6 @@ export default function HolidayBanner() {
         for any assistance.
       </Box>
     </div>,
-    document.querySelector('#holiday-banner')!,
+    document.querySelector('#allocations-banner')!,
   );
 }

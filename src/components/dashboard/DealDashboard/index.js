@@ -395,7 +395,7 @@ const DealDashboard = () => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {dealProgress ? (
+      {dealProgress && serviceDeal?.metadata?.show_progress !== false ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
