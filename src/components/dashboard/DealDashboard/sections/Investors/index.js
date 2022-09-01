@@ -91,11 +91,11 @@ const Investors = ({ investments }) => {
       const wiredAt = !investment?.wired_at
         ? ''
         : moment.utc(new Date(investment?.wired_at * 1)).format('MMM DD YYYY');
-      return `${acc}\n${
-        investment.submissionData?.fullName || investment.submissionData?.legalName
-      };${investment.submissionData?.legalName};${investment.submissionData?.investor_type};${
-        investment.investor.email
-      };${investment.status};${investment.amount};${
+      const legalName = encodeURIComponent(investment.submissionData?.legalName);
+
+      return `${acc}\n${investment.submissionData?.fullName || legalName};${legalName};${
+        investment.submissionData?.investor_type
+      };${investment.investor.email};${investment.status};${investment.amount};${
         investment.capitalWiredAmount || 0
       };${signedAt};${wiredAt}`;
     }, `data:text/csv;charset=utf-8,${headers.join(';')}`);
