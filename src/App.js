@@ -65,11 +65,11 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard, holidayBannerContent, buildV2 } = useFlags();
+  const { remoteFundManagerDashboard, holidayBannerContent } = useFlags();
 
   const styles = useStyles({ isAuthenticated });
   return (
-    <div className={styles.mainRoute} id="holiday-banner">
+    <div className={styles.mainRoute}>
       {holidayBannerContent && <HolidayBanner />}
       <RemoteTaxBanner />
       <Switch>
@@ -107,15 +107,15 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
 
-        {buildV2 && <Route path="/public/getting-started" component={RemoteNewLead} exact />}
-        {buildV2 && <Route path="/create-organization" component={RemoteOrgDetails} exact />}
+        <Route path="/public/getting-started" component={RemoteNewLead} exact />
+        <PrivateRoute path="/create-organization" component={RemoteOrgDetails} exact />
 
         {/** Deals * */}
         {/* Public */}
 
         <Route path="/public/new-build" exact component={RemoteBuild} />
         <PrivateRoute path="/new-build" exact component={RemoteBuild} />
-        {buildV2 && <Route path="/build" component={RemoteBuildProduct} exact />}
+        <PrivateRoute path="/build" component={RemoteBuildProduct} exact />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
