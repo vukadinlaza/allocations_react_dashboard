@@ -21,7 +21,7 @@ function TermsAndConditionsPanel({
 
       setServiceDeal(deal);
     })();
-  });
+  }, [_id]);
   const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
   });
