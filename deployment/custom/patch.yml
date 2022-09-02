@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $name
+spec:
+  template:
+    spec:
+      volumes:
+        - name: build-volume
+          emptyDir: {}
+      initContainers:
+        - name: builder
+          image: $IMAGE
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              yarn build
+              cp -r ./build /build-files
+          envFrom:
+            - secretRef:
+                name: $name-secrets
+          volumeMounts:
+            - name: build-volume
+              mountPath: '/build-files'
+          resources:
+            limits:
+              memory: 4Gi
+              cpu: 2
+      containers:
+        - name: $name
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              cp -r /build-files/build ./
+              node server.js
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - sleep 90
+          readinessProbe:
+            failureThreshold: 13
+            tcpSocket:
+              port: $port
+          volumeMounts:
+            - name: build-volume
+              mountPath: '/build-files'
