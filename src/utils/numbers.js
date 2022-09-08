@@ -7,7 +7,15 @@
 export function nWithCommas(x) {
   if (!x) return 0;
 
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  let num = x.toString();
+
+  if (num.includes('.')) {
+    num = Math.round((x + Number.EPSILON) * 100) / 100;
+    num = num.toString();
+  }
+
+  num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return num;
 }
 
 export const amountFormat = (amount) => {
