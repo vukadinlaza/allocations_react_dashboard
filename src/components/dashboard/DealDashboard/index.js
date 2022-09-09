@@ -100,7 +100,7 @@ const GET_DEAL = gql`
   }
 `;
 
-const fundTabs = [
+let fundTabs = [
   'Highlights',
   'Investments',
   'Investor Onboarding Status',
@@ -185,6 +185,16 @@ const DealDashboard = () => {
           if (deal?.phases?.length === 6) {
             spvTabs = [
               'Deal Progress',
+              'Investor Onboarding Status',
+              'Investors',
+              'Documents',
+              'Deal Page',
+            ];
+
+            fundTabs = [
+              'Deal Progress',
+              'Highlights',
+              'Investments',
               'Investor Onboarding Status',
               'Investors',
               'Documents',
