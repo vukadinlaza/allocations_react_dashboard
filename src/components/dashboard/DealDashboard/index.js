@@ -101,6 +101,7 @@ const GET_DEAL = gql`
 `;
 
 const fundTabs = [
+  'Deal Progress',
   'Highlights',
   'Investments',
   'Investor Onboarding Status',
