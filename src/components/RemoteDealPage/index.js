@@ -54,7 +54,10 @@ export default function RemoteDealPage() {
         redirectTo404={() => <Redirect to="/404" />}
         user={userProfile}
         disableInvest={
-          showNewInvestFlow ? !deal.subscription_agreement?.investor_docspring_template_id : false
+          showNewInvestFlow
+            ? !deal.subscription_agreement?.investor_docspring_template_id ||
+              !deal.subscription_agreement.investor_template_approved
+            : false
         }
       />
     </Suspense>
