@@ -7,12 +7,7 @@
 export function nWithCommas(x) {
   if (!x) return 0;
 
-  let num = x.toString();
-
-  if (num.includes('.')) {
-    num = Math.round((x + Number.EPSILON) * 100) / 100;
-    num = num.toString();
-  }
+  let num = x.toFixed(2).toString();
 
   num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return num;
