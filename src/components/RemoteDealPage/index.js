@@ -53,7 +53,7 @@ export default function RemoteDealPage() {
         }}
         redirectTo404={() => <Redirect to="/404" />}
         user={userProfile}
-        disableInvest={showNewInvestFlow}
+        disableInvest={!showNewInvestFlow}
       />
     </Suspense>
   );
