@@ -46,7 +46,6 @@ import HolidayBanner from './components/HolidayBanner';
 import InvestmentNew from './components/InvestmentNew';
 import RemoteBuildV2 from './components/RemoteBuildV2';
 import RemoteNewLead from './components/RemoteNewLead';
-import RemoteOrgDetails from './components/RemoteOrgDetails';
 import RemoteBuildProduct from './components/RemoteBuildProduct';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
@@ -108,7 +107,6 @@ const MainApp = ({ isAuthenticated }) => {
         <Route path="/getting-started" component={Faq} exact />
 
         <Route path="/public/getting-started" component={RemoteNewLead} exact />
-        <PrivateRoute path="/create-organization" component={RemoteOrgDetails} exact />
 
         {/** Deals * */}
         {/* Public */}
