@@ -7,7 +7,8 @@
 export function nWithCommas(x) {
   if (!x) return 0;
 
-  let num = x.toFixed(2).toString();
+  let num = Number(x).toFixed(2);
+  num = num.toString();
 
   num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return num;
