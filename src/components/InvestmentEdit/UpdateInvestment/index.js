@@ -91,8 +91,11 @@ const UPDATE_USER = gql`
 `;
 
 function Doc({ doc, investment, getInvestment, matches }) {
-  const file =
-    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+  const file = doc.path.includes('/')
+    ? doc.path.slice(0, 12) === 'investments/'
+      ? doc.path.split('/')[2]
+      : doc.path.split('/')[1]
+    : doc.path;
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
@@ -124,7 +127,11 @@ function Doc({ doc, investment, getInvestment, matches }) {
       <Grid item>
         <Tooltip title={file}>
           <Typography align="center" style={{ fontSize: '14px' }}>
-            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={doc.link.includes('http') ? doc.link : `https://${doc.link}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {_.truncate(file, { length: 25 })}
             </a>
           </Typography>

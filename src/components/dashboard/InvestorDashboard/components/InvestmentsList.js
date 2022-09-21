@@ -50,7 +50,7 @@ const headers = [
   },
   {
     id: 'status',
-    label: 'Status',
+    label: 'Deal Status',
     withSort: true,
     customSort: true,
   },

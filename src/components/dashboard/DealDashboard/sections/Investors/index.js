@@ -121,7 +121,9 @@ const Investors = ({ investments }) => {
       />
       <Menu open={anchorEl} anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>
         {documents.map(({ path, link }) => (
-          <MenuItem onClick={() => openInNewTab({ url: `//${link}` })}>
+          <MenuItem
+            onClick={() => openInNewTab({ url: link.includes('http') ? link : `//${link}` })}
+          >
             {path.split('/').slice(-1)[0]}
           </MenuItem>
         ))}

@@ -189,7 +189,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         if (row.dateSigned) {
           return (
             <a
-              href={`//${row.docLink}`}
+              href={row.docLink.includes('http') ? row.docLink : `//${row.docLink}`}
               target="_blank"
               rel="noopener noreferrer"
               key={row.docLink}
@@ -229,7 +229,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   const unusedVariable = data?.deal?.investments?.forEach((investment) => {
     if (investment.documents.length) {
       investment.documents.forEach((doc) => {
-        const splitPath = doc.path.split('/')[2];
+        const splitPath = doc.path.split('/')[2] || doc.path;
         const containsId = splitPath.match(/\d{13}/);
 
         if (containsId) {
