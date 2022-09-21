@@ -59,6 +59,7 @@ export interface Deal {
     country: string;
   };
   investor_countries: [string];
+  investor_passport_id: string;
   management_fee: {
     type: string;
     value: string;
