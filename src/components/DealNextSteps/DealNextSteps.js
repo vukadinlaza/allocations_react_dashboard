@@ -215,7 +215,7 @@ function DealNextSteps() {
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.user?.investments;
-    const currentInvestment = userInvestments.find((inv) => inv.deal.slug === deal_slug);
+    const currentInvestment = userInvestments.find((inv) => inv?.deal?.slug === deal_slug);
     const { amount } = currentInvestment;
     const submission = currentInvestment.submissionData;
 
@@ -238,7 +238,7 @@ function DealNextSteps() {
     }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
-  const currentInvestment = data?.user?.investments.find((inv) => inv.deal.slug === deal_slug);
+  const currentInvestment = data?.user?.investments.find((inv) => inv?.deal?.slug === deal_slug);
 
   return (
     <>
