@@ -153,6 +153,15 @@ const useStyles = makeStyles((theme) => ({
   investorBoxName: {
     display: 'flex',
     alignItems: 'center',
+    // width: 'calc(100% - 80px)',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      marginBottom: '1em',
+    },
+  },
+  investorBoxNameAndAmount: {
+    display: 'flex',
+    alignItems: 'center',
     width: 'calc(100% - 80px)',
     [theme.breakpoints.down(phone)]: {
       width: '100%',
@@ -161,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
   },
   investorName: {
     fontSize: '14px',
-    maxWidth: 'calc(100% - 108px)',
+    maxWidth: '90%',
     overflow: 'hidden',
     whiteSpace: 'pre',
     textOverflow: 'ellipsis',
