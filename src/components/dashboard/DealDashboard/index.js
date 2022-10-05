@@ -182,7 +182,6 @@ const DealDashboard = () => {
             `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
           );
           const deal = await res.json();
-
           // if there are tasks in every phase
           if (deal?.phases?.every((phase) => phase.tasks.length > 0) && deal?.phases.length === 6) {
             spvTabs = [
@@ -408,7 +407,7 @@ const DealDashboard = () => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {dealProgress && serviceDeal?.metadata?.show_progress !== false ? (
+      {dealProgress ? (
         <Suspense fallback={<Loader />}>
           <ProgressBar
             deal={serviceDeal || { name: '' }}
