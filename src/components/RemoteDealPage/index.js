@@ -11,6 +11,7 @@ export const GET_DEAL = gql`
     deal(_id: $_id, deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
       slug
+      status
       subscription_agreement {
         investor_docspring_template_id
       }
