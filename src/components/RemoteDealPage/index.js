@@ -48,7 +48,7 @@ export default function RemoteDealPage() {
         }}
         redirectTo404={() => <Redirect to="/404" />}
         user={userProfile}
-        disableInvest={deal.status === 'onboarding'}
+        disableInvest={deal.status !== 'onboarding'}
       />
     </Suspense>
   );
