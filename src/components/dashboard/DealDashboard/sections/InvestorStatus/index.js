@@ -90,6 +90,7 @@ const InvestorBox = ({
   setShowModal,
   setInvestmentId,
   dealType,
+  hasAmount = false,
 }) => {
   const onClick = () => {
     if (superAdmin) {
@@ -107,7 +108,10 @@ const InvestorBox = ({
       key={`investor-${index}`}
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
-      <div className={classes.investorBoxName} style={{ display: 'flex' }}>
+      <div
+        className={hasAmount ? classes.investorBoxNameAndAmount : classes.investorBoxName}
+        style={{ display: 'flex' }}
+      >
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
         {dealType === '506c' ? (
@@ -381,6 +385,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
                 setDealId={setDealId}
                 setInvestorId={setInvestorId}
                 dealType={dealType}
+                hasAmount
               />
             ))}
           </ScrollableBox>
@@ -406,6 +411,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
                 setDealId={setDealId}
                 setInvestorId={setInvestorId}
                 dealType={dealType}
+                hasAmount
               />
             ))}
           </ScrollableBox>

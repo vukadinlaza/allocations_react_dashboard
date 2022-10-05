@@ -381,7 +381,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                   ) : (
                     <BigBox
                       content="No SPVs created"
-                      button={{ action: () => history.push('/new-build'), text: 'Create SPV' }}
+                      button={{ action: () => history.push('/build?type=SPV'), text: 'Create SPV' }}
                       icon="business"
                     />
                   )}
@@ -407,7 +407,10 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                   ) : (
                     <BigBox
                       content="No Funds created"
-                      button={{ action: () => history.push('/new-build'), text: 'Create Fund' }}
+                      button={{
+                        action: () => history.push('/build?type=Fund'),
+                        text: 'Create Fund',
+                      }}
                       icon="business"
                     />
                   )}
