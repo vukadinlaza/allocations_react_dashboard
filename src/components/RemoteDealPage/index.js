@@ -1,7 +1,9 @@
 import { useQuery, gql } from '@apollo/client';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory, useLocation, useParams } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
+import { shouldShowDealBasedFlag } from '../../utils/helpers';
 import Loader from '../utils/Loader';
 
 const DealPage = React.lazy(() => import('build/DealPage'));
@@ -20,6 +22,7 @@ export const GET_DEAL = gql`
 `;
 
 export default function RemoteDealPage() {
+  const { newInvestFlow } = useFlags();
   const history = useHistory();
   const { pathname } = useLocation();
   const { organization, deal_slug, deal_id } = useParams();
@@ -31,6 +34,8 @@ export default function RemoteDealPage() {
       fund_slug: organization || 'allocations',
     },
   });
+
+  const showNewInvestFlow = shouldShowDealBasedFlag(newInvestFlow, deal_id);
 
   if (!data) return null;
   const { deal } = data;
@@ -49,7 +54,12 @@ export default function RemoteDealPage() {
         }}
         redirectTo404={() => <Redirect to="/404" />}
         user={userProfile}
-        disableInvest={false}
+        disableInvest={
+          showNewInvestFlow
+            ? !deal.subscription_agreement?.investor_docspring_template_id ||
+              !deal.subscription_agreement.investor_template_approved
+            : false
+        }
       />
     </Suspense>
   );
