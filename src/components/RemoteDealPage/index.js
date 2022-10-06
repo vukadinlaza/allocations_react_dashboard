@@ -35,11 +35,10 @@ export default function RemoteDealPage() {
     },
   });
 
-  const showNewInvestFlow = shouldShowDealBasedFlag(newInvestFlow, deal_id);
-
   if (!data) return null;
   const { deal } = data;
   const dealSlug = deal_slug || deal.slug;
+  const showNewInvestFlow = shouldShowDealBasedFlag(newInvestFlow, deal_id || deal?._id);
 
   return (
     <Suspense fallback={<Loader />}>
