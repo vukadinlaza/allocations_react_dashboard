@@ -87,12 +87,15 @@ export const sortByStatus = (statusOrder, data, field, order) => {
 
 export const shouldShowDealBasedFlag = (flag, deal_id) => {
   if (!flag || !deal_id) return false;
+
   const isDealWhiteListed = flag?.whiteListedDeals?.includes(deal_id);
+  if (isDealWhiteListed) return true;
+
   const isDealBlackListed = flag?.blackListedDeals?.includes(deal_id);
+  if (isDealBlackListed) return false;
+
   const minimumDate = moment(flag?.minDealCreationDate, 'MMMM DD, YYYY');
   const dealCreationDate = getMomentFromId(deal_id);
 
-  const isDealCreatedAfterMinDate = dealCreationDate.diff(minimumDate, 'minutes') >= 0;
-
-  return !!(!isDealBlackListed && (isDealWhiteListed || isDealCreatedAfterMinDate));
+  return dealCreationDate.diff(minimumDate, 'minutes') >= 0;
 };
