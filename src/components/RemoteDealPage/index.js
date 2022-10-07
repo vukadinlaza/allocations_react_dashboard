@@ -16,6 +16,7 @@ export const GET_DEAL = gql`
       status
       subscription_agreement {
         investor_docspring_template_id
+        investor_template_approved
       }
     }
   }
