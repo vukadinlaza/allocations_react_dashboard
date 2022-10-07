@@ -36,10 +36,7 @@ const Investors = ({ investments }) => {
   const displayData = investments
     ?.map((investment) => ({
       name: investment.submissionData?.fullName || investment.submissionData?.legalName,
-      investingAs:
-        investment.submissionData?.investor_type === 'Entity'
-          ? investment.submissionData?.legalName
-          : investment.submissionData?.fullName,
+      investingAs: investment.submissionData?.legalName,
       type: (
         <Chip
           text={investment.submissionData?.investor_type || 'unknown'}
