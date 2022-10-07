@@ -148,6 +148,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         .reduce((acc: number, n: number) => {
           return acc + n;
         }, 0);
+
       setOrgAUM(organizationAUM);
 
       const organizationMultiple =
