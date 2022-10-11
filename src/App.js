@@ -26,7 +26,6 @@ import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
 // test
-import RemoteBuild from './components/RemoteBuild';
 import RemotePostBuild from './components/RemotePostBuild';
 
 import './utils/initFontAwesome';
@@ -111,8 +110,6 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Deals * */}
         {/* Public */}
 
-        <Route path="/public/new-build" exact component={RemoteBuild} />
-        <PrivateRoute path="/new-build" exact component={RemoteBuild} />
         <PrivateRoute path="/build" component={RemoteBuildProduct} exact />
 
         {/* Private  */}
