@@ -72,7 +72,7 @@ const SidebarDrawer = ({
         variant="contained"
         className={classes.addButton}
         onClick={() => {
-          history.push('/build');
+          history.push('/public/getting-started');
         }}
       >
         <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
