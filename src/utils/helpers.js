@@ -9,6 +9,8 @@ import { getMomentFromId } from '@allocations/nextjs-common';
 
 export const phone = 650;
 export const tablet = 1024;
+export const smallLaptop = 1264;
+export const laptop = 1480;
 
 export const titleCase = (str) => {
   if (!str) return str;
