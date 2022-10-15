@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { phone } from '../../../../utils/helpers';
+import { phone, laptop, smallLaptop } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   bigBox: {
@@ -29,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
     fontSize: '44px',
     color: theme.colors.black[50],
+    [theme.breakpoints.down(laptop)]: {
+      fontSize: '32px',
+    },
+    [theme.breakpoints.down(smallLaptop)]: {
+      fontSize: '24px',
+    },
     [theme.breakpoints.down(phone)]: {
       fontSize: '16px',
     },
@@ -41,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     borderRadius: '8px',
     boxShadow: 'none !important',
-    padding: '18px 24px',
+    padding: '9px 12px',
   },
 }));
 
