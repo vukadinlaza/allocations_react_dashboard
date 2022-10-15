@@ -90,7 +90,11 @@ const MainApp = ({ isAuthenticated }) => {
           exact
         />
         <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-        <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
+        <PrivateRoute
+          path="/admin/:organization/deals/:id/edit-deprecated"
+          component={DealEditNew}
+          exact
+        />
         <PrivateRoute path="/admin/:organization/deals/:deal_id" component={DealDashboard} exact />
 
         {/* Investor */}
