@@ -148,6 +148,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         .reduce((acc: number, n: number) => {
           return acc + n;
         }, 0);
+
       setOrgAUM(organizationAUM);
 
       const organizationMultiple =
@@ -381,7 +382,10 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                   ) : (
                     <BigBox
                       content="No SPVs created"
-                      button={{ action: () => history.push('/build?type=SPV'), text: 'Create SPV' }}
+                      button={{
+                        action: () => history.push('/public/getting-started'),
+                        text: 'Create SPV',
+                      }}
                       icon="business"
                     />
                   )}
@@ -408,7 +412,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                     <BigBox
                       content="No Funds created"
                       button={{
-                        action: () => history.push('/build?type=Fund'),
+                        action: () => history.push('/public/getting-started'),
                         text: 'Create Fund',
                       }}
                       icon="business"
