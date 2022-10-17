@@ -193,7 +193,7 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
         inputProps={{ name: 'Accredited Investor Status' }}
       >
         <MenuItem value="" />
-        {statusOptions[investor_type].map((opt) => (
+        {statusOptions[investor_type]?.map((opt) => (
           <MenuItem key={opt} value={opt}>
             {opt}
           </MenuItem>
