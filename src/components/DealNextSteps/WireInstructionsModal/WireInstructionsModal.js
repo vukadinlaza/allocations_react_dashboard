@@ -7,8 +7,8 @@ import './styles.scss';
 
 function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions = {} }) {
   let link =
-    docs && docs.find((d) => d.path.includes('instructions'))
-      ? `https://${docs.find((d) => d.path.includes('instructions')).link}`
+    docs && docs.find((d) => d.path.toLowerCase().includes('instructions'))
+      ? `https://${docs.find((d) => d.path.toLowerCase().includes('instructions')).link}`
       : null;
 
   if (investmentWireInstructions?.link) {
