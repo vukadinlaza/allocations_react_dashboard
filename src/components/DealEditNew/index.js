@@ -283,7 +283,7 @@ function DealEditNew() {
   }, [data]);
 
   const dealCreationDate = getMomentFromId(id);
-  if (dealCreationDate.isBefore('2022-07-26')) {
+  if (!dealCreationDate.isBefore('2022-07-26')) {
     return <Redirect to="/404" />;
   }
 
