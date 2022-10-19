@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import { Button } from '@material-ui/core';
 import { toast } from 'react-toastify';
+import { getMomentFromId } from '@allocations/nextjs-common';
 import BasicInfoSettings from './BasicInfoSettings';
 import DeadlineSettings from './DeadlineSettings';
 import SPVTermSettings from './SPVTermSettings';
@@ -280,6 +281,11 @@ function DealEditNew() {
       }
     }
   }, [data]);
+
+  const dealCreationDate = getMomentFromId(id);
+  if (dealCreationDate.isBefore('2022-07-26')) {
+    return <Redirect to="/404" />;
+  }
 
   const toggleDifferentSPVTerms = (value) => {
     setFormData((prevData) => ({
