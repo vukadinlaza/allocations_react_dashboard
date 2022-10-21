@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
 
@@ -105,7 +105,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
-
         <Route path="/public/getting-started" component={RemoteNewLead} exact />
 
         {/** Deals * */}
@@ -130,6 +129,8 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/identity" component={Identity} />
 
         <PrivateRoute path="/passports/create" component={RemoteCreatePassport} />
+        {/* Redirects */}
+        <Redirect from="/public/new-build" to="/public/getting-started" />
 
         {/** catchall * */}
         <Route path={['*', '/404']} component={NotFound} />
