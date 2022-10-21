@@ -53,7 +53,7 @@ export default function DealPage({
   const [openModal, setOpenModal] = useState(false);
   const dealSlug = dealData?.metadata?.slug || dealData?.slug;
 
-  const { deal: { _id: deal_id } = {} } = dealData;
+  const { deal: { _id: deal_id, status } = {} } = dealData;
   const isDealWhiteListed = newDealPage?.whiteListedDeals?.includes(deal_id);
   const isDealBlackListed = newDealPage?.blackListedDeals?.includes(deal_id);
   const minimumDate = moment(newDealPage?.minDealCreationDate, 'MMMM DD, YYYY');
@@ -88,7 +88,12 @@ export default function DealPage({
         </Typography>
         {width > phone ? (
           <div className={classes.pageIcons}>
-            <Button className={classes.outlinedButton} variant="outlined" onClick={goToEditDeal}>
+            <Button
+              className={classes.outlinedButton}
+              variant="outlined"
+              onClick={goToEditDeal}
+              disabled={status === 'closed'}
+            >
               Edit Deal
             </Button>
             <Button className={classes.outlinedButton} variant="outlined" onClick={handleLinkCopy}>
