@@ -46,6 +46,7 @@ import InvestmentNew from './components/InvestmentNew';
 import RemoteBuildV2 from './components/RemoteBuildV2';
 import RemoteNewLead from './components/RemoteNewLead';
 import RemoteBuildProduct from './components/RemoteBuildProduct';
+import RemoteCreatePassport from './components/RemoteCreatePassport';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -127,6 +128,8 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Whitelabel Routes * */}
         <PrivateRoute path="/identity" component={Identity} />
+
+        <PrivateRoute path="/passports/create" component={RemoteCreatePassport} />
 
         {/** catchall * */}
         <Route path={['*', '/404']} component={NotFound} />
