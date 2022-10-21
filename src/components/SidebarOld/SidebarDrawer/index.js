@@ -67,7 +67,7 @@ const SidebarDrawer = ({
         }}
       >
         <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-        Add
+        New Deal
       </Button>
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
