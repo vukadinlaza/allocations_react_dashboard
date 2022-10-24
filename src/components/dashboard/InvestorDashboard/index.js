@@ -25,6 +25,7 @@ const GET_INVESTOR = gql`
         _id
         value
         amount
+        capitalWiredAmount
         status
         created_at
         documents {
@@ -68,7 +69,7 @@ const UserHome = ({ classes }) => {
     () =>
       userProfile.investments?.map((investment) => ({
         _id: investment._id,
-        amount: investment.amount,
+        amount: investment.capitalWiredAmount || 0,
         type: investment.deal?.investmentType,
         dealName: investment.deal?.company_name,
         dealMultiple: investment.deal?.dealParams?.dealMultiple || 1,
