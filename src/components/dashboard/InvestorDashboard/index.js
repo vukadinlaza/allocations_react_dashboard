@@ -69,7 +69,11 @@ const UserHome = ({ classes }) => {
     () =>
       userProfile.investments?.map((investment) => ({
         _id: investment._id,
-        amount: investment.capitalWiredAmount || 0,
+        amount: investment.capitalWiredAmount
+          ? investment.capitalWiredAmount
+          : ['complete', 'wired'].includes(investment.status)
+          ? investment.amount
+          : 0,
         type: investment.deal?.investmentType,
         dealName: investment.deal?.company_name,
         dealMultiple: investment.deal?.dealParams?.dealMultiple || 1,
