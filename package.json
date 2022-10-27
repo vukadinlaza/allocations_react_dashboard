@@ -17,7 +17,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@allocations/design-system": "^0.2.4",
+    "@allocations/design-system": "0.2.4",
     "@allocations/nextjs-common": "^1.6.3",
     "@apollo/client": "^3.3.21",
     "@auth0/auth0-react": "^1.1.0",
