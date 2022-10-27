@@ -18,7 +18,7 @@
     node-fetch "2"
     pino "^8.4.0"
 
-"@allocations/design-system@^0.2.5":
+"@allocations/design-system@^0.2.4":
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.2.5.tgz#c26b443223253adb6f0fae082591de242f2a3e2f"
   integrity sha512-tZ4flHThdUN7FGJJwxoPlrITFZCUktQAvefIlTmHFt6QQ+e/17MH+8314/xEggLxziuJYK5kr04uiEI4jqd2UA==
