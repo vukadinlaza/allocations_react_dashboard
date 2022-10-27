@@ -260,6 +260,7 @@ function InvestmentPage({ deal_id }) {
       organization,
       requireSecondSigChecked,
       deal.docSpringTemplateId,
+      is3c7,
     );
     setErrors(validation);
     if (
@@ -272,6 +273,7 @@ function InvestmentPage({ deal_id }) {
 
     const payload = {
       ...investorFormData,
+      accredited_investor_status: is3c7 ? '' : investorFormData.accredited_investor_status,
       investmentAmount: nWithCommas(amount),
       dealId: deal._id,
       docSpringTemplateId: deal.docSpringTemplateId,

@@ -176,8 +176,8 @@ const statusOptions = {
 export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
   const classes = useStyles();
   const { investor_type } = investor;
-  if (!investor_type) return null;
 
+  if (!investor_type) return null;
   return (
     <FormControl
       required
@@ -193,7 +193,7 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
         inputProps={{ name: 'Accredited Investor Status' }}
       >
         <MenuItem value="" />
-        {statusOptions[investor_type]?.map((opt) => (
+        {statusOptions[investor_type.toLowerCase()]?.map((opt) => (
           <MenuItem key={opt} value={opt}>
             {opt}
           </MenuItem>
@@ -219,6 +219,7 @@ const is3c7Options = {
 export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, errors }) {
   const classes = useStyles();
   const { investor_type } = investor;
+
   if (!investor_type) return null;
 
   return (
@@ -238,7 +239,7 @@ export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, err
         }}
       >
         <MenuItem value="" style={{ whiteSpace: 'normal' }} />
-        {is3c7Options[investor_type].map((opt) => (
+        {is3c7Options[investor_type.toLowerCase()].map((opt) => (
           <MenuItem key={opt} value={opt} style={{ whiteSpace: 'normal' }}>
             <ListItemIcon>
               <SendIcon fontSize="small" />
