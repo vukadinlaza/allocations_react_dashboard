@@ -18,10 +18,10 @@
     node-fetch "2"
     pino "^8.4.0"
 
-"@allocations/design-system@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.2.4.tgz#2991bc762eb5a8215fade69583cf2b52b2d42d21"
-  integrity sha512-i6PoRATOsEgQwaaJksbgSZbLp1opekzaf2RDD+KOW+fT0JhrkIqLMCi90efjO1QYeJNy16TwarQc0L3E0mRe7g==
+"@allocations/design-system@0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.2.3.tgz#9b4313941957c7613efbcf747471556c28526e3e"
+  integrity sha512-aLGcnvlf9Pyqpiv5sFYPWebdjhzPyeItpK1RWMlXgHyG8hqxt1IYHuUnq4HsuA/ABVptNjM6oj39iQUp6ucfVA==
   dependencies:
     clsx "^1.1.1"
     tslib "^2.3.1"
