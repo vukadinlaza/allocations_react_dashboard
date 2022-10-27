@@ -216,6 +216,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         type === 'spv' ? d.investmentType !== 'fund' : d.investmentType === 'fund',
       )
       .filter((d: Deal) => d.company_name.toUpperCase().includes(searchTerm.toUpperCase()))
+      .filter((d: Deal) => d.status !== 'archived')
       .reverse()
       .map((deal: Deal) => {
         let dealRaised: number | number[] = deal.investments?.map((i) =>
