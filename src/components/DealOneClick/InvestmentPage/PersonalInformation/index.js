@@ -83,6 +83,7 @@ function PersonalInformation({
         ...prev,
         [prop]: e.target.value,
         accredited_investor_status: '',
+        is3c7_options_status: '',
       }));
     }
     if (prop === 'country') {
