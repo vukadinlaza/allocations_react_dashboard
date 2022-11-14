@@ -404,7 +404,7 @@ export default function InvestmentEdit({
   const convertToPositiveInteger = (num) => {
     return Number(num < 0 ? 0 : num);
   };
-
+  console.log('RENDER');
   return (
     <div className={classes.investmentEdit}>
       <div className={classes.title}>Update Investment</div>
