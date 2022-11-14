@@ -58,6 +58,7 @@ function Sidebar(props) {
     loading,
     refetch: refetchUserProfile,
   } = useAuth(GET_INVESTOR);
+
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
@@ -93,6 +94,8 @@ function Sidebar(props) {
       const currentHomePath = org ? `/admin/${org.slug}` : '/';
       setCurrentHomeUrl(currentHomePath);
       setCurrentOrganization(org);
+    } else {
+      setCurrentOrganization(userProfile);
     }
   };
 

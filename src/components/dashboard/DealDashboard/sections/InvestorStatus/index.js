@@ -249,6 +249,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
     let total = 0;
     if (columnInvestors.length) {
       // For deals that support capitalWiredAmount, we should look for capitalWiredAmount on wired investments, for old deals we just rely on the wired status and use amount
+
       total = Math.round(
         columnInvestors
           .map((inv) =>
