@@ -297,11 +297,15 @@ export default function InvestmentEdit({
   });
 
   useEffect(() => {
+    console.log('USEEFFECT1');
+    console.log(investment, data?.investment);
     setHasInvestmentChanges(!isEqual(investment, data?.investment));
   }, [investment, data?.investment]);
 
   useEffect(() => {
+    console.log('USEEFFECT2');
     if (data && !loading) {
+      console.log(data);
       setInvestment(data.investment);
       setUser(get(data, 'investment.investor', {}));
     }
