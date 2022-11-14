@@ -94,7 +94,13 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
   const organization = data?.investment?.deal?.organization?.name.toLowerCase();
 
   const submitInvestment = async () => {
-    const validation = personalInfoValidation(investor, organization);
+    const validation = personalInfoValidation(
+      investor,
+      organization,
+      {},
+      data?.investment?.deal.docSpringTemplateId,
+      data?.investment?.deal?.dealParams?.is3c7,
+    );
     setErrors(validation);
     if (validation.length > 0) {
       return toast.warning('Please complete the form before continuing');
