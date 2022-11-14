@@ -18,6 +18,7 @@ export const GET_DEAL = gql`
         investor_docspring_template_id
         investor_template_approved
       }
+      AUM
     }
   }
 `;
@@ -60,6 +61,7 @@ export default function RemoteDealPage() {
               !deal.subscription_agreement.investor_template_approved
             : false
         }
+        AUM={deal.AUM}
       />
     </Suspense>
   );
