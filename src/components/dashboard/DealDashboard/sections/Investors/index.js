@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Box, Grid, Menu, MenuItem } from '@material-ui/core';
 import { Button, Chip, IconButton, List, Search } from '@allocations/design-system';
 import moment from 'moment';
+import { sortByNumber } from '@allocations/nextjs-common';
 import { nWithCommas } from '../../../../../utils/numbers';
-import { openInNewTab } from '../../../../../utils/helpers';
+import { openInNewTab, sortByStatus } from '../../../../../utils/helpers';
 
 const statusColors = {
   invited: 'gray',
@@ -22,9 +23,9 @@ const headers = [
   { id: 'investingAs', label: 'Investing As' },
   { id: 'type', label: 'Type' },
   { id: 'email', label: 'Email' },
-  { id: 'amount', label: 'Amount Committed' },
-  { id: 'wiredAmount', label: 'Wired Amount' },
-  { id: 'status', label: 'Status' },
+  { id: 'amount', label: 'Amount Committed', withSort: true, customSort: true },
+  { id: 'wiredAmount', label: 'Wired Amount', withSort: true, customSort: true },
+  { id: 'status', label: 'Status', withSort: true, customSort: true },
   { id: 'documents', label: 'Documents' },
 ];
 
@@ -101,6 +102,31 @@ const Investors = ({ investments }) => {
     }, `data:text/csv;charset=utf-8,${headers.join(';')}`);
   };
 
+  const handleSort = (data, orderBy, direction) => {
+    const statusOrder = {
+      complete: 1,
+      wired: 2,
+      signed: 3,
+      invited: 4,
+    };
+    switch (orderBy) {
+      case 'status':
+        return sortByStatus(statusOrder, data, 'status.props.text', direction);
+      case 'amount':
+      case 'wiredAmount':
+        return data.sort((a, b) =>
+          sortByNumber(
+            Number(a[orderBy].replaceAll(/(\$|,)/g, '')),
+            Number(b[orderBy].replaceAll(/(\$|,)/g, '')),
+            null,
+            direction,
+          ),
+        );
+      default:
+        return data;
+    }
+  };
+
   return (
     <>
       <Box my={3}>
@@ -115,6 +141,7 @@ const Investors = ({ investments }) => {
         loading={!investments}
         headers={headers}
         data={displayData}
+        customSort={handleSort}
         sortBy="name"
         sortDirection="asc"
         stickyHeader
