@@ -65,9 +65,7 @@ const SideBar = ({ isAuthenticated }) => {
 
 const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard, holidayBannerContent } = useFlags();
-  React.useEffect(() => {
-    window.location.replace('https://www.allocations.com/maintenance');
-  }, []);
+
   const styles = useStyles({ isAuthenticated });
 
   return (

@@ -10,7 +10,6 @@ window.passportModuleFederationURL = `${process.env.REACT_APP_PASSPORT_FRONTEND_
 window.taxdashboardModuleFerederationURL = `${process.env.REACT_APP_TAX_DASHBOARD_FRONTEND_URL}/${moduleFederationURLSuffix}`;
 window.taxModuleFerederationURL = `${process.env.REACT_APP_TAX_FRONTEND_URL}/${moduleFederationURLSuffix}`;
 
-window.location.replace('https://www.allocations.com/maintenance');
 window.DD_RUM.init({
   applicationId: '158b19e3-1c1c-4f3b-9269-b2f23a20814f',
   clientToken: process.env.REACT_APP_DATADOG_CLIENT_TOKEN,
