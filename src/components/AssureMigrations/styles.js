@@ -45,6 +45,13 @@ const useStyles = makeStyles(() => ({
     width: '100vw',
     margin: '-2rem -3rem',
   },
+  modal: {
+    '&>div': {
+      '&>div': {
+        width: '640px',
+      },
+    },
+  },
   rightSide: {
     padding: '110px 80px',
     display: 'flex',

@@ -277,6 +277,7 @@ export default function AssureMigrations() {
         open={!!openModal}
         modalTitle="Sign Data Storage and Privacy Notice"
         onClose={() => setOpenModal(null)}
+        className={classes.modal}
         primaryButtonProps={{
           onClick: () => {
             acceptTransitionDocument({
