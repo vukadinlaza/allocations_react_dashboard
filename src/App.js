@@ -68,6 +68,7 @@ const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard, holidayBannerContent } = useFlags();
 
   const styles = useStyles({ isAuthenticated });
+
   return (
     <div className={styles.mainRoute}>
       {holidayBannerContent && <HolidayBanner />}
