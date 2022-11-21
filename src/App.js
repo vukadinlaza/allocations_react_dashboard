@@ -47,6 +47,7 @@ import RemoteBuildV2 from './components/RemoteBuildV2';
 import RemoteNewLead from './components/RemoteNewLead';
 import RemoteBuildProduct from './components/RemoteBuildProduct';
 import RemoteManagePassport from './components/RemoteManagePassport';
+import AssureMigrations from './components/AssureMigrations';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -106,6 +107,7 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
         <Route path="/public/getting-started" component={RemoteNewLead} exact />
+        <Route path="/public/assure-migrations" component={AssureMigrations} exact />
 
         {/** Deals * */}
         {/* Public */}
