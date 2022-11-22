@@ -204,7 +204,37 @@ export default function DataStorageForm({
           <Button onClick={handleSubmit} text="Continue" fullWidth disabled={!form.terms} />
         </Paper>
       ) : (
-        <div className={classes.airtableForm}>
+        <Paper className={classes.thankyou}>
+          <Logo width={300} />
+          <div className={classes.thankyouText}>
+            <Typography content="Thank You! ✅" variant="heading4" fontWeight={500} />
+          </div>
+          <Typography
+            variant="paragraph3"
+            fontWeight={400}
+            content="Your migration process has started! We have alerted Assure that you would like to migrate your information to Allocations. "
+            component="div"
+            align="center"
+          />
+          <div style={{ height: '16px' }} />
+          <div className={classes.step}>
+            <Typography variant="paragraph2" fontWeight={700} content="Step 1:" component="span" />
+            <Typography
+              variant="paragraph2"
+              fontWeight={400}
+              content="Completed Data Transfer Request  ✅"
+              component="span"
+            />
+          </div>
+          <div className={classes.step}>
+            <Typography variant="paragraph2" fontWeight={700} content="Step 2:" component="span" />
+            <Typography
+              variant="paragraph2"
+              fontWeight={400}
+              content="Complete SPV Migration Request below"
+              component="span"
+            />
+          </div>
           <iframe
             className="airtable-embed"
             src="https://airtable.com/embed/shr8xIeqqpM0rWTOR?backgroundColor=red"
@@ -218,10 +248,11 @@ export default function DataStorageForm({
                 '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
               height: '100%',
               width: '100%',
+              marginTop: '20px',
             }}
             title="Airtable Title"
           />
-        </div>
+        </Paper>
       )}
     </Grid>
   );

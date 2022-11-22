@@ -1,11 +1,11 @@
-import { Button, Modal } from '@allocations/design-system';
+import { IconButton, Modal, Typography } from '@allocations/design-system';
 import { gql, useMutation } from '@apollo/client';
 import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  // Dialog,
+  // DialogActions,
+  // DialogContent,
+  // DialogContentText,
+  // DialogTitle,
   Grid,
 } from '@material-ui/core';
 import React, { useState } from 'react';
@@ -99,36 +99,42 @@ export default function AssureMigrations() {
               title="Sign Data Storage and Privacy Notice"
             />
           </Grid>
-          <Dialog
-            open={openDecline}
+          <Modal
+            open={!!openDecline}
+            modalTitle="Decline Confirmation"
             onClose={() => setOpenDecline(false)}
-            className={classes.declineDialog}
+            primaryButtonProps={{
+              onClick: () => setOpenDecline(false),
+              text: 'No. Go Back',
+            }}
+            secondaryButtonProps={{
+              onClick: () => {
+                setOpenDecline(false);
+                setOpenModal(false);
+              },
+              text: 'Yes. I am sure',
+            }}
+            withSecondaryButton
           >
-            <DialogTitle className={classes.declineTitle}>Are you sure?</DialogTitle>
-            <div className={classes.declineBody}>
-              <DialogContent>
-                <DialogContentText>Assure will delete your data soon.</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => setOpenDecline(false)}
-                  text="No. Go Back"
-                  fullWidth
-                  size="small"
-                />
-                <Button
-                  onClick={() => {
-                    setOpenDecline(false);
-                    setOpenModal(false);
-                  }}
-                  text="Yes. I am sure"
-                  fullWidth
-                  variant="secondary"
-                  size="small"
-                />
-              </DialogActions>
+            <div className={classes.warning}>
+              <IconButton
+                allocationsIconName="Allocations"
+                iconColor="#2E75EF"
+                iconName="warning"
+                size="large"
+                variant="default"
+                outlined
+              />
             </div>
-          </Dialog>
+            <Typography
+              variant="paragraph3"
+              fontWeight={400}
+              content="Are you sure you would like to decline the Data Privacy Transfer Agreement? Assure
+                will delete your data soon."
+              component="div"
+              align="center"
+            />
+          </Modal>
         </Grid>
       </Modal>
     </Grid>

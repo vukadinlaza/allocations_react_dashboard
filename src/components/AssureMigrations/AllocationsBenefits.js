@@ -67,6 +67,20 @@ export default function AllocationsBenefits() {
           </Grid>
         </Grid>
       </Grid>
+      <Grid item xs={12}>
+        <div className={classes.assure}>
+          <Typography
+            content="Migrate from"
+            variant="paragraph2"
+            fontWeight={500}
+            fontColor={colors.white[100]}
+          />
+          <img
+            src="https://allocations-public.s3.us-east-2.amazonaws.com/Assure.png"
+            alt="assure-logo"
+          />
+        </div>
+      </Grid>
     </Grid>
   );
 }

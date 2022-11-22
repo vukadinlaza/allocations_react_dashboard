@@ -1,12 +1,18 @@
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  airtableForm: {
-    width: '100%',
-    height: '100%',
-    [theme.breakpoints.down('md')]: {
-      height: '800px',
-    },
+  assure: {
+    marginTop: '60px',
+    maxWidth: '387px',
+    minWidth: '327px',
+    height: '77px',
+    background: 'rgba(0, 148, 144, 0.25)',
+    border: '1px dashed #009490',
+    borderRadius: '8px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 32px',
   },
   checkbox: {
     verticalAlign: 'bottom',
@@ -33,12 +39,19 @@ const useStyles = makeStyles((theme) => ({
     '& [class*=MuiDialog-paper]': {
       borderRadius: '8px',
       maxWidth: 'none',
-      width: '400px',
+      width: '523px',
     },
   },
   declineTitle: {
     background: '#186EFF',
     color: 'white',
+  },
+  dialogActions: {
+    display: 'flex',
+    flexDirection: 'column',
+    '&>*': {
+      marginBottom: '12px',
+    },
   },
   documentIframe: {
     width: '100%',
@@ -62,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
   },
   leftSide: {
     background: '#2A2B54',
-    padding: '110px 10%',
+    padding: '96px 10%',
   },
   mainContainer: {
     height: '100vh',
@@ -81,8 +94,18 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100%',
     [theme.breakpoints.down('md')]: {
       padding: '20px',
+    },
+  },
+  step: {
+    display: 'flex',
+    width: '100%',
+    margin: '12px 0',
+    '&>*': {
+      marginRight: '8px',
+      minWidth: '72px',
     },
   },
   subChecks: {
@@ -105,8 +128,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
   },
   thankyou: {
-    width: '514px',
-    height: '426px',
+    // width: '514px',
+    // height: '426px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -114,14 +137,25 @@ const useStyles = makeStyles((theme) => ({
     padding: '55px 32px',
     alignSelf: 'center',
     boxSizing: 'border-box',
+    width: '100%',
+    height: '100%',
+    [theme.breakpoints.down('md')]: {
+      height: '800px',
+    },
   },
   thankyouText: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: '25px',
     '& span': {
       marginRight: '4px',
     },
+  },
+  warning: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '24px',
   },
 }));
 
