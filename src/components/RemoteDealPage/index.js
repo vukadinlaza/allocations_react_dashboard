@@ -57,9 +57,11 @@ export default function RemoteDealPage() {
         user={userProfile}
         disableInvest={
           showNewInvestFlow
-            ? !deal.subscription_agreement?.investor_docspring_template_id ||
-              !deal.subscription_agreement.investor_template_approved
-            : false
+            ? !(
+                deal.subscription_agreement?.investor_docspring_template_id &&
+                deal.subscription_agreement.investor_template_approved
+              )
+            : true
         }
         AUM={deal.AUM}
       />
