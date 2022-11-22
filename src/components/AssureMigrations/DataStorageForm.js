@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Checkbox,
   colors,
@@ -10,6 +11,7 @@ import {
 import { openInNewTab, validateEmail } from '@allocations/nextjs-common';
 import { Grid, Paper } from '@material-ui/core';
 import React, { useState } from 'react';
+import codes from 'country-calling-code';
 import useStyles from './styles';
 
 const fields = [
@@ -45,7 +47,14 @@ const fields = [
   },
 ];
 
-export default function DataStorageForm({ accepted, setOpenModal, setForm, form }) {
+export default function DataStorageForm({
+  accepted,
+  setOpenModal,
+  setForm,
+  form,
+  setCountryCode,
+  countryCode,
+}) {
   const classes = useStyles();
   const [errors, setErrors] = useState({});
 
@@ -85,6 +94,10 @@ export default function DataStorageForm({ accepted, setOpenModal, setForm, form 
             validCondition: isNumeric(form[field.name]),
             errorMessage: 'This field has to be a number',
           });
+          if (!countryCode) {
+            validated = false;
+            errorsFound[field.name] = 'Please select a country code';
+          }
         } else if (field.name === 'spv_count') {
           validated = validate({
             field,
@@ -115,17 +128,34 @@ export default function DataStorageForm({ accepted, setOpenModal, setForm, form 
         <Paper className={classes.formContainer}>
           <Logo width={300} />
           {fields.map((field, index) => (
-            <span className={classes.input} key={`field-${index}`}>
-              <Input
-                onChange={({ target }) => updateForm(target)}
-                label={field.label}
-                name={field.name}
-                type="text"
-                value={form[field.name]}
-                error={!!errors[field.name]}
-                helperText={errors[field.name]}
-              />
-            </span>
+            <Grid container spacing={2} className={classes.input} key={`field-${index}`}>
+              {field.name === 'phone' && (
+                <Grid item xs={12} md={6}>
+                  <Autocomplete
+                    items={codes.map((code) => ({
+                      id: code.countryCodes[0],
+                      label: `${code.country} (${code.countryCodes[0]})`,
+                    }))}
+                    label="Country Code"
+                    onChange={(_e, code) => setCountryCode(code.id)}
+                    value={countryCode}
+                    fullWidth={false}
+                  />
+                </Grid>
+              )}
+              <Grid item md={field.name === 'phone' ? 6 : 12} xs={12}>
+                <Input
+                  onChange={({ target }) => updateForm(target)}
+                  label={field.label}
+                  name={field.name}
+                  type="text"
+                  value={form[field.name]}
+                  error={!!errors[field.name]}
+                  helperText={errors[field.name]}
+                  fullWidth={field.name !== 'phone'}
+                />
+              </Grid>
+            </Grid>
           ))}
           <div className={classes.termsContainer}>
             <span className={classes.checkbox}>

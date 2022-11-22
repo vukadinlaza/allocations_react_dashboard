@@ -37,6 +37,7 @@ export default function AssureMigrations() {
   const [openModal, setOpenModal] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [countryCode, setCountryCode] = useState('');
 
   const [acceptTransitionDocument] = useMutation(ACCEPT_TRANSITION_DOCUMENT, {
     onError: () => {
@@ -57,6 +58,8 @@ export default function AssureMigrations() {
         setOpenModal={setOpenModal}
         setForm={setForm}
         form={form}
+        countryCode={countryCode}
+        setCountryCode={setCountryCode}
       />
 
       <Modal
@@ -72,6 +75,7 @@ export default function AssureMigrations() {
                   ...form,
                   ip_address: await getClientIp(),
                   user_agent: navigator.userAgent,
+                  phone: `(${countryCode})${form.phone}`,
                 },
               },
             });

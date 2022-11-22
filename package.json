@@ -50,6 +50,7 @@
     "chartjs-plugin-datalabels": "^1.0.0",
     "classnames": "^2.2.6",
     "cohere-js": "^1.0.9",
+    "country-calling-code": "^0.0.3",
     "country-region-data": "^1.5.1",
     "d3": "^5.14.2",
     "dotenv": "^8.2.0",
