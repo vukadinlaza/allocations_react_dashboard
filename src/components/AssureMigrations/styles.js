@@ -2,7 +2,11 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   airtableForm: {
-    height: '800px',
+    width: '100%',
+    height: '100%',
+    [theme.breakpoints.down('md')]: {
+      height: '800px',
+    },
   },
   checkbox: {
     verticalAlign: 'bottom',
