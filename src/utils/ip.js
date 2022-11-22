@@ -1,8 +1,8 @@
-import publicIp from 'public-ip';
+import { publicIpv4 } from 'public-ip';
 
 export const getClientIp = async () => {
   try {
-    const res = await publicIp.v4({
+    const res = await publicIpv4({
       fallbackUrls: ['https://ifconfig.co/ip'],
     });
     return res;

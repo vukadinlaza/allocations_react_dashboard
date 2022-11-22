@@ -19,13 +19,27 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
   },
+  declineBody: {
+    padding: '10px 20px 20px 20px',
+  },
+  declineDialog: {
+    '& [class*=MuiDialog-paper]': {
+      borderRadius: '8px',
+      maxWidth: 'none',
+      width: '400px',
+    },
+  },
+  declineTitle: {
+    background: '#186EFF',
+    color: 'white',
+  },
   documentIframe: {
     width: '100%',
     height: '500px',
   },
   formContainer: {
     width: '514px',
-    height: '700px',
+    height: '830px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'cemter',
@@ -38,7 +52,7 @@ const useStyles = makeStyles(() => ({
   },
   leftSide: {
     background: '#2A2B54',
-    padding: '110px 80px',
+    padding: '110px 10%',
   },
   mainContainer: {
     height: '100vh',
@@ -53,9 +67,10 @@ const useStyles = makeStyles(() => ({
     },
   },
   rightSide: {
-    padding: '110px 80px',
+    padding: '20px 80px',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   subChecks: {
     paddingLeft: '60px !important',
@@ -86,6 +101,14 @@ const useStyles = makeStyles(() => ({
     padding: '55px 32px',
     alignSelf: 'center',
     boxSizing: 'border-box',
+  },
+  thankyouText: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& span': {
+      marginRight: '4px',
+    },
   },
 }));
 
