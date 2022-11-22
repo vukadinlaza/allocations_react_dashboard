@@ -110,7 +110,7 @@ export default function DataStorageForm({ accepted, setOpenModal, setForm, form 
   };
 
   return (
-    <Grid item xs={6} className={classes.rightSide}>
+    <Grid item xs={12} md={6} className={classes.rightSide}>
       {!accepted ? (
         <Paper className={classes.formContainer}>
           <Logo width={300} />

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   checkbox: {
     verticalAlign: 'bottom',
   },
@@ -45,6 +45,9 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'cemter',
     flexDirection: 'column',
     padding: '20px',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
   },
   input: {
     width: '100%',
@@ -71,6 +74,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    [theme.breakpoints.down('md')]: {
+      padding: '20px',
+    },
   },
   subChecks: {
     paddingLeft: '60px !important',

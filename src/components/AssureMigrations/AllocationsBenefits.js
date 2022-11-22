@@ -24,7 +24,7 @@ export default function AllocationsBenefits() {
   const classes = useStyles();
 
   return (
-    <Grid item xs={6} className={classes.leftSide}>
+    <Grid item xs={12} md={6} className={classes.leftSide}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography
