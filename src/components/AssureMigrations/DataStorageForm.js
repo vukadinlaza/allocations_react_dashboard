@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   colors,
-  Icon,
   Input,
   Logo,
   Typography,
@@ -205,40 +204,23 @@ export default function DataStorageForm({
           <Button onClick={handleSubmit} text="Continue" fullWidth disabled={!form.terms} />
         </Paper>
       ) : (
-        <Paper className={classes.thankyou}>
-          <Logo width={300} />
-          <div className={classes.thankyouText}>
-            <Icon iconColor="#34D399" iconName="check_circle" />
-            <Typography content="Thank You!" variant="heading4" fontWeight={500} />
-          </div>
-          <Typography
-            variant="paragraph3"
-            fontWeight={400}
-            content="Your migration process has begun!"
-            component="span"
-            align="center"
+        <div className={classes.airtableForm}>
+          <iframe
+            className="airtable-embed"
+            src="https://airtable.com/embed/shr8xIeqqpM0rWTOR?backgroundColor=red"
+            frameBorder="0"
+            onmousewheel=""
+            width="100%"
+            height="533"
+            style={{
+              background: 'transparent',
+              boxShadow:
+                '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
+              height: '100%',
+            }}
+            title="Airtable Title"
           />
-          <Typography
-            variant="paragraph3"
-            fontWeight={400}
-            content="We have alerted Assure and will begin processing your data as soon as we receive it."
-            component="span"
-            align="center"
-          />
-          <Typography
-            variant="paragraph3"
-            fontWeight={400}
-            content="In the meantime if you have a new deal you would like to create, you can do that now by creating an account with us."
-            component="span"
-            align="center"
-          />
-          <div style={{ height: '16px' }} />
-          <Button
-            onClick={() => openInNewTab('https://dashboard.allocations.com')}
-            text="Create Account"
-            fullWidth
-          />
-        </Paper>
+        </div>
       )}
     </Grid>
   );
