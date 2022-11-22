@@ -61,7 +61,7 @@ export default function RemoteDealPage() {
                 deal.subscription_agreement?.investor_docspring_template_id &&
                 deal.subscription_agreement.investor_template_approved
               )
-            : true
+            : false // TODO: This will show the button for all new deals that dont use the new invest flow, but wont disable the button for new deals with new invest flow. Need to add condition to differentiate between old and new deals
         }
         AUM={deal.AUM}
       />
