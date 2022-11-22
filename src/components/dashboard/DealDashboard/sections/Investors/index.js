@@ -38,7 +38,7 @@ const Investors = ({ investments }) => {
     ?.map((investment) => ({
       name: investment.submissionData?.fullName || '',
       investingAs:
-        investment.submissionData?.investor_type === 'Entity'
+        investment.submissionData?.investor_type?.toLowerCase() === 'entity'
           ? investment.submissionData?.legalName
           : investment.submissionData?.fullName,
       type: (
