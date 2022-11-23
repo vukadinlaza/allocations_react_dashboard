@@ -173,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     border: 'solid 1px #CBD5E1',
     textTransform: 'none',
-    width: '100%',
+    width: '200px',
     height: '50px',
     '&:first-child': {
       margin: '0.5rem 0.5rem 0.5rem 0rem',
@@ -208,6 +208,10 @@ const useStyles = makeStyles((theme) => ({
       borderTopLeftRadius: '8px',
       borderBottomLeftRadius: '8px',
     },
+  },
+  gridItem: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
