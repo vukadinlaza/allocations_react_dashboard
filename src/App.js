@@ -48,6 +48,7 @@ import RemoteNewLead from './components/RemoteNewLead';
 import RemoteBuildProduct from './components/RemoteBuildProduct';
 import RemoteManagePassport from './components/RemoteManagePassport';
 import AssureMigrations from './components/AssureMigrations';
+import Stripe from './components/AssureMigrations/Stripe';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -85,6 +86,7 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
 
         <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
+        <AdminRoute path="/admin/stripe" componenet={Stripe} exact />
 
         {/* Organization Admin */}
         <PrivateRoute
