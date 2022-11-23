@@ -1,16 +1,17 @@
 import React from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from './CheckoutFrom';
+import CheckoutForm from './CheckoutForm';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
-console.log(process.env.REACT_APP_STRIPE_API_KEY, 'KEY');
 
-export default function Stripe() {
+const Stripe = () => {
   return (
     <Elements stripe={stripePromise}>
       <CheckoutForm />
     </Elements>
   );
-}
+};
+
+export default Stripe;

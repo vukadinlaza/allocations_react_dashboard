@@ -86,7 +86,7 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
 
         <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
-        <AdminRoute path="/admin/stripe" componenet={Stripe} exact />
+        <AdminRoute path="/admin/stripe" component={Stripe} exact />
 
         {/* Organization Admin */}
         <PrivateRoute
