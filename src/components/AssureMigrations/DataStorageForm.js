@@ -47,7 +47,6 @@ const fields = [
 ];
 
 export default function DataStorageForm({
-  accepted,
   setOpenModal,
   setForm,
   form,
@@ -123,137 +122,85 @@ export default function DataStorageForm({
 
   return (
     <Grid item xs={12} md={6} className={classes.rightSide}>
-      {!accepted ? (
-        <Paper className={classes.formContainer}>
-          <Logo width={300} />
-          {fields.map((field, index) => (
-            <Grid container spacing={2} className={classes.input} key={`field-${index}`}>
-              {field.name === 'phone' && (
-                <Grid item xs={12} md={6}>
-                  <Autocomplete
-                    items={codes.map((code) => ({
-                      id: code.countryCodes[0],
-                      label: `${code.country} (${code.countryCodes[0]})`,
-                    }))}
-                    label="Country Code"
-                    onChange={(_e, code) => setCountryCode(code.id)}
-                    value={countryCode}
-                    fullWidth={false}
-                  />
-                </Grid>
-              )}
-              <Grid item md={field.name === 'phone' ? 6 : 12} xs={12}>
-                <Input
-                  onChange={({ target }) => updateForm(target)}
-                  label={field.label}
-                  name={field.name}
-                  type="text"
-                  value={form[field.name]}
-                  error={!!errors[field.name]}
-                  helperText={errors[field.name]}
-                  fullWidth={field.name !== 'phone'}
+      <Paper className={classes.formContainer}>
+        <Logo width={300} />
+        {fields.map((field, index) => (
+          <Grid container spacing={2} className={classes.input} key={`field-${index}`}>
+            {field.name === 'phone' && (
+              <Grid item xs={12} md={6}>
+                <Autocomplete
+                  items={codes.map((code) => ({
+                    id: code.countryCodes[0],
+                    label: `${code.country} (${code.countryCodes[0]})`,
+                  }))}
+                  label="Country Code"
+                  onChange={(_e, code) => setCountryCode(code.id)}
+                  value={countryCode}
+                  fullWidth={false}
                 />
               </Grid>
-            </Grid>
-          ))}
-          <div className={classes.termsContainer}>
-            <span className={classes.checkbox}>
-              <Checkbox
-                name="terms"
+            )}
+            <Grid item md={field.name === 'phone' ? 6 : 12} xs={12}>
+              <Input
                 onChange={({ target }) => updateForm(target)}
-                checked={form.terms}
+                label={field.label}
+                name={field.name}
+                type="text"
+                value={form[field.name]}
+                error={!!errors[field.name]}
+                helperText={errors[field.name]}
+                fullWidth={field.name !== 'phone'}
               />
-            </span>
-            <span className={classes.text}>
-              <Typography
-                variant="paragraph3"
-                fontWeight={400}
-                content="By clicking here, I accept Allocations"
-                component="span"
-              />
-            </span>
-            <span className={classes.textSpace} />
-            <span
-              onClick={() => openInNewTab('//allocations.com/privacy-policy-migrations')}
-              className={classes.terms}
-            >
-              <Typography
-                variant="paragraph3"
-                fontColor={colors.brand[300]}
-                fontWeight={500}
-                content="Privacy Policy"
-                component="span"
-              />
-            </span>
-            <span className={classes.textSpace} />
-            <Typography variant="paragraph3" fontWeight={400} content="and" component="span" />
-            <span className={classes.textSpace} />
-            <span
-              onClick={() => openInNewTab('//allocations.com/terms-and-conditions-migrations')}
-              className={classes.terms}
-            >
-              <Typography
-                variant="paragraph3"
-                fontColor={colors.brand[300]}
-                fontWeight={500}
-                content=" Terms and Conditions"
-                component="span"
-              />
-            </span>
-          </div>
-          <Button onClick={handleSubmit} text="Continue" fullWidth disabled={!form.terms} />
-        </Paper>
-      ) : (
-        <Paper className={classes.thankyou}>
-          <Logo width={300} />
-          <div className={classes.thankyouText}>
-            <Typography content="Thank You! ✅" variant="heading4" fontWeight={500} />
-          </div>
-          <Typography
-            variant="paragraph3"
-            fontWeight={400}
-            content="Your migration process has started! We have alerted Assure that you would like to migrate your information to Allocations. "
-            component="div"
-            align="center"
-          />
-          <div style={{ height: '16px' }} />
-          <div className={classes.step}>
-            <Typography variant="paragraph2" fontWeight={700} content="Step 1:" component="span" />
+            </Grid>
+          </Grid>
+        ))}
+        <div className={classes.termsContainer}>
+          <span className={classes.checkbox}>
+            <Checkbox
+              name="terms"
+              onChange={({ target }) => updateForm(target)}
+              checked={form.terms}
+            />
+          </span>
+          <span className={classes.text}>
             <Typography
-              variant="paragraph2"
+              variant="paragraph3"
               fontWeight={400}
-              content="Completed Data Transfer Request  ✅"
+              content="By clicking here, I accept Allocations"
               component="span"
             />
-          </div>
-          <div className={classes.step}>
-            <Typography variant="paragraph2" fontWeight={700} content="Step 2:" component="span" />
+          </span>
+          <span className={classes.textSpace} />
+          <span
+            onClick={() => openInNewTab('//allocations.com/privacy-policy-migrations')}
+            className={classes.terms}
+          >
             <Typography
-              variant="paragraph2"
-              fontWeight={400}
-              content="Complete SPV Migration Request below"
+              variant="paragraph3"
+              fontColor={colors.brand[300]}
+              fontWeight={500}
+              content="Privacy Policy"
               component="span"
             />
-          </div>
-          <iframe
-            className="airtable-embed"
-            src="https://airtable.com/embed/shr8xIeqqpM0rWTOR?backgroundColor=red"
-            frameBorder="0"
-            onmousewheel=""
-            width="100%"
-            height="533"
-            style={{
-              background: 'transparent',
-              boxShadow:
-                '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
-              height: '100%',
-              width: '100%',
-              marginTop: '20px',
-            }}
-            title="Airtable Title"
-          />
-        </Paper>
-      )}
+          </span>
+          <span className={classes.textSpace} />
+          <Typography variant="paragraph3" fontWeight={400} content="and" component="span" />
+          <span className={classes.textSpace} />
+          <span
+            onClick={() => openInNewTab('//allocations.com/terms-and-conditions-migrations')}
+            className={classes.terms}
+          >
+            <Typography
+              variant="paragraph3"
+              fontColor={colors.brand[300]}
+              fontWeight={500}
+              content=" Terms and Conditions"
+              component="span"
+            />
+          </span>
+        </div>
+        <Button onClick={handleSubmit} text="Continue" fullWidth disabled={!form.terms} />
+      </Paper>
     </Grid>
   );
 }

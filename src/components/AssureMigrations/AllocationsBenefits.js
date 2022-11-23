@@ -1,24 +1,8 @@
-import { colors, Icon, Typography } from '@allocations/design-system';
+import { colors, Typography } from '@allocations/design-system';
 import { Grid } from '@material-ui/core';
 import React from 'react';
+import { TextCheck } from './common';
 import useStyles from './styles';
-
-const TextCheck = ({ text, style }) => {
-  const classes = useStyles();
-  return (
-    <Grid item xs={12} className={classes.checkTextContainer} style={style}>
-      <Icon iconColor="#B5CEF9" iconName="check_circle" />
-      <span className={classes.checkText}>
-        <Typography
-          content={text}
-          variant="paragraph2"
-          fontWeight={400}
-          fontColor={colors.white[100]}
-        />
-      </span>
-    </Grid>
-  );
-};
 
 export default function AllocationsBenefits() {
   const classes = useStyles();
@@ -48,12 +32,11 @@ export default function AllocationsBenefits() {
             />
           </div>
         </Grid>
-        <TextCheck text="Free secure data storage" style={{ marginTop: '20px' }} />
         <TextCheck
           text="Technology platform with GP / LP dashboard"
           style={{ marginTop: '20px' }}
         />
-        <TextCheck text="Professional services including" style={{ marginTop: '20px' }} />
+        <TextCheck text="Professional services including" style={{ marginTop: '8px' }} />
         <Grid item xs={12} className={classes.subChecks}>
           <Grid container spacing={2}>
             <TextCheck text="Fund administration" />

@@ -9,6 +9,7 @@ import {
   Grid,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import { getClientIp } from '../../utils/ip';
 import AllocationsBenefits from './AllocationsBenefits';
@@ -33,10 +34,10 @@ const ACCEPT_TRANSITION_DOCUMENT = gql`
 
 export default function AssureMigrations() {
   const classes = useStyles();
+  const history = useHistory();
   const [form, setForm] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
-  const [accepted, setAccepted] = useState(false);
   const [countryCode, setCountryCode] = useState('');
 
   const [acceptTransitionDocument] = useMutation(ACCEPT_TRANSITION_DOCUMENT, {
@@ -46,7 +47,8 @@ export default function AssureMigrations() {
       );
     },
     onCompleted: ({ acceptTransitionDocument }) => {
-      if (acceptTransitionDocument?.acknowledged) setAccepted(true);
+      if (acceptTransitionDocument?.acknowledged)
+        history.push('/public/assure-migrations/subscription');
     },
   });
 
@@ -54,7 +56,6 @@ export default function AssureMigrations() {
     <Grid container spacing={0} className={classes.mainContainer}>
       <AllocationsBenefits />
       <DataStorageForm
-        accepted={accepted}
         setOpenModal={setOpenModal}
         setForm={setForm}
         form={form}

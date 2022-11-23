@@ -30,7 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
   checkTextContainer: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+  },
+  checkTextDescription: {
+    marginTop: '12px',
   },
   declineBody: {
     padding: '10px 20px 20px 20px',
@@ -89,6 +92,16 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  qualifyingContainer: {
+    height: '800px',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'cemter',
+    flexDirection: 'column',
+    padding: '20px 55px',
+    overflowY: 'scroll',
+  },
   rightSide: {
     padding: '20px 80px',
     display: 'flex',
@@ -128,8 +141,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
   },
   thankyou: {
-    // width: '514px',
-    // height: '426px',
+    width: '514px',
+    height: '426px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -137,11 +150,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '55px 32px',
     alignSelf: 'center',
     boxSizing: 'border-box',
-    width: '100%',
-    height: '100%',
-    [theme.breakpoints.down('md')]: {
-      height: '800px',
-    },
+    // [theme.breakpoints.down('md')]: {
+    //   height: '800px',
+    // },
   },
   thankyouText: {
     display: 'flex',
@@ -151,6 +162,12 @@ const useStyles = makeStyles((theme) => ({
     '& span': {
       marginRight: '4px',
     },
+  },
+  titleUnderline: {
+    background: 'rgb(0, 64, 254)',
+    height: '2px',
+    width: '250px',
+    margin: '15px 0 25px 0',
   },
   warning: {
     display: 'flex',
