@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: '0 32px',
   },
+  bottomInformation: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   checkbox: {
     verticalAlign: 'bottom',
   },
@@ -71,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     width: '100%',
-    marginTop: '20px',
+    // marginTop: '4px',
   },
   leftSide: {
     background: '#2A2B54',
@@ -88,6 +93,53 @@ const useStyles = makeStyles((theme) => ({
         width: '640px',
       },
     },
+  },
+  paymentForm: {
+    width: '514px',
+    height: '830px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'cemter',
+    flexDirection: 'column',
+    padding: '60px',
+    overflowY: 'scroll',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  paymentMethod: {
+    width: '134px',
+    height: '100px',
+    background: '#FFFFFF',
+    border: '1px solid #CBD5E1',
+    borderRadius: '8px',
+    marginLeft: '8px',
+    padding: '15px 20px',
+    cursor: 'pointer',
+  },
+  paymentMethods: {
+    marginTop: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  },
+  quantity: {
+    display: 'flex',
+    alignItems: 'center',
+    '& *': {
+      marginRight: '8px',
+    },
+  },
+  quantityContainer: {
+    marginTop: '8px',
+    padding: '8px',
+  },
+  quantityModifier: {
+    cursor: 'pointer',
+    height: '16px',
+    width: '16px',
+    display: 'flex',
+    alignItems: 'center',
   },
   rightSide: {
     padding: '20px 80px',
