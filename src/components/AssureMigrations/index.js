@@ -48,7 +48,7 @@ export default function AssureMigrations() {
     },
     onCompleted: ({ acceptTransitionDocument }) => {
       if (acceptTransitionDocument?.acknowledged)
-        history.push('/public/assure-migrations/subscription');
+        history.push(`/public/assure-migrations/subscription?email=${form.email}`);
     },
   });
 
@@ -80,7 +80,6 @@ export default function AssureMigrations() {
                 },
               },
             });
-            setOpenModal(false);
           },
           text: 'I Accept',
         }}

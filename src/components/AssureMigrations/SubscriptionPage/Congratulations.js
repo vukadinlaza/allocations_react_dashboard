@@ -23,7 +23,7 @@ export default function Congratulations() {
       <div style={{ height: '16px' }} />
       <Button
         onClick={() => openInNewTab('https://meetings.hubspot.com/jihany/sales-team-round-robin')}
-        text="Shedule Now"
+        text="Schedule Now"
       />
     </Paper>
   );

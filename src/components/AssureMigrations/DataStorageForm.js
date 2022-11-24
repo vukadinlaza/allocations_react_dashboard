@@ -125,7 +125,7 @@ export default function DataStorageForm({
       <Paper className={classes.formContainer}>
         <Logo width={300} />
         {fields.map((field, index) => (
-          <Grid container spacing={2} className={classes.input} key={`field-${index}`}>
+          <Grid container spacing={2} className={classes.dataFormInput} key={`field-${index}`}>
             {field.name === 'phone' && (
               <Grid item xs={12} md={6}>
                 <Autocomplete

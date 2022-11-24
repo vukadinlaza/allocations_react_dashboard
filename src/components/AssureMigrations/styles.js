@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: '0 32px',
   },
+  bottomInformation: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   checkbox: {
     verticalAlign: 'bottom',
   },
@@ -74,7 +79,11 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     width: '100%',
-    marginTop: '20px',
+    // marginTop: '4px',
+  },
+  dataFormInput: {
+    width: '100%',
+    marginTop: '4px',
   },
   leftSide: {
     background: '#2A2B54',
@@ -101,6 +110,56 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     padding: '20px 55px',
     overflowY: 'scroll',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  paymentForm: {
+    width: '514px',
+    height: '830px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'cemter',
+    flexDirection: 'column',
+    padding: '60px',
+    overflowY: 'scroll',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  paymentMethod: {
+    width: '134px',
+    height: '100px',
+    background: '#FFFFFF',
+    border: '1px solid #CBD5E1',
+    borderRadius: '8px',
+    marginLeft: '8px',
+    padding: '15px 20px',
+    cursor: 'pointer',
+  },
+  paymentMethods: {
+    marginTop: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  },
+  quantity: {
+    display: 'flex',
+    alignItems: 'center',
+    '& *': {
+      marginRight: '8px',
+    },
+  },
+  quantityContainer: {
+    marginTop: '8px',
+    padding: '8px',
+  },
+  quantityModifier: {
+    cursor: 'pointer',
+    height: '16px',
+    width: '16px',
+    display: 'flex',
+    alignItems: 'center',
   },
   rightSide: {
     padding: '20px 80px',
@@ -123,6 +182,16 @@ const useStyles = makeStyles((theme) => ({
   },
   subChecks: {
     paddingLeft: '60px !important',
+  },
+  subscriptionRightSide: {
+    padding: '20px 80px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    [theme.breakpoints.down('md')]: {
+      padding: '20px',
+    },
   },
   terms: {
     cursor: 'pointer',
@@ -173,6 +242,62 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     marginBottom: '24px',
+  },
+  group: {
+    padding: '0.5rem 0',
+  },
+  label: {
+    fontWeight: 'bolder',
+    margin: '0',
+    padding: '0',
+  },
+  help: {
+    color: '#186EFF',
+    verticalAlign: 'sub',
+  },
+  button: {
+    borderRadius: '8px',
+    border: 'solid 1px #CBD5E1',
+    textTransform: 'none',
+    width: '200px',
+    height: '50px',
+    '&:first-child': {
+      margin: '0.5rem 0.5rem 0.5rem 0rem',
+    },
+    '&:last-child': {
+      margin: '0.5rem 0rem 0.5rem 0.5rem',
+    },
+  },
+  containedOverride: {
+    backgroundColor: 'rgba(236, 243, 255, 1)',
+    color: 'rgba(24, 110, 255, 1)',
+    border: 'solid 2px #205DF5 !important',
+    '&:hover': {
+      backgroundColor: 'rgba(236, 243, 255, 1)',
+    },
+  },
+  rootOverride: {
+    padding: '5px',
+  },
+  groupedOutlinedHorizontalOverride: {
+    '&:not(:last-child)': { borderRightColor: '#CBD5E1' },
+  },
+  groupedHorizontalOverride: {
+    '&:not(:last-child)': {
+      borderTopRightRadius: '8px',
+      borderBottomRightRadius: '8px',
+      '&:hover': {
+        border: 'solid 1px #205DF5',
+      },
+    },
+    '&:not(:first-child)': {
+      borderTopLeftRadius: '8px',
+      borderBottomLeftRadius: '8px',
+    },
+  },
+  gridItem: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
