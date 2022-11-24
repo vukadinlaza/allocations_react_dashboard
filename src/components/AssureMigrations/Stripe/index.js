@@ -75,13 +75,14 @@ export default function StripeForm({ setPaymentMade }) {
   const { quantity: spv_count, email } = Object.fromEntries(query);
   const [errors, setErrors] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
   // const [method, setMethod] = useState('card');
   const method = 'card';
   const [form, setForm] = useState({});
 
   useEffect(() => {
     const newState = { email: form.email || email };
-    setQuantity(spv_count);
+    setQuantity(Number(spv_count) || 1);
     setForm(newState);
   }, [method]);
 
@@ -158,6 +159,7 @@ export default function StripeForm({ setPaymentMade }) {
   const handleSubmit = async () => {
     if (!validateFields()) return;
     try {
+      setLoading(true);
       const response = await fetch(
         `${process.env.REACT_APP_STRIPE_API}/api/stripe/create-checkout-session`,
         {
@@ -180,7 +182,7 @@ export default function StripeForm({ setPaymentMade }) {
         },
       );
       const res = await response.json();
-
+      setLoading(false);
       if (res.error) {
         throw new Error(res.error);
       }
@@ -226,7 +228,7 @@ export default function StripeForm({ setPaymentMade }) {
           <QuantityContainer quantity={quantity} setQuantity={setQuantity} />
         </Grid>
         <Grid item xs={12} style={{ marginTop: '12px' }}>
-          <Button onClick={handleSubmit} text="Subscribe" fullWidth />
+          <Button onClick={handleSubmit} text={loading ? 'Processing...' : 'Subscribe'} fullWidth />
         </Grid>
       </Grid>
     </Paper>
