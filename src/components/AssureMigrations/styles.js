@@ -81,6 +81,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     // marginTop: '4px',
   },
+  dataFormInput: {
+    width: '100%',
+    marginTop: '4px',
+  },
   leftSide: {
     background: '#2A2B54',
     padding: '96px 10%',
@@ -178,6 +182,16 @@ const useStyles = makeStyles((theme) => ({
   },
   subChecks: {
     paddingLeft: '60px !important',
+  },
+  subscriptionRightSide: {
+    padding: '20px 80px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    [theme.breakpoints.down('md')]: {
+      padding: '20px',
+    },
   },
   terms: {
     cursor: 'pointer',

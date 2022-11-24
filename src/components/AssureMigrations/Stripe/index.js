@@ -69,7 +69,7 @@ const useQuery = () => {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 };
 
-export default function StripeForm() {
+export default function StripeForm({ setPaymentMade }) {
   const classes = useStyles();
   const query = useQuery();
   const { full_name, email } = Object.fromEntries(query);
@@ -182,6 +182,8 @@ export default function StripeForm() {
       if (res.error) {
         throw new Error(res.error);
       }
+
+      setPaymentMade(true);
     } catch (error) {
       toast.error(error.message);
     }
