@@ -22,7 +22,9 @@ export default function Congratulations() {
       />
       <div style={{ height: '16px' }} />
       <Button
-        onClick={() => openInNewTab('https://meetings.hubspot.com/jihany/sales-team-round-robin')}
+        onClick={() =>
+          openInNewTab('https://info.allocations.com/meetings/carlos-biazotto/assure-migrations')
+        }
         text="Schedule Now"
       />
     </Paper>

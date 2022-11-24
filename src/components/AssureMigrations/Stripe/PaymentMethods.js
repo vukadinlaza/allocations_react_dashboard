@@ -1,19 +1,8 @@
-import { colors, Typography, Icon } from '@allocations/design-system';
 import React from 'react';
+import { colors, Typography, Icon } from '@allocations/design-system';
 import useStyles from '../styles';
 
-const paymentMethods = [
-  {
-    name: 'bank',
-    icon: 'account_balance',
-    label: 'US Bank Account',
-  },
-  {
-    name: 'card',
-    icon: 'credit_card',
-    label: 'Card',
-  },
-];
+import { paymentMethods } from './constants';
 
 export default function PaymentMethods({ setMethod, method }) {
   const classes = useStyles();
