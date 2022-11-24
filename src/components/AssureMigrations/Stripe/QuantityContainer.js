@@ -35,9 +35,10 @@ export default function QuantityContainer({ quantity, setQuantity }) {
           <span className={classes.quantityModifier}>
             <Icon
               iconColor={colors.brand[300]}
-              iconName="add_circle"
+              iconName="remove_circle"
               onClick={() => {
-                const newQuantity = quantity + 1;
+                if (quantity === 1) return;
+                const newQuantity = quantity - 1;
                 setQuantity(newQuantity);
                 setAmount(price * newQuantity);
               }}
@@ -54,10 +55,9 @@ export default function QuantityContainer({ quantity, setQuantity }) {
           <span className={classes.quantityModifier}>
             <Icon
               iconColor={colors.brand[300]}
-              iconName="remove_circle"
+              iconName="add_circle"
               onClick={() => {
-                if (quantity === 1) return;
-                const newQuantity = quantity - 1;
+                const newQuantity = quantity + 1;
                 setQuantity(newQuantity);
                 setAmount(price * newQuantity);
               }}

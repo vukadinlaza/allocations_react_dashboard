@@ -72,7 +72,7 @@ const useQuery = () => {
 export default function StripeForm({ setPaymentMade }) {
   const classes = useStyles();
   const query = useQuery();
-  const { full_name, email } = Object.fromEntries(query);
+  const { quantity: spv_count, email } = Object.fromEntries(query);
   const [errors, setErrors] = useState({});
   const [quantity, setQuantity] = useState(1);
   // const [method, setMethod] = useState('card');
@@ -80,7 +80,8 @@ export default function StripeForm({ setPaymentMade }) {
   const [form, setForm] = useState({});
 
   useEffect(() => {
-    const newState = { full_name: form.full_name || full_name, email: form.email || email };
+    const newState = { email: form.email || email };
+    setQuantity(spv_count);
     setForm(newState);
   }, [method]);
 
