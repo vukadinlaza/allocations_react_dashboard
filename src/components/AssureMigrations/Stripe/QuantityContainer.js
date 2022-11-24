@@ -7,7 +7,7 @@ import useStyles from '../styles';
 export default function QuantityContainer({ quantity, setQuantity }) {
   const classes = useStyles();
   const price = 99;
-  const [amount, setAmount] = useState(price);
+  const [amount, setAmount] = useState(quantity * price);
 
   return (
     <Grid container spacing={2} className={classes.quantityContainer}>
