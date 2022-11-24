@@ -163,6 +163,7 @@ export default function StripeForm({ setPaymentMade }) {
         {
           method: 'POST',
           headers: {
+            'X-API-TOKEN': process.env.REACT_APP_ALLOCATIONS_TOKEN,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
