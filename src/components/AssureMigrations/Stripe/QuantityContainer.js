@@ -1,12 +1,13 @@
+import React from 'react';
+import { Grid } from '@material-ui/core';
 import { colors, Typography, Icon } from '@allocations/design-system';
 import { amountFormat } from '@allocations/nextjs-common';
-import { Grid } from '@material-ui/core';
-import React from 'react';
+
+import { currentPrice } from './constants';
 import useStyles from '../styles';
 
 export default function QuantityContainer({ quantity, setQuantity }) {
   const classes = useStyles();
-  const price = 99;
 
   return (
     <Grid container spacing={2} className={classes.quantityContainer}>
@@ -73,7 +74,7 @@ export default function QuantityContainer({ quantity, setQuantity }) {
         <Typography
           variant="heading3"
           fontWeight={700}
-          content={`$${amountFormat(price * quantity)}`}
+          content={`$${amountFormat(currentPrice * quantity)}`}
           component="div"
         />
         <Typography
