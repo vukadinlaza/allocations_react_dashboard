@@ -23,11 +23,6 @@ export const fields = {
       name: 'full_name',
       label: 'Full name',
     },
-    {
-      name: 'bank_account',
-      label: 'Bank account',
-      placeholder: 'Search your bank account by name',
-    },
   ],
   card: [
     {
