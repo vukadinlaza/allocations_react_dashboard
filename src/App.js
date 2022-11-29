@@ -50,6 +50,7 @@ import RemoteManagePassport from './components/RemoteManagePassport';
 import AssureMigrations from './components/AssureMigrations';
 import MigrationsSubscription from './components/AssureMigrations/SubscriptionPage';
 import Stripe from './components/AssureMigrations/Stripe';
+import Migrations from './components/Migrations';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -106,6 +107,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
+        <PrivateRoute path="/migrations" component={Migrations} />
 
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
