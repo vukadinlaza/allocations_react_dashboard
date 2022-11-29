@@ -12,6 +12,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import BallotIcon from '@material-ui/icons/Ballot';
+import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import styles from '../styles';
 
 const SidebarDrawer = ({
@@ -52,6 +53,11 @@ const SidebarDrawer = ({
           to: '/profile',
           title: 'Profile',
           icon: <PersonIcon fontSize="medium" />,
+        },
+        {
+          to: '/migrations',
+          title: 'Migrations',
+          icon: <CompareArrowsIcon fontSize="medium" />,
         },
       ],
     },
