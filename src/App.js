@@ -51,6 +51,7 @@ import AssureMigrations from './components/AssureMigrations';
 import MigrationsSubscription from './components/AssureMigrations/SubscriptionPage';
 import Stripe from './components/AssureMigrations/Stripe';
 import Migrations from './components/Migrations';
+import ManageMigration from './components/ManageMigration';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -107,7 +108,8 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
-        <PrivateRoute path="/migrations" component={Migrations} />
+        <PrivateRoute path="/migrations" component={Migrations} exact />
+        <PrivateRoute path="/migrations/:migration_id" component={ManageMigration} exact />
 
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
