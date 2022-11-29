@@ -7,7 +7,7 @@ export default function Migrations() {
   const history = useHistory();
   return (
     <Suspense fallback={<Loader />}>
-      <MigrationsLazy redirect={(id) => history.push(`/migrations/${id}`)} />
+      <MigrationsLazy redirect={(path) => history.push(path)} />
     </Suspense>
   );
 }
