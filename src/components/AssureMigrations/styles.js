@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainer: {
     width: '514px',
-    height: '830px',
+    height: '730px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'cemter',

@@ -25,11 +25,6 @@ const fields = [
     required: true,
   },
   {
-    name: 'title',
-    label: 'Title',
-    required: true,
-  },
-  {
     name: 'email',
     label: 'Email',
     required: true,

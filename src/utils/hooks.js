@@ -84,12 +84,16 @@ export const useFetchWithEmail = (base, tableName, email) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     if (!base || !tableName) return;
-    const url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${
-      process.env.REACT_APP_AIRTABLE_API_KEY
-    }&filterByFormula={Email}="${encodeURIComponent(email)}"`;
+    const url = `https://api.airtable.com/v0/${base}/${tableName}?filterByFormula={Email}="${encodeURIComponent(
+      email,
+    )}"`;
     const fetchData = async () => {
       setStatus('fetching');
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        },
+      });
       const data = await response.json();
       setData(data.records);
       setStatus('fetched');
