@@ -1,68 +1,18 @@
-import { Input, Logo, Button } from '@allocations/design-system';
-import { validateEmail } from '@allocations/nextjs-common';
-import { Grid, Paper } from '@material-ui/core';
+/* eslint-disable import/no-cycle */
 import React, { useEffect, useState } from 'react';
+import { useStripe } from '@stripe/react-stripe-js';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
-import useStyles from '../styles';
-// import PaymentMethods from './PaymentMethods';
+
+import { Input, Logo, Button, Modal } from '@allocations/design-system';
+import { validateEmail } from '@allocations/nextjs-common';
+
+import PaymentMethods from './PaymentMethods';
 import QuantityContainer from './QuantityContainer';
 
-const fields = {
-  // bank: [
-  //   {
-  //     name: 'email',
-  //     label: 'Email',
-  //   },
-  //   {
-  //     name: 'full_name',
-  //     label: 'Full name',
-  //   },
-  //   {
-  //     name: 'bank_account',
-  //     label: 'Bank account',
-  //     placeholder: 'Search your bank account by name',
-  //   },
-  // ],
-  card: [
-    {
-      name: 'email',
-      label: 'Email',
-    },
-    {
-      name: 'card_number',
-      label: 'Card number',
-      type: 'number',
-      maxLength: 16,
-    },
-    {
-      name: 'expiration',
-      label: 'Expiration',
-      type: 'number',
-      placeholder: 'MM/YYYY',
-      maxLength: 7,
-      md: 6,
-    },
-    {
-      name: 'cvc',
-      label: 'CVC',
-      type: 'number',
-      maxLength: 3,
-      md: 6,
-    },
-    // {
-    //   name: 'country',
-    //   label: 'Country',
-    //   md: 6,
-    // },
-    // {
-    //   name: 'zip_code',
-    //   label: 'ZIP',
-    //   type: 'number',
-    //   md: 6,
-    // },
-  ],
-};
+import { currentPrice, fields } from './constants';
+import useStyles from '../styles';
 
 const useQuery = () => {
   const { search } = useLocation();
@@ -70,15 +20,18 @@ const useQuery = () => {
 };
 
 export default function StripeForm({ setPaymentMade }) {
+  const stripe = useStripe();
+
   const classes = useStyles();
   const query = useQuery();
   const { quantity: spv_count, email } = Object.fromEntries(query);
   const [errors, setErrors] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-  // const [method, setMethod] = useState('card');
-  const method = 'card';
+  const [method, setMethod] = useState('card');
   const [form, setForm] = useState({});
+  const [openMandateConfirmationModal, setOpenMandateConfirmationModal] = useState(false);
+  const [paymentIntent, setPaymentIntent] = useState(undefined);
 
   useEffect(() => {
     const newState = { email: form.email || email };
@@ -160,77 +113,180 @@ export default function StripeForm({ setPaymentMade }) {
     if (!validateFields()) return;
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.REACT_APP_STRIPE_API}/api/stripe/create-checkout-session`,
-        {
-          method: 'POST',
-          headers: {
-            'X-API-TOKEN': process.env.REACT_APP_ALLOCATIONS_TOKEN,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            payment_type: 'card',
-            quantity,
-            email: form.email,
-            card: {
-              number: form.card_number,
-              exp_month: Number(form.expiration.slice(0, 2)),
-              exp_year: Number(form.expiration.slice(2, 6)),
-              cvc: Number(form.cvc),
+
+      if (method === 'card') {
+        const response = await fetch(
+          `${process.env.REACT_APP_STRIPE_API}/api/stripe/create-checkout-session`,
+          {
+            method: 'POST',
+            headers: {
+              'X-API-TOKEN': process.env.REACT_APP_ALLOCATIONS_TOKEN,
+              'Content-Type': 'application/json',
             },
-          }),
-        },
-      );
-      const res = await response.json();
-      setLoading(false);
-      if (res.error) {
-        throw new Error(res.error);
+            body: JSON.stringify({
+              payment_type: 'card',
+              quantity,
+              email: form.email,
+              card: {
+                number: form.card_number,
+                exp_month: Number(form.expiration.slice(0, 2)),
+                exp_year: Number(form.expiration.slice(2, 6)),
+                cvc: Number(form.cvc),
+              },
+            }),
+          },
+        );
+        const res = await response.json();
+
+        setLoading(false);
+
+        if (res.error) {
+          throw new Error(res.error);
+        }
+
+        setPaymentMade(true);
       }
 
-      setPaymentMade(true);
+      if (method === 'bank') {
+        const response = await fetch(
+          `${process.env.REACT_APP_STRIPE_API}/api/stripe/create-payment-intent`,
+          {
+            method: 'POST',
+            headers: {
+              'X-API-TOKEN': process.env.REACT_APP_ALLOCATIONS_TOKEN,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              payment_type: 'us_bank_account',
+              email: form.email,
+              amount: quantity * currentPrice,
+            }),
+          },
+        );
+        const res = await response.json();
+
+        setLoading(false);
+
+        if (res.error) {
+          throw new Error(res.error);
+        }
+
+        stripe
+          .collectBankAccountForPayment({
+            clientSecret: res.clientSecret,
+            params: {
+              payment_method_type: 'us_bank_account',
+              payment_method_data: {
+                billing_details: {
+                  name: form.full_name,
+                  email: form.email,
+                },
+              },
+            },
+            expand: ['payment_method'],
+          })
+          .then(({ paymentIntent, error }) => {
+            if (error) {
+              toast.error(error.message);
+            } else if (paymentIntent.status === 'requires_confirmation') {
+              setPaymentIntent(paymentIntent);
+              setOpenMandateConfirmationModal(true);
+            }
+          });
+      }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   return (
-    <Paper className={classes.paymentForm}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <div style={{ height: '100px', display: 'flex', justifyContent: 'center' }}>
-            <Logo width={300} />
-          </div>
-          {/* <PaymentMethods setMethod={setMethod} method={method} /> */}
-        </Grid>
-        {fields[method].map((field, index) => (
-          <Grid
-            item
-            xs={12}
-            md={field.md}
-            key={`field-${field.name}-${index}`}
-            className={classes.input}
-          >
-            <Input
-              onChange={({ target }) => updateForm(target)}
-              label={field.label}
-              name={field.name}
-              type="text"
-              value={formatValue(field.name, form[field.name])}
-              error={!!errors[field.name]}
-              helperText={errors[field.name]}
-              fullWidth={field.name !== 'phone'}
-              placeholder={field.placeholder}
-              inputProps={{ maxLength: field.maxLength }}
+    <>
+      <Paper className={classes.paymentForm}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <div style={{ height: '100px', display: 'flex', justifyContent: 'center' }}>
+              <Logo width={300} />
+            </div>
+            <PaymentMethods setMethod={setMethod} method={method} />
+          </Grid>
+          {fields[method].map((field, index) => (
+            <Grid
+              item
+              xs={12}
+              md={field.md}
+              key={`field-${field.name}-${index}`}
+              className={classes.input}
+            >
+              <Input
+                onChange={({ target }) => updateForm(target)}
+                label={field.label}
+                name={field.name}
+                type="text"
+                value={formatValue(field.name, form[field.name])}
+                error={!!errors[field.name]}
+                helperText={errors[field.name]}
+                fullWidth={field.name !== 'phone'}
+                placeholder={field.placeholder}
+                inputProps={{ maxLength: field.maxLength }}
+              />
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <QuantityContainer quantity={quantity} setQuantity={setQuantity} />
+          </Grid>
+          <Grid item xs={12} style={{ marginTop: '12px' }}>
+            <Button
+              onClick={handleSubmit}
+              text={loading ? 'Processing...' : 'Subscribe'}
+              fullWidth
             />
           </Grid>
-        ))}
-        <Grid item xs={12}>
-          <QuantityContainer quantity={quantity} setQuantity={setQuantity} />
         </Grid>
-        <Grid item xs={12} style={{ marginTop: '12px' }}>
-          <Button onClick={handleSubmit} text={loading ? 'Processing...' : 'Subscribe'} fullWidth />
+      </Paper>
+
+      <Modal
+        open={openMandateConfirmationModal}
+        onClose={() => setOpenMandateConfirmationModal(false)}
+        modalTitle="Mandate Confirmation"
+        withSecondaryButton
+        secondaryButtonProps={{
+          text: 'Cancel',
+          onClick: () => setOpenMandateConfirmationModal(false),
+        }}
+        primaryButtonProps={{
+          text: 'Accept',
+          onClick: () => {
+            stripe
+              .confirmUsBankAccountPayment(paymentIntent.client_secret)
+              .then(({ paymentIntent, error }) => {
+                if (error) {
+                  toast.error(error.message);
+                } else if (paymentIntent.status === 'requires_payment_method') {
+                  toast.error(
+                    'Confirmation failed. Attempt again with a different payment method.',
+                  );
+                } else if (paymentIntent.status === 'processing') {
+                  toast.success('Confirmation succeeded! The account will be debited');
+                  setPaymentMade(true);
+                } else if (paymentIntent.next_action?.type === 'verify_with_microdeposits') {
+                  toast.info('The account needs to be verified via microdeposits');
+                }
+
+                setOpenMandateConfirmationModal(false);
+              });
+          },
+        }}
+      >
+        <Grid container spacing={2}>
+          <Typography variant="body1" style={{ marginBottom: '12px' }}>
+            By clicking Accept, you authorize Allocations to debit the bank account specified above
+            for any amount owed for charges arising from your use of Allocations’ services and/or
+            purchase of products from Allocations, pursuant to Allocations’ website and terms, until
+            this authorization is revoked. You may amend or cancel this authorization at any time by
+            providing notice to Allocations with 30 (thirty) days notice.
+          </Typography>
         </Grid>
-      </Grid>
-    </Paper>
+      </Modal>
+    </>
   );
 }

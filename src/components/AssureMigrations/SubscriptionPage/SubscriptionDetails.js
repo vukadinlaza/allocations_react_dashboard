@@ -39,7 +39,7 @@ export default function SubscriptionDetails() {
             />
           </div>
         </Grid>
-        <SubscriptionTextCheck text="Secure Cloud Stoage" style={{ marginTop: '8px' }} />
+        <SubscriptionTextCheck text="Secure Cloud Storage" style={{ marginTop: '8px' }} />
         <SubscriptionTextCheck text="Self-Service Data Entry" style={{ marginTop: '8px' }} />
         <SubscriptionTextCheck
           text="Fund Manager Dashboard"
