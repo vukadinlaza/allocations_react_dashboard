@@ -2,8 +2,6 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
@@ -54,8 +52,6 @@ import MigrationsSubscription from './components/AssureMigrations/SubscriptionPa
 import Stripe from './components/AssureMigrations/Stripe';
 import Migrations from './components/Migrations';
 import ManageMigration from './components/ManageMigration';
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
