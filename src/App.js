@@ -113,7 +113,9 @@ const MainApp = ({ isAuthenticated }) => {
         {/** Onboarding * */}
         <Route path="/getting-started" component={Faq} exact />
         <Route path="/public/getting-started" component={RemoteNewLead} exact />
-        <Route path="/public/assure-migrations" component={AssureMigrations} exact />
+        <Route path="/public/assure-migrations" component={AssureMigrations} exact>
+          <Redirect to="/migrations" />
+        </Route>
         <Route
           path="/public/assure-migrations/subscription"
           component={MigrationsSubscription}
