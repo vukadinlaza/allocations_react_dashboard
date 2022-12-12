@@ -2,8 +2,6 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
@@ -52,8 +50,8 @@ import RemoteManagePassport from './components/RemoteManagePassport';
 import AssureMigrations from './components/AssureMigrations';
 import MigrationsSubscription from './components/AssureMigrations/SubscriptionPage';
 import Stripe from './components/AssureMigrations/Stripe';
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
+import Migrations from './components/Migrations';
+import ManageMigration from './components/ManageMigration';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -75,93 +73,82 @@ const MainApp = ({ isAuthenticated }) => {
   const styles = useStyles({ isAuthenticated });
 
   return (
-    <Elements stripe={stripePromise}>
-      <div className={styles.mainRoute}>
-        {holidayBannerContent && <HolidayBanner />}
-        <RemoteTaxBanner />
-        <Switch>
-          {/* Allocations Admin Routes */}
-          <AdminRoute
-            path="/admin/:organization/manager"
-            component={remoteFundManagerDashboard ? RemoteAddOrgAdmin : SuperAdminManager}
-            exact
-          />
-          <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
-          <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
-          <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+    <div className={styles.mainRoute}>
+      {holidayBannerContent && <HolidayBanner />}
+      <RemoteTaxBanner />
+      <Switch>
+        {/* Allocations Admin Routes */}
+        <AdminRoute
+          path="/admin/:organization/manager"
+          component={remoteFundManagerDashboard ? RemoteAddOrgAdmin : SuperAdminManager}
+          exact
+        />
+        <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
+        <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+        <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
 
-          <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
-          <AdminRoute path="/admin/stripe" component={Stripe} exact />
-          {/* Organization Admin */}
-          <PrivateRoute
-            path="/admin/:organization"
-            component={
-              remoteFundManagerDashboard ? RemoteFundManagerDashboard : FundManagerDashboard
-            }
-            exact
-          />
-          <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
-          <PrivateRoute
-            path="/admin/:organization/deals/:deal_id"
-            component={DealDashboard}
-            exact
-          />
+        <AdminRoute path="/admin/organization-onboarding" exact component={RemoteBuildV2} />
+        <AdminRoute path="/admin/stripe" component={Stripe} exact />
+        {/* Organization Admin */}
+        <PrivateRoute
+          path="/admin/:organization"
+          component={remoteFundManagerDashboard ? RemoteFundManagerDashboard : FundManagerDashboard}
+          exact
+        />
+        <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+        <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
+        <PrivateRoute path="/admin/:organization/deals/:deal_id" component={DealDashboard} exact />
 
-          {/* Investor */}
-          <PrivateRoute path="/" exact component={InvestorDashboard} />
-          <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
-          <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
-          <PrivateRoute path="/tax-activity" component={RemoteTaxDashboard} />
-          <PrivateRoute path="/demo" component={Demo} />
-          <PrivateRoute path="/profile/:id" component={ProfilePage} />
-          <PrivateRoute path="/profile" component={Profile} />
+        {/* Investor */}
+        <PrivateRoute path="/" exact component={InvestorDashboard} />
+        <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
+        <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
+        <PrivateRoute path="/tax-activity" component={RemoteTaxDashboard} />
+        <PrivateRoute path="/demo" component={Demo} />
+        <PrivateRoute path="/profile/:id" component={ProfilePage} />
+        <PrivateRoute path="/profile" component={Profile} />
+        <PrivateRoute path="/migrations" component={Migrations} exact />
+        <PrivateRoute path="/migrations/:migration_id" component={ManageMigration} exact />
 
-          {/** Onboarding * */}
-          <Route path="/getting-started" component={Faq} exact />
-          <Route path="/public/getting-started" component={RemoteNewLead} exact />
-          <Route path="/public/assure-migrations" component={AssureMigrations} exact />
-          <Route
-            path="/public/assure-migrations/subscription"
-            component={MigrationsSubscription}
-            exact
-          />
+        {/** Onboarding * */}
+        <Route path="/getting-started" component={Faq} exact />
+        <Route path="/public/getting-started" component={RemoteNewLead} exact />
+        <Route path="/public/assure-migrations" component={AssureMigrations} exact />
+        <Route
+          path="/public/assure-migrations/subscription"
+          component={MigrationsSubscription}
+          exact
+        />
 
-          {/** Deals * */}
-          {/* Public */}
+        {/** Deals * */}
+        {/* Public */}
 
-          <PrivateRoute path="/build" component={RemoteBuildProduct} exact />
+        <PrivateRoute path="/build" component={RemoteBuildProduct} exact />
 
-          {/* Private  */}
-          <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
-          <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+        {/* Private  */}
+        <PrivateRoute path="/new-build/deal" exact component={RemotePostBuild} />
+        <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
 
-          {/* Invest */}
-          <PrivateRoute path="/invest/:deal_id" component={InvestFlow} exact />
-          <PrivateRoute path="/invest/:deal_id/:investment_id" component={InvestFlow} exact />
+        {/* Invest */}
+        <PrivateRoute path="/invest/:deal_id" component={InvestFlow} exact />
+        <PrivateRoute path="/invest/:deal_id/:investment_id" component={InvestFlow} exact />
 
-          {/* Next Steps page */}
-          <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
-          <PrivateRoute
-            path="/next-steps/:organization/:deal_slug"
-            component={DealNextSteps}
-            exact
-          />
+        {/* Next Steps page */}
+        <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
+        <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
-          {/** Whitelabel Routes * */}
-          <PrivateRoute path="/identity" component={Identity} />
+        {/** Whitelabel Routes * */}
+        <PrivateRoute path="/identity" component={Identity} />
 
-          <PrivateRoute path="/passports/manage" component={RemoteManagePassport} />
-          {/* Redirects */}
-          <Redirect from="/public/new-build" to="/public/getting-started" />
-          <Redirect from="/migrations" to="/public/assure-migrations" />
+        <PrivateRoute path="/passports/manage" component={RemoteManagePassport} />
+        {/* Redirects */}
+        <Redirect from="/public/new-build" to="/public/getting-started" />
 
-          {/** catchall * */}
-          <Route path={['*', '/404']} component={NotFound} />
-        </Switch>
-      </div>
-    </Elements>
+        {/** catchall * */}
+        <Route path={['*', '/404']} component={NotFound} />
+      </Switch>
+    </div>
   );
 };
 
