@@ -28,11 +28,15 @@ export default function HolidayBanner() {
     <div style={{ maxHeight: '30%' }}>
       <Box className={styles.banner}>
         {holidayBannerContent}
-        Banks in the United States will be closed. Please contact{' '}
+        Please contact{' '}
         <a href="https://www.allocations.com/contact-us" className={styles.link}>
           support
         </a>{' '}
-        for any assistance.
+        for any assistance. For migrations, please contact
+        <a href="mailto:assuremigrations@allocations.com" className={styles.link}>
+          {' '}
+          assuremigrations@allocations.com
+        </a>
       </Box>
     </div>,
     document.querySelector('#allocations-banner')!,
