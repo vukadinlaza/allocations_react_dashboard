@@ -61,13 +61,6 @@ export function useAuth(QUERY = GET_INVESTOR) {
       //     email: user.email,
       //   });
       // }
-
-      window.Intercom('boot', {
-        app_id: 't8cjlj0f',
-        email: data.email,
-        user_id: data._id,
-        created_at: new Date(),
-      });
       window.hj('identify', data._id, {
         email: data.email,
         testAttr: 'this is a test',
