@@ -273,7 +273,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   }
 
   const handleZip = async (dealName) => {
-    console.log(dealName, 'NAME');
+    console.log(documentsData, 'DOCS');
     try {
       const zip = new JSZip();
 
@@ -284,11 +284,12 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         documentsData.map((doc) => {
           const link = doc.docLink.includes('https') ? doc.docLink : `https://${doc.docLink}`;
           return fetch(link).then((res) => {
+            console.log(res, 'RES');
             return res.blob();
           });
         }),
       );
-
+      console.log(files, 'FILES');
       files.forEach((file, i) =>
         zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file),
       );
