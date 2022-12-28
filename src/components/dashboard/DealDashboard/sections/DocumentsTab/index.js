@@ -288,6 +288,8 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         }),
       );
 
+      console.log(documentsData, 'DATA');
+
       files.forEach((file, i) =>
         zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file),
       );
@@ -302,12 +304,12 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   return (
     <Grid className={classes.section}>
       {downloadDocuments && (
-        <Grid item xs={12}>
-          <Button
-            text="Download Documents"
-            onClick={handleZip}
-            style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
-          />
+        <Grid
+          item
+          xs={12}
+          style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
+        >
+          <Button text="Download Documents" onClick={handleZip} />
         </Grid>
       )}
       <div className={classes.searchContainer}>
