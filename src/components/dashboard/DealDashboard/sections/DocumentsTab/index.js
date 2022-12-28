@@ -20,6 +20,7 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Button } from '@allocations/design-system';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import AllocationsTable from '../../../../utils/AllocationsTable';
 import Loader from '../../../../utils/Loader';
 import { titleCase } from '../../../../../utils/helpers';
@@ -74,6 +75,7 @@ const headers = [
 ];
 
 const DocumentsTab = ({ classes, data, refetch }) => {
+  const { downloadDocuments } = useFlags();
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   let documentsData = [];
@@ -299,9 +301,15 @@ const DocumentsTab = ({ classes, data, refetch }) => {
 
   return (
     <Grid className={classes.section}>
-      <Grid item xs={12}>
-        <Button text="Download Documents" onClick={handleZip} />
-      </Grid>
+      {downloadDocuments && (
+        <Grid item xs={12}>
+          <Button
+            text="Download Documents"
+            onClick={handleZip}
+            style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
+          />
+        </Grid>
+      )}
       <div className={classes.searchContainer}>
         <FormControl variant="outlined" size="small" value={sortField}>
           <InputLabel htmlFor="field-filter">Field</InputLabel>
