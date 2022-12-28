@@ -273,6 +273,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   }
 
   const handleZip = async (dealName) => {
+    console.log(dealName, 'NAME');
     try {
       const zip = new JSZip();
 
@@ -287,8 +288,6 @@ const DocumentsTab = ({ classes, data, refetch }) => {
           });
         }),
       );
-
-      console.log(documentsData, 'DATA');
 
       files.forEach((file, i) =>
         zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file),
@@ -309,7 +308,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
           xs={12}
           style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
         >
-          <Button text="Download Documents" onClick={handleZip} />
+          <Button text="Download Documents" onClick={() => handleZip(data.deal.company_name)} />
         </Grid>
       )}
       <div className={classes.searchContainer}>
