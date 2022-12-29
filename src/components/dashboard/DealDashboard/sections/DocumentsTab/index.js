@@ -20,7 +20,6 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Button } from '@allocations/design-system';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import AllocationsTable from '../../../../utils/AllocationsTable';
 import Loader from '../../../../utils/Loader';
 import { titleCase } from '../../../../../utils/helpers';
@@ -75,7 +74,6 @@ const headers = [
 ];
 
 const DocumentsTab = ({ classes, data, refetch }) => {
-  const { downloadDocuments } = useFlags();
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   let documentsData = [];
@@ -273,7 +271,6 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   }
 
   const handleZip = async (dealName) => {
-    console.log(documentsData, 'DOCS');
     try {
       const zip = new JSZip();
 
@@ -283,10 +280,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
       const files = await Promise.all(
         documentsData.map((doc) => {
           const link = doc.docLink.includes('https') ? doc.docLink : `https://${doc.docLink}`;
-          return fetch(link).then((res) => {
-            console.log(res, 'RES');
-            return res.blob();
-          });
+          return fetch(link).then((res) => res.blob());
         }),
       );
       files.forEach((file, i) => {
@@ -303,15 +297,13 @@ const DocumentsTab = ({ classes, data, refetch }) => {
 
   return (
     <Grid className={classes.section}>
-      {downloadDocuments && (
-        <Grid
-          item
-          xs={12}
-          style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
-        >
-          <Button text="Download Documents" onClick={() => handleZip(data.deal.company_name)} />
-        </Grid>
-      )}
+      <Grid
+        item
+        xs={12}
+        style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
+      >
+        <Button text="Download Documents" onClick={() => handleZip(data.deal.company_name)} />
+      </Grid>
       <div className={classes.searchContainer}>
         <FormControl variant="outlined" size="small" value={sortField}>
           <InputLabel htmlFor="field-filter">Field</InputLabel>
