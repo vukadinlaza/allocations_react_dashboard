@@ -289,10 +289,9 @@ const DocumentsTab = ({ classes, data, refetch }) => {
           });
         }),
       );
-      console.log(files, 'FILES');
       files.forEach((file, i) => {
-        console.log(file, 'EACH FILE');
-        zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file);
+        const doc = documentsData[i];
+        zip.file(`${doc.name} ${doc.documents.replace('.pdf', '')}.pdf`, file);
       });
 
       const content = await zip.generateAsync({ type: 'blob' });
