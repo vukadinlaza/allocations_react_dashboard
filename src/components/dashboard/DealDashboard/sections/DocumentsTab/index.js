@@ -290,9 +290,10 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         }),
       );
       console.log(files, 'FILES');
-      files.forEach((file, i) =>
-        zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file),
-      );
+      files.forEach((file, i) => {
+        console.log(file, 'EACH FILE');
+        zip.file(`${documentsData[i].documents.replace('.pdf', '')}.pdf`, file);
+      });
 
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `${dealName}_Investment_Documents.zip`);
