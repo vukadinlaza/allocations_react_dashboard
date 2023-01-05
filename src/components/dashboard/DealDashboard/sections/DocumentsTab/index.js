@@ -13,9 +13,13 @@ import {
   Typography,
   Tooltip,
   IconButton,
+  Grid,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import { Button } from '@allocations/design-system';
 import AllocationsTable from '../../../../utils/AllocationsTable';
 import Loader from '../../../../utils/Loader';
 import { titleCase } from '../../../../../utils/helpers';
@@ -266,8 +270,40 @@ const DocumentsTab = ({ classes, data, refetch }) => {
     });
   }
 
+  const handleZip = async (dealName) => {
+    try {
+      const zip = new JSZip();
+
+      if (documentsData.length === 0) {
+        return toast.success('There are no documents to download.');
+      }
+      const files = await Promise.all(
+        documentsData.map((doc) => {
+          const link = doc.docLink.includes('https') ? doc.docLink : `https://${doc.docLink}`;
+          return fetch(link).then((res) => res.blob());
+        }),
+      );
+      files.forEach((file, i) => {
+        const doc = documentsData[i];
+        zip.file(`${doc.name} ${doc.documents.replace('.pdf', '')}.pdf`, file);
+      });
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `${dealName}_Investment_Documents.zip`);
+    } catch {
+      toast.error('Error downloading Investment Documents');
+    }
+  };
+
   return (
-    <div className={classes.section}>
+    <Grid className={classes.section}>
+      <Grid
+        item
+        xs={12}
+        style={{ marginBottom: '15px', display: 'flex', justifyContent: 'flex-end' }}
+      >
+        <Button text="Download Documents" onClick={() => handleZip(data.deal.company_name)} />
+      </Grid>
       <div className={classes.searchContainer}>
         <FormControl variant="outlined" size="small" value={sortField}>
           <InputLabel htmlFor="field-filter">Field</InputLabel>
@@ -300,7 +336,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         />
       </div>
       <AllocationsTable data={documentsData} headers={headers} getCellContent={getCellContent} />
-    </div>
+    </Grid>
   );
 };
 
