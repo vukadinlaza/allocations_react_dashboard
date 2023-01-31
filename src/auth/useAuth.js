@@ -61,7 +61,6 @@ export function useAuth(QUERY = GET_INVESTOR) {
       //     email: user.email,
       //   });
       // }
-
       window.hj('identify', data._id, {
         email: data.email,
         testAttr: 'this is a test',

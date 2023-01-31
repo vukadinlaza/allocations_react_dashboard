@@ -218,9 +218,8 @@ function DealNextSteps() {
     const currentInvestment = userInvestments.find((inv) => inv?.deal?.slug === deal_slug);
     const { amount } = currentInvestment;
     const submission = currentInvestment.submissionData;
-
     history.push({
-      pathname: `/invest/${dealData?._id}`,
+      pathname: `/invest/${dealData?.deal?._id}`,
       state: { submission, amount, investmentId: currentInvestment._id },
     });
   };
