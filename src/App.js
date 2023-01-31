@@ -34,7 +34,6 @@ import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import DealDashboard from './components/dashboard/DealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
-import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
 import RemoteAddOrgAdmin from './components/RemoteAddOrgAdmin';
 
@@ -52,6 +51,7 @@ import MigrationsSubscription from './components/AssureMigrations/SubscriptionPa
 import Stripe from './components/AssureMigrations/Stripe';
 import Migrations from './components/Migrations';
 import ManageMigration from './components/ManageMigration';
+import RetoolTax from './components/RetoolTax';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -103,7 +103,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/" exact component={InvestorDashboard} />
         <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
         <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
-        <PrivateRoute path="/tax-activity" component={RemoteTaxDashboard} />
+        <PrivateRoute path="/tax-activity" component={RetoolTax} />
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
