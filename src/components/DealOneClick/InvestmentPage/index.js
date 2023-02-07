@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button } from '@material-ui/core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
@@ -302,7 +302,7 @@ function InvestmentPage({ deal_id }) {
   };
 
   if (!populated) populateInvestorData(deal);
-
+  if (data?.deal?.status === 'archived') return <Redirect to="/404" />;
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">

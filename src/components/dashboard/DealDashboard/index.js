@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
-import { useParams, withRouter } from 'react-router-dom';
+import { Redirect, useParams, withRouter } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Typography as AllocationsTypography } from '@allocations/design-system';
 import Setup from './sections/Setup';
@@ -405,6 +405,9 @@ const DealDashboard = () => {
         <AllocationsLoader />
       </div>
     );
+
+  if (dealData?.deal?.status === 'archived' || serviceDeal?.phase === 'archived')
+    return <Redirect to="/404" />;
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {dealProgress ? (
