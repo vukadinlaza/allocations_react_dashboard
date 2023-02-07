@@ -164,33 +164,35 @@ const PaymentSelectModal = ({
                           justifyContent: 'space-between',
                         }}
                       >
-                        {paymentOptions.map((paymentType) => {
-                          return (
-                            <Paper
-                              onClick={() => {
-                                setOpen(false);
-                                paymentType.openFunction();
-                              }}
-                              key={paymentType.paymentMethod}
-                              className={classes.clickableButton}
-                            >
-                              <div style={{ height: '55px' }}>
-                                <img
-                                  alt={`${paymentType.paymentMethod} icon`}
-                                  className={classes.clickableButtonIcon}
-                                  src={
-                                    paymentType.paymentMethod === 'Send Crypto'
-                                      ? CryptoIcon
-                                      : BankIcon
-                                  }
-                                />
-                              </div>
-                              <Typography className={classes.clickableButtonText}>
-                                {paymentType.paymentMethod}
-                              </Typography>
-                            </Paper>
-                          );
-                        })}
+                        {paymentOptions
+                          .filter((p) => p.paymentMethod !== 'Send Crypto')
+                          .map((paymentType) => {
+                            return (
+                              <Paper
+                                onClick={() => {
+                                  setOpen(false);
+                                  paymentType.openFunction();
+                                }}
+                                key={paymentType.paymentMethod}
+                                className={classes.clickableButton}
+                              >
+                                <div style={{ height: '55px' }}>
+                                  <img
+                                    alt={`${paymentType.paymentMethod} icon`}
+                                    className={classes.clickableButtonIcon}
+                                    src={
+                                      paymentType.paymentMethod === 'Send Crypto'
+                                        ? CryptoIcon
+                                        : BankIcon
+                                    }
+                                  />
+                                </div>
+                                <Typography className={classes.clickableButtonText}>
+                                  {paymentType.paymentMethod}
+                                </Typography>
+                              </Paper>
+                            );
+                          })}
                       </Box>
                     </RadioGroup>
                   </FormControl>
