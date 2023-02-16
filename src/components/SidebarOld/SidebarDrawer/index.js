@@ -131,7 +131,7 @@ const SidebarDrawer = ({
       {taxDashboard && (
         <Link
           to={`/tax-activity${
-            !currentOrganization?.email ? `?organization_id=${currentOrganization._id}` : ''
+            !currentOrganization?.email ? `?organization_id=${currentOrganization?._id}` : ''
           }`}
         >
           <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
