@@ -17,6 +17,7 @@ import styles from '../styles';
 
 const SidebarDrawer = ({
   mobileOpen,
+  currentOrganization,
   handleDrawerClose,
   currentHomeUrl,
   logout,
@@ -128,7 +129,11 @@ const SidebarDrawer = ({
         ))}
       </List>
       {taxDashboard && (
-        <Link to="/tax-activity">
+        <Link
+          to={`/tax-activity${
+            !currentOrganization.email ? `?organization_id=${currentOrganization._id}` : ''
+          }`}
+        >
           <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
             <ListItem button className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>

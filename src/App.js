@@ -51,7 +51,7 @@ import MigrationsSubscription from './components/AssureMigrations/SubscriptionPa
 import Stripe from './components/AssureMigrations/Stripe';
 import Migrations from './components/Migrations';
 import ManageMigration from './components/ManageMigration';
-import RemoteTaxDashboard from './components/TaxDashboard';
+import RetoolTax from './components/RetoolTax';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -103,7 +103,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/" exact component={InvestorDashboard} />
         <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
         <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
-        <PrivateRoute path="/tax-activity" component={RemoteTaxDashboard} />
+        <PrivateRoute path="/tax-activity" component={RetoolTax} />
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
