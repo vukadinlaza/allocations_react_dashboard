@@ -13,7 +13,10 @@ const RETOOL_EMBED_URL = gql`
 const RetoolTax = () => {
   const { search } = useLocation();
   const { userProfile } = useAuth();
-  const { data } = useQuery(RETOOL_EMBED_URL, { variables: { app: 'taxExternal' } });
+  const { data } = useQuery(RETOOL_EMBED_URL, {
+    fetchPolicy: 'network-only',
+    variables: { app: 'taxExternal' },
+  });
   const currentOrganization = search ? search.split('=')?.[1] : null;
   const isUserTheOrgAdmin = userProfile?.organizations_admin
     ?.map((o) => o._id)
