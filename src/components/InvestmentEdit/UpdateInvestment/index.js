@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import _, { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import moment from 'moment';
 import { Icon, colors } from '@allocations/design-system';
 import {
@@ -249,14 +249,16 @@ export default function InvestmentEdit({
   const oldDatabaseWireDate = !investment?.wired_at ? '' : new Date(investment?.wired_at * 1);
   const oldDatabaseWireDateTime = moment.utc(oldDatabaseWireDate).format('yyy-MM-DD');
 
-  const {
-    data,
-    refetch: getInvestment,
-    loading,
-  } = useQuery(GET_INVESTMENT, {
+  const [getInvestment, { data, loading }] = useLazyQuery(GET_INVESTMENT, {
     variables: { _id: id },
-    fetchPolicy: 'network-only',
   });
+
+  useEffect(() => {
+    if (!data) {
+      // fixes bug where you cant edit anything because we keep making get requests to get the investment
+      getInvestment();
+    }
+  }, []);
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
