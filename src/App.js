@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
+import { gql, useQuery } from '@apollo/client';
 
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
@@ -52,6 +53,7 @@ import Stripe from './components/AssureMigrations/Stripe';
 import Migrations from './components/Migrations';
 import ManageMigration from './components/ManageMigration';
 import RetoolTax from './components/RetoolTax';
+import RetoolPassportUpdate from './components/RetoolPassportUpdate';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -61,6 +63,12 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
  * with auth where appropriate {AdminRoute, PrivateRoute}
  *
  * */
+
+const MISSING_PASSPORT_DATA = gql`
+  query PassportMissingInformation($email: String) {
+    passportMissingInformation(email: $email)
+  }
+`;
 
 const SideBar = ({ isAuthenticated }) => {
   const { federatedSidebar } = useFlags();
@@ -156,8 +164,10 @@ const MainApp = ({ isAuthenticated }) => {
 
 const LayOut = () => {
   const ldclient = useLDClient();
+  const { taxDashboard } = useFlags();
   const { isAuthenticated, userProfile } = useAuth();
   const styles = useStyles({ isAuthenticated });
+  const { data } = useQuery(MISSING_PASSPORT_DATA);
   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
   if (launchDarklyUser.key && launchDarklyUser.email) {
     ldclient?.identify(launchDarklyUser, userProfile._id);
@@ -170,10 +180,14 @@ const LayOut = () => {
 
   return (
     <CurrentAccountProvider>
-      <div className={styles.app}>
-        <SideBar isAuthenticated={isAuthenticated} />
-        <MainApp isAuthenticated={isAuthenticated} />
-      </div>
+      {taxDashboard && data?.passportMissingInformation?.length ? (
+        <RetoolPassportUpdate />
+      ) : (
+        <div className={styles.app}>
+          <SideBar isAuthenticated={isAuthenticated} />
+          <MainApp isAuthenticated={isAuthenticated} />
+        </div>
+      )}
     </CurrentAccountProvider>
   );
 };
