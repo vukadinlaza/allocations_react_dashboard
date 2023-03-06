@@ -70,10 +70,14 @@ const MISSING_PASSPORT_DATA = gql`
   }
 `;
 
-const SideBar = ({ isAuthenticated }) => {
+const SideBar = ({ isAuthenticated, missingInformation }) => {
   const { federatedSidebar } = useFlags();
   const styles = useStyles({ isAuthenticated });
-  return <div className={styles.sidebar}>{federatedSidebar ? <Sidebar /> : <SidebarOld />}</div>;
+  return (
+    <div className={styles.sidebar}>
+      {federatedSidebar ? <Sidebar /> : <SidebarOld missingInformation={missingInformation} />}
+    </div>
+  );
 };
 
 const MainApp = ({ isAuthenticated }) => {
@@ -180,14 +184,17 @@ const LayOut = () => {
 
   return (
     <CurrentAccountProvider>
-      {taxDashboard && data?.passportMissingInformation?.length ? (
-        <RetoolPassportUpdate />
-      ) : (
-        <div className={styles.app}>
-          <SideBar isAuthenticated={isAuthenticated} />
+      <div className={styles.app}>
+        <SideBar
+          isAuthenticated={isAuthenticated}
+          missingInformation={taxDashboard && data?.passportMissingInformation?.length}
+        />
+        {taxDashboard && data?.passportMissingInformation?.length ? (
+          <RetoolPassportUpdate />
+        ) : (
           <MainApp isAuthenticated={isAuthenticated} />
-        </div>
-      )}
+        )}
+      </div>
     </CurrentAccountProvider>
   );
 };

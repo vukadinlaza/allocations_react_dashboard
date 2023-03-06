@@ -23,6 +23,7 @@ const SidebarDrawer = ({
   logout,
   location,
   classes,
+  missingInformation,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { taxDashboard } = useFlags();
@@ -66,83 +67,90 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <Button
-        variant="contained"
-        className={classes.addButton}
-        onClick={() => {
-          history.push('/public/getting-started');
-        }}
-      >
-        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-        New Deal
-      </Button>
-      <List>
-        {menuSections.map(({ sectionTitle, menu }) => (
-          <React.Fragment key={uuidv4()}>
-            <Typography className={classes.sectionSideBarTitle}>{sectionTitle}</Typography>
-            {menu.map(({ to, title, icon, subMenu }, menuId) => (
-              <div
-                key={`menu-${title}`}
-                onClick={mobileOpen ? handleDrawerClose : null}
-                className={`${!subMenu ? classes.sidebarNavItem : ''} ${
-                  location.pathname === to ? classes.sidebarNavItemActive : ''
-                }`}
-              >
-                {!subMenu ? (
-                  <Link to={to}>
-                    <ListItem button className={classes.menuItem}>
-                      <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                      <ListItemText primary={title} className={classes.iconLabel} />
-                    </ListItem>
-                  </Link>
-                ) : (
-                  <>
-                    <ListItem
-                      button
-                      onClick={() => handleOpenSubMenu(menuId)}
-                      className={classes.menuItem}
-                    >
-                      <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                      <ListItemText primary={title} className={classes.iconLabel} />
-                      {openSubMenu.includes(menuId) ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={openSubMenu.includes(menuId)} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        {subMenu.map((subMenuItem) => {
-                          return (
-                            <div className={classes.sidebarNavItem}>
-                              <Link to={subMenuItem.to}>
-                                <ListItem button className={classes.nested}>
-                                  <ListItemText size="small" primary={subMenuItem.title} />
-                                </ListItem>
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </List>
-                    </Collapse>
-                  </>
-                )}
-              </div>
+      {!missingInformation && (
+        <>
+          <Button
+            variant="contained"
+            className={classes.addButton}
+            onClick={() => {
+              history.push('/public/getting-started');
+            }}
+          >
+            <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+            New Deal
+          </Button>
+          <List>
+            {menuSections.map(({ sectionTitle, menu }) => (
+              <React.Fragment key={uuidv4()}>
+                <Typography className={classes.sectionSideBarTitle}>{sectionTitle}</Typography>
+                {menu.map(({ to, title, icon, subMenu }, menuId) => (
+                  <div
+                    key={`menu-${title}`}
+                    onClick={mobileOpen ? handleDrawerClose : null}
+                    className={`${!subMenu ? classes.sidebarNavItem : ''} ${
+                      location.pathname === to ? classes.sidebarNavItemActive : ''
+                    }`}
+                  >
+                    {!subMenu ? (
+                      <Link to={to}>
+                        <ListItem button className={classes.menuItem}>
+                          <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                          <ListItemText primary={title} className={classes.iconLabel} />
+                        </ListItem>
+                      </Link>
+                    ) : (
+                      <>
+                        <ListItem
+                          button
+                          onClick={() => handleOpenSubMenu(menuId)}
+                          className={classes.menuItem}
+                        >
+                          <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                          <ListItemText primary={title} className={classes.iconLabel} />
+                          {openSubMenu.includes(menuId) ? <ExpandLess /> : <ExpandMore />}
+                        </ListItem>
+                        <Collapse in={openSubMenu.includes(menuId)} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            {subMenu.map((subMenuItem) => {
+                              return (
+                                <div className={classes.sidebarNavItem}>
+                                  <Link to={subMenuItem.to}>
+                                    <ListItem button className={classes.nested}>
+                                      <ListItemText size="small" primary={subMenuItem.title} />
+                                    </ListItem>
+                                  </Link>
+                                </div>
+                              );
+                            })}
+                          </List>
+                        </Collapse>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </React.Fragment>
             ))}
-          </React.Fragment>
-        ))}
-      </List>
-      {taxDashboard && (
-        <Link
-          to={`/tax-activity${
-            !currentOrganization.email ? `?organization_id=${currentOrganization._id}` : ''
-          }`}
-        >
-          <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
-            <ListItem button className={classes.menuItem}>
-              <ListItemIcon className={classes.icon}>
-                <BallotIcon fontSize="medium" />
-              </ListItemIcon>
-              <ListItemText primary="Tax Dashboard" />
-            </ListItem>
-          </div>
-        </Link>
+          </List>
+          {taxDashboard && (
+            <Link
+              to={`/tax-activity${
+                !currentOrganization.email ? `?organization_id=${currentOrganization._id}` : ''
+              }`}
+            >
+              <div
+                onClick={mobileOpen ? handleDrawerClose : null}
+                className={classes.sidebarNavItem}
+              >
+                <ListItem button className={classes.menuItem}>
+                  <ListItemIcon className={classes.icon}>
+                    <BallotIcon fontSize="medium" />
+                  </ListItemIcon>
+                  <ListItemText primary="Tax Dashboard" />
+                </ListItem>
+              </div>
+            </Link>
+          )}
+        </>
       )}
 
       <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
