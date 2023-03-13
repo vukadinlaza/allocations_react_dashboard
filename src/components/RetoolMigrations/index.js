@@ -11,20 +11,20 @@ const RETOOL_EMBED_URL = gql`
   }
 `;
 
-const RetoolTax = () => {
+const RetoolMigrations = () => {
   const { search } = useLocation();
   const { userProfile } = useAuth();
-  const { taxDashboard } = useFlags();
+  const { migrationsManagement } = useFlags();
   const { data } = useQuery(RETOOL_EMBED_URL, {
     fetchPolicy: 'network-only',
-    variables: { app: 'taxExternal' },
+    variables: { app: 'migrations' },
   });
   const currentOrganization = search ? search.split('=')?.[1] : null;
   const isUserTheOrgAdmin = userProfile?.organizations_admin
     ?.map((o) => o._id)
     .includes(currentOrganization);
 
-  if (!data || (currentOrganization && !isUserTheOrgAdmin) || !taxDashboard) return null;
+  if (!data || (currentOrganization && !isUserTheOrgAdmin) || !migrationsManagement) return null;
   return (
     <div style={{ width: '100%', height: '84vh' }}>
       <Retool
@@ -35,4 +35,4 @@ const RetoolTax = () => {
   );
 };
 
-export default RetoolTax;
+export default RetoolMigrations;

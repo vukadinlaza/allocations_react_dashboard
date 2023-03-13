@@ -26,7 +26,7 @@ const SidebarDrawer = ({
   missingInformation,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const { taxDashboard } = useFlags();
+  const { taxDashboard, migrationsManagement } = useFlags();
   const history = useHistory();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -61,6 +61,26 @@ const SidebarDrawer = ({
           title: 'Migrations',
           icon: <CompareArrowsIcon fontSize="medium" />,
         },
+        {
+          to: `/migrations-management${
+            currentOrganization && !currentOrganization?.email
+              ? `?organization_id=${currentOrganization._id}`
+              : ''
+          }`,
+          title: 'Migrations Management',
+          icon: <CompareArrowsIcon fontSize="medium" />,
+          hidden: !(currentOrganization && migrationsManagement),
+        },
+        {
+          to: `/tax-activity${
+            currentOrganization && !currentOrganization?.email
+              ? `?organization_id=${currentOrganization._id}`
+              : ''
+          }`,
+          title: 'Tax Dashboard',
+          icon: <BallotIcon fontSize="medium" />,
+          hidden: !(currentOrganization && taxDashboard),
+        },
       ],
     },
   ];
@@ -83,73 +103,56 @@ const SidebarDrawer = ({
             {menuSections.map(({ sectionTitle, menu }) => (
               <React.Fragment key={uuidv4()}>
                 <Typography className={classes.sectionSideBarTitle}>{sectionTitle}</Typography>
-                {menu.map(({ to, title, icon, subMenu }, menuId) => (
-                  <div
-                    key={`menu-${title}`}
-                    onClick={mobileOpen ? handleDrawerClose : null}
-                    className={`${!subMenu ? classes.sidebarNavItem : ''} ${
-                      location.pathname === to ? classes.sidebarNavItemActive : ''
-                    }`}
-                  >
-                    {!subMenu ? (
-                      <Link to={to}>
-                        <ListItem button className={classes.menuItem}>
-                          <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                          <ListItemText primary={title} className={classes.iconLabel} />
-                        </ListItem>
-                      </Link>
-                    ) : (
-                      <>
-                        <ListItem
-                          button
-                          onClick={() => handleOpenSubMenu(menuId)}
-                          className={classes.menuItem}
-                        >
-                          <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                          <ListItemText primary={title} className={classes.iconLabel} />
-                          {openSubMenu.includes(menuId) ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                        <Collapse in={openSubMenu.includes(menuId)} timeout="auto" unmountOnExit>
-                          <List component="div" disablePadding>
-                            {subMenu.map((subMenuItem) => {
-                              return (
-                                <div className={classes.sidebarNavItem}>
-                                  <Link to={subMenuItem.to}>
-                                    <ListItem button className={classes.nested}>
-                                      <ListItemText size="small" primary={subMenuItem.title} />
-                                    </ListItem>
-                                  </Link>
-                                </div>
-                              );
-                            })}
-                          </List>
-                        </Collapse>
-                      </>
-                    )}
-                  </div>
-                ))}
+                {menu
+                  .filter((item) => !item.hidden)
+                  .map(({ to, title, icon, subMenu }, menuId) => (
+                    <div
+                      key={`menu-${title}`}
+                      onClick={mobileOpen ? handleDrawerClose : null}
+                      className={`${!subMenu ? classes.sidebarNavItem : ''} ${
+                        location.pathname === to ? classes.sidebarNavItemActive : ''
+                      }`}
+                    >
+                      {!subMenu ? (
+                        <Link to={to}>
+                          <ListItem button className={classes.menuItem}>
+                            <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                            <ListItemText primary={title} className={classes.iconLabel} />
+                          </ListItem>
+                        </Link>
+                      ) : (
+                        <>
+                          <ListItem
+                            button
+                            onClick={() => handleOpenSubMenu(menuId)}
+                            className={classes.menuItem}
+                          >
+                            <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                            <ListItemText primary={title} className={classes.iconLabel} />
+                            {openSubMenu.includes(menuId) ? <ExpandLess /> : <ExpandMore />}
+                          </ListItem>
+                          <Collapse in={openSubMenu.includes(menuId)} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              {subMenu.map((subMenuItem) => {
+                                return (
+                                  <div className={classes.sidebarNavItem}>
+                                    <Link to={subMenuItem.to}>
+                                      <ListItem button className={classes.nested}>
+                                        <ListItemText size="small" primary={subMenuItem.title} />
+                                      </ListItem>
+                                    </Link>
+                                  </div>
+                                );
+                              })}
+                            </List>
+                          </Collapse>
+                        </>
+                      )}
+                    </div>
+                  ))}
               </React.Fragment>
             ))}
           </List>
-          {taxDashboard && (
-            <Link
-              to={`/tax-activity${
-                !currentOrganization.email ? `?organization_id=${currentOrganization._id}` : ''
-              }`}
-            >
-              <div
-                onClick={mobileOpen ? handleDrawerClose : null}
-                className={classes.sidebarNavItem}
-              >
-                <ListItem button className={classes.menuItem}>
-                  <ListItemIcon className={classes.icon}>
-                    <BallotIcon fontSize="medium" />
-                  </ListItemIcon>
-                  <ListItemText primary="Tax Dashboard" />
-                </ListItem>
-              </div>
-            </Link>
-          )}
         </>
       )}
 

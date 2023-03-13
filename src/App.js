@@ -54,6 +54,7 @@ import Migrations from './components/Migrations';
 import ManageMigration from './components/ManageMigration';
 import RetoolTax from './components/RetoolTax';
 import RetoolPassportUpdate from './components/RetoolPassportUpdate';
+import RetoolMigrations from './components/RetoolMigrations';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -120,6 +121,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
         <PrivateRoute path="/migrations" component={Migrations} exact />
+        <PrivateRoute path="/migrations-management" component={RetoolMigrations} exact />
         <PrivateRoute path="/migrations/:migration_id" component={ManageMigration} exact />
 
         {/** Onboarding * */}
