@@ -170,7 +170,7 @@ const MainApp = ({ isAuthenticated }) => {
 
 const LayOut = () => {
   const ldclient = useLDClient();
-  const { taxDashboard } = useFlags();
+  const { missingTaxInfo } = useFlags();
   const { isAuthenticated, userProfile } = useAuth();
   const styles = useStyles({ isAuthenticated });
   const { data } = useQuery(MISSING_PASSPORT_DATA);
@@ -189,9 +189,9 @@ const LayOut = () => {
       <div className={styles.app}>
         <SideBar
           isAuthenticated={isAuthenticated}
-          missingInformation={taxDashboard && data?.passportMissingInformation?.length}
+          missingInformation={missingTaxInfo && data?.passportMissingInformation?.length}
         />
-        {taxDashboard && data?.passportMissingInformation?.length ? (
+        {missingTaxInfo && data?.passportMissingInformation?.length ? (
           <RetoolPassportUpdate />
         ) : (
           <MainApp isAuthenticated={isAuthenticated} />
