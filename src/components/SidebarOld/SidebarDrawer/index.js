@@ -26,7 +26,7 @@ const SidebarDrawer = ({
   missingInformation,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const { taxDashboard, migrationsManagement } = useFlags();
+  const { taxDashboard, migrationsManagement, migrationsFms } = useFlags();
   const history = useHistory();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -60,6 +60,7 @@ const SidebarDrawer = ({
           to: '/migrations',
           title: 'Migrations',
           icon: <CompareArrowsIcon fontSize="medium" />,
+          hidden: !(currentOrganization && migrationsFms),
         },
         {
           to: `/migrations-management${
