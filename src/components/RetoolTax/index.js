@@ -29,7 +29,7 @@ const RetoolTax = () => {
     <div style={{ width: '100%', height: '84vh' }}>
       <Retool
         url={data.retoolEmbedUrl}
-        data={{ user: { email: userProfile.email }, organizationId: currentOrganization }}
+        data={{ userEmail: userProfile.email, organizationId: currentOrganization }}
       />
     </div>
   );
