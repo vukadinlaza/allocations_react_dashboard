@@ -55,6 +55,7 @@ import RetoolTax from './components/RetoolTax';
 import RetoolPassportUpdate from './components/RetoolPassportUpdate';
 import RetoolMigrations from './components/RetoolMigrations';
 import RetoolMigrationsFms from './components/RetoolMigrationsFms';
+import RetoolTaxManagement from './components/RetoolTaxManagement';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -117,6 +118,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
         <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
         <PrivateRoute path="/tax-activity" component={RetoolTax} />
+        <PrivateRoute path="/tax-management" component={RetoolTaxManagement} />
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />

@@ -26,7 +26,7 @@ const SidebarDrawer = ({
   missingInformation,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const { taxDashboard, migrationsManagement, migrationsFms } = useFlags();
+  const { taxDashboard, taxManagement, migrationsManagement, migrationsFms } = useFlags();
   const history = useHistory();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -81,6 +81,12 @@ const SidebarDrawer = ({
           title: 'Tax Dashboard',
           icon: <BallotIcon fontSize="medium" />,
           hidden: !(currentOrganization && taxDashboard),
+        },
+        {
+          to: `/tax-management`,
+          title: 'Tax Management',
+          icon: <BallotIcon fontSize="medium" />,
+          hidden: !(currentOrganization && taxManagement),
         },
       ],
     },
