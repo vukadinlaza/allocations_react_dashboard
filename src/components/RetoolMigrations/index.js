@@ -4,6 +4,7 @@ import { gql, useQuery } from '@apollo/client';
 import { useLocation } from 'react-router';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useAuth } from '../../auth/useAuth';
+import useStyles from '../../styles';
 
 const RETOOL_EMBED_URL = gql`
   query GetRetoolEmbedUrl($app: String!) {
@@ -12,6 +13,7 @@ const RETOOL_EMBED_URL = gql`
 `;
 
 const RetoolMigrations = () => {
+  const styles = useStyles({ isAuthenticated: true });
   const { search } = useLocation();
   const { userProfile } = useAuth();
   const { migrationsManagement } = useFlags();
@@ -26,7 +28,7 @@ const RetoolMigrations = () => {
 
   if (!data || (currentOrganization && !isUserTheOrgAdmin) || !migrationsManagement) return null;
   return (
-    <div style={{ width: '100%', height: '84vh' }}>
+    <div className={styles.retoolPage}>
       <Retool
         url={data.retoolEmbedUrl}
         data={{ user: { email: userProfile.email }, organizationId: currentOrganization }}
