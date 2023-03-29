@@ -43,7 +43,7 @@ const columns = [
   },
   {
     field: 'name',
-    headerName: 'Name',
+    headerName: 'Transaction Description',
     flex: true,
   },
 ];
