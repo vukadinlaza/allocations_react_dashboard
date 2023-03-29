@@ -21,11 +21,21 @@ const useStyles = makeStyles<Theme, { isAuthenticated: boolean }>((theme) => ({
     overflow: 'auto',
     backgroundColor: '#f8fafc',
     justifyContent: ({ isAuthenticated }) => (isAuthenticated ? 'center' : ''),
-    padding: ({ isAuthenticated }) => (isAuthenticated ? '0.5rem 3rem' : '2rem 3rem'),
+    padding: 0,
+    paddingLeft: '2em',
+    paddingRight: '2em',
   },
   sidebar: {
     gridArea: 'sidebar',
     zIndex: 999,
+  },
+  retoolPage: {
+    height: '100vh',
+    marginLeft: '-2em',
+    marginRight: '-2em',
+    marginBottom: '0',
+    paddingBottom: '0',
+    overflowY: 'hidden',
   },
 }));
 
