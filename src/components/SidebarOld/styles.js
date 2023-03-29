@@ -135,7 +135,6 @@ const styles = (theme) => ({
     // paddingTop: 8,
     // border: 'none',
     // borderRight: '1px solid #dfe2e5',
-    // borderLeft: 0,
     position: 'relative',
     height: '100vh',
   },
