@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
 import { Redirect, useParams, withRouter } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { Typography as AllocationsTypography } from '@allocations/design-system';
+import { Typography, Typography as AllocationsTypography } from '@allocations/design-system';
+import { Box, Divider } from '@material-ui/core';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -22,6 +23,7 @@ import RemoteInvestorsDocuments from '../../RemoteInvestorDocuments';
 import Investors from './sections/Investors';
 import DocumentsTab from './sections/DocumentsTab';
 import LegacyInvestors from './sections/Investors/LegacyInvestors';
+import TransactionsList from '../../Banking/TransactionsList';
 
 const RemoteOnboarding = React.lazy(() => import('invest/Onboarding'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
@@ -44,6 +46,21 @@ const GET_DEAL = gql`
         _id
         name
         high_volume_partner
+      }
+      banking {
+        routing_number
+        account_number
+        balance
+        transactions {
+          _id
+          amount
+          date
+          name
+          type
+          status
+          category
+          investment_id
+        }
       }
       dealParams {
         signDeadline
@@ -105,6 +122,7 @@ let fundTabs = [
   'Investments',
   'Investor Onboarding Status',
   'Investors',
+  'Banking',
   'Documents',
   'Deal Page',
 ];
@@ -114,7 +132,7 @@ let BASE = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
-let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+let spvTabs = ['Investor Onboarding Status', 'Investors', 'Banking', 'Documents', 'Deal Page'];
 
 const DealDashboard = () => {
   const { width } = useViewport();
@@ -137,6 +155,7 @@ const DealDashboard = () => {
     dealProgress,
     investApiDocsAndInvestments,
     investorList,
+    dealBanking,
   } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -174,7 +193,7 @@ const DealDashboard = () => {
   );
 
   useEffect(() => {
-    spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+    spvTabs = ['Investor Onboarding Status', 'Investors', 'Banking', 'Documents', 'Deal Page'];
     (async () => {
       try {
         if (dealProgress) {
@@ -188,6 +207,7 @@ const DealDashboard = () => {
               'Deal Progress',
               'Investor Onboarding Status',
               'Investors',
+              'Banking',
               'Documents',
               'Deal Page',
             ];
@@ -198,6 +218,7 @@ const DealDashboard = () => {
               'Investments',
               'Investor Onboarding Status',
               'Investors',
+              'Banking',
               'Documents',
               'Deal Page',
             ];
@@ -386,6 +407,20 @@ const DealDashboard = () => {
               <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
             </Suspense>
           </div>
+        );
+
+      case 'Banking':
+        return (
+          <>
+            {dealBanking ? (
+              <TransactionsList transactions={dealData.deal?.banking?.transactions ?? []} />
+            ) : (
+              <Box>
+                <Divider className={classes.divider} />
+                <Typography align="center" variant="subheading" content="Coming Soon" />
+              </Box>
+            )}
+          </>
         );
       default:
         return <p>No Data</p>;
