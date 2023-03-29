@@ -461,6 +461,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.colors.success[500],
     fontWeight: 'bold',
   },
+  divider: {
+    marginTop: '3em',
+    marginBottom: '3em',
+  },
 }));
 
 export default useStyles;
