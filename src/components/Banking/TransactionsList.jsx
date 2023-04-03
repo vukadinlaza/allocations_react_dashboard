@@ -19,9 +19,9 @@ const columns = [
     valueGetter: (params) => dayjs(parseInt(params.row.date, 10)).format('MM-DD-YYYY'),
   },
   {
-    field: 'type',
-    headerName: 'Type',
-    width: 120,
+    field: 'name',
+    headerName: 'Transaction Description',
+    flex: true,
   },
   {
     field: 'amount',
@@ -29,6 +29,11 @@ const columns = [
     type: 'number',
     width: 150,
     valueGetter: (params) => currencyFormatter(params.row.amount),
+  },
+  {
+    field: 'type',
+    headerName: 'Type',
+    width: 120,
   },
   {
     field: 'status',
@@ -40,11 +45,6 @@ const columns = [
     field: 'category',
     headerName: 'Category',
     width: 150,
-  },
-  {
-    field: 'name',
-    headerName: 'Transaction Description',
-    flex: true,
   },
 ];
 
