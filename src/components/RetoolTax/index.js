@@ -23,8 +23,9 @@ const RetoolTax = () => {
   });
   const currentOrganization = search ? search.split('=')?.[1] : null;
   const isUserOrgAdmin = userProfile?.organizations_admin?.length;
+  console.log(!data, !isUserOrgAdmin, !taxDashboard);
 
-  if (!data || (currentOrganization && !isUserOrgAdmin) || !taxDashboard) return null;
+  if (!data || !isUserOrgAdmin || !taxDashboard) return null;
   return (
     <div className={styles.retoolPage}>
       <Retool
