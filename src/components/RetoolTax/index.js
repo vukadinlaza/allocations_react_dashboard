@@ -22,11 +22,9 @@ const RetoolTax = () => {
     variables: { app: 'taxExternal' },
   });
   const currentOrganization = search ? search.split('=')?.[1] : null;
-  const isUserTheOrgAdmin = userProfile?.organizations_admin
-    ?.map((o) => o._id)
-    .includes(currentOrganization);
+  const isUserOrgAdmin = userProfile?.organizations_admin.length;
 
-  if (!data || (currentOrganization && !isUserTheOrgAdmin) || !taxDashboard) return null;
+  if (!data || (currentOrganization && !isUserOrgAdmin) || !taxDashboard) return null;
   return (
     <div className={styles.retoolPage}>
       <Retool
