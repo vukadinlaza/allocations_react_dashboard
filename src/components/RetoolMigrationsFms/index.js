@@ -1,7 +1,6 @@
 import React from 'react';
 // import Retool from 'react-retool';
 import { gql, useQuery } from '@apollo/client';
-import { useLocation } from 'react-router';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Icon, Typography } from '@allocations/design-system';
 import { useAuth } from '../../auth/useAuth';
@@ -15,19 +14,16 @@ const RETOOL_EMBED_URL = gql`
 
 const RetoolMigrationsFms = () => {
   const styles = useStyles({ isAuthenticated: true });
-  const { search } = useLocation();
   const { userProfile } = useAuth();
   const { migrationsManagement } = useFlags();
   const { data } = useQuery(RETOOL_EMBED_URL, {
     fetchPolicy: 'network-only',
     variables: { app: 'migrationsFms' },
   });
-  const currentOrganization = search ? search.split('=')?.[1] : null;
-  const isUserTheOrgAdmin = userProfile?.organizations_admin
-    ?.map((o) => o._id)
-    .includes(currentOrganization);
 
-  if (!data || (currentOrganization && !isUserTheOrgAdmin) || !migrationsManagement) return null;
+  const isUserOrgAdmin = userProfile?.organizations_admin?.length;
+
+  if (!data || !isUserOrgAdmin || !migrationsManagement) return null;
   return (
     <div className={styles.retoolPageUpdating}>
       {/* <Retool

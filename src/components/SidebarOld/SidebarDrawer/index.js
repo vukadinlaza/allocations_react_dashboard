@@ -61,11 +61,7 @@ const SidebarDrawer = ({
           to: '/migrations',
           title: 'Migrations',
           icon: <CompareArrowsIcon fontSize="medium" />,
-          hidden: !(
-            currentOrganization &&
-            migrationsFms &&
-            userProfile?.organizations_admin?.length
-          ),
+          hidden: !(migrationsFms && userProfile?.organizations_admin?.length),
         },
         {
           to: `/migrations-management${
@@ -85,11 +81,7 @@ const SidebarDrawer = ({
           }`,
           title: 'Tax Dashboard',
           icon: <BallotIcon fontSize="medium" />,
-          hidden: !(
-            currentOrganization &&
-            taxDashboard &&
-            userProfile?.organizations_admin?.length
-          ),
+          hidden: !(taxDashboard && userProfile?.organizations_admin?.length),
         },
         {
           to: `/tax-management`,
