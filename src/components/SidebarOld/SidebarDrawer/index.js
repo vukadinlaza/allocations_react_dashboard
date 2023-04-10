@@ -24,6 +24,7 @@ const SidebarDrawer = ({
   location,
   classes,
   missingInformation,
+  userProfile,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { taxDashboard, taxManagement, migrationsManagement, migrationsFms } = useFlags();
@@ -60,7 +61,7 @@ const SidebarDrawer = ({
           to: '/migrations',
           title: 'Migrations',
           icon: <CompareArrowsIcon fontSize="medium" />,
-          hidden: !(currentOrganization && migrationsFms),
+          hidden: !(migrationsFms && userProfile?.organizations_admin?.length),
         },
         {
           to: `/migrations-management${
@@ -80,7 +81,7 @@ const SidebarDrawer = ({
           }`,
           title: 'Tax Dashboard',
           icon: <BallotIcon fontSize="medium" />,
-          hidden: !(currentOrganization && taxDashboard),
+          hidden: !(taxDashboard && userProfile?.organizations_admin?.length),
         },
         {
           to: `/tax-management`,

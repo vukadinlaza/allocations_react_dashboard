@@ -37,6 +37,13 @@ const useStyles = makeStyles<Theme, { isAuthenticated: boolean }>((theme) => ({
     paddingBottom: '0',
     overflowY: 'hidden',
   },
+  retoolPageUpdating: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+  },
 }));
 
 export default useStyles;
