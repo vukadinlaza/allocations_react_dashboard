@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Retool from 'react-retool';
 import { gql, useQuery } from '@apollo/client';
 import { useLocation } from 'react-router';
@@ -15,12 +15,23 @@ const RETOOL_EMBED_URL = gql`
 const RetoolMigrations = () => {
   const styles = useStyles({ isAuthenticated: true });
   const { search } = useLocation();
-  const { userProfile } = useAuth();
+  const { userProfile, getAccessTokenSilently } = useAuth();
   const { migrationsManagement } = useFlags();
   const { data } = useQuery(RETOOL_EMBED_URL, {
     fetchPolicy: 'network-only',
     variables: { app: 'migrations' },
   });
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (userProfile) {
+      (async () => {
+        const token = await getAccessTokenSilently();
+        setToken(token);
+      })();
+    }
+  }, [userProfile, getAccessTokenSilently]);
+
   const currentOrganization = search ? search.split('=')?.[1] : null;
   const isUserTheOrgAdmin = userProfile?.organizations_admin
     ?.map((o) => o._id)
@@ -31,7 +42,11 @@ const RetoolMigrations = () => {
     <div className={styles.retoolPage}>
       <Retool
         url={data.retoolEmbedUrl}
-        data={{ user: { email: userProfile.email }, organizationId: currentOrganization }}
+        data={{
+          user: { email: userProfile.email },
+          organizationId: currentOrganization,
+          userToken: token,
+        }}
       />
     </div>
   );
