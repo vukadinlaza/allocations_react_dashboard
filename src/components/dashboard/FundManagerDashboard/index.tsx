@@ -30,6 +30,7 @@ export const ORG_DEALS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
+      taxInformation
       slug
       deals(limit: 100) {
         _id
@@ -82,6 +83,22 @@ const TOTAL_INVESTMENTS_DATA = gql`
     }
   }
 `;
+
+const taxHeaders: Header[] = [
+  {
+    id: 'dealName',
+    isButton: false,
+    label: 'Deal Name',
+    withSort: true,
+  },
+  {
+    id: 'status',
+    isButton: false,
+    label: 'Status',
+    withSort: true,
+    customSort: true,
+  },
+];
 
 const headers: Header[] = [
   {
@@ -250,6 +267,22 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       });
   };
 
+  const getTaxData = () => {
+    return data.organization?.taxInformation.map((tax: { [key: string]: any }) => {
+      return {
+        dealName: tax.deals?.name || 'N/A',
+        status: (
+          <AllocationsChip
+            chipColor={getChipColor(tax.extension_status)}
+            chipSize="small"
+            icons="none"
+            text={`${titleCase(tax.extension_status)}`}
+          />
+        ),
+      };
+    });
+  };
+
   const handleChangeFn = (event: React.ChangeEvent<HTMLButtonElement>, newValue: string) => {
     if (event && newValue !== selectedTabIndex) {
       setSelectedTabIndex(newValue);
@@ -354,6 +387,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
               <TabList value={selectedTabIndex} onChange={handleChangeFn} variant="boxed">
                 <Tab label={`SPVs (${spvs.length})`} value="0" />
                 <Tab label={`Funds (${funds.length})`} value="1" />
+                <Tab label="2022 Taxes" value="2" />
               </TabList>
             </Tabs>
           </Grid>
@@ -415,6 +449,35 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                       button={{
                         action: () => history.push('/public/getting-started'),
                         text: 'Create Fund',
+                      }}
+                      icon="business"
+                    />
+                  )}
+                </Grid>
+              )}
+              {selectedTabIndex === '2' && (
+                <Grid item xs={12} className={classes.list}>
+                  <AllocationsTypography
+                    component="div"
+                    content="2022 Tax Information"
+                    fontWeight={700}
+                    variant="heading3"
+                  />
+                  {data.organization.taxInformation ? (
+                    <AllocationsList
+                      data={getTaxData()}
+                      headers={taxHeaders}
+                      customSort={handleSort}
+                      sortBy="dealName"
+                      sortDirection="asc"
+                      itemsPerPage={5}
+                    />
+                  ) : (
+                    <BigBox
+                      content="No Tax Information found"
+                      button={{
+                        action: () => null,
+                        text: '',
                       }}
                       icon="business"
                     />
