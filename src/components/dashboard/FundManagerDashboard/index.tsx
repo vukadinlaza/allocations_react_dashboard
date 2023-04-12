@@ -268,8 +268,9 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   };
 
   const getTaxData = () => {
-    return (
-      data.organization?.taxInformation?.map((tax: { [key: string]: any }) => {
+    const taxInfo = data.organization?.taxInformation;
+    if (Array.isArray(taxInfo) && taxInfo.length) {
+      return data.organization?.taxInformation?.map((tax: { [key: string]: any }) => {
         return {
           dealName: tax.deals?.name || 'N/A',
           status: (
@@ -281,8 +282,9 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
             />
           ),
         };
-      }) || []
-    );
+      });
+    }
+    return [];
   };
 
   const handleChangeFn = (event: React.ChangeEvent<HTMLButtonElement>, newValue: string) => {
