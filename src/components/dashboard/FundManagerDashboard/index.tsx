@@ -268,19 +268,21 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   };
 
   const getTaxData = () => {
-    return data.organization?.taxInformation?.map((tax: { [key: string]: any }) => {
-      return {
-        dealName: tax.deals?.name || 'N/A',
-        status: (
-          <AllocationsChip
-            chipColor={getChipColor(tax.extension_status)}
-            chipSize="small"
-            icons="none"
-            text={`${titleCase(tax.extension_status)}`}
-          />
-        ),
-      };
-    });
+    return (
+      data.organization?.taxInformation?.map((tax: { [key: string]: any }) => {
+        return {
+          dealName: tax.deals?.name || 'N/A',
+          status: (
+            <AllocationsChip
+              chipColor={getChipColor(tax.extension_status)}
+              chipSize="small"
+              icons="none"
+              text={`${titleCase(tax.extension_status)}`}
+            />
+          ),
+        };
+      }) || []
+    );
   };
 
   const handleChangeFn = (event: React.ChangeEvent<HTMLButtonElement>, newValue: string) => {
