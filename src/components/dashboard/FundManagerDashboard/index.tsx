@@ -268,7 +268,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   };
 
   const getTaxData = () => {
-    return data.organization?.taxInformation.map((tax: { [key: string]: any }) => {
+    return data.organization?.taxInformation?.map((tax: { [key: string]: any }) => {
       return {
         dealName: tax.deals?.name || 'N/A',
         status: (
